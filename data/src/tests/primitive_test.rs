@@ -1,0 +1,170 @@
+use crate::primitive::Primitive;
+
+#[test]
+fn is_numberic() {
+    assert!(!Primitive::Boolean(None).is_numberic());
+    assert!(!Primitive::Character(None).is_numberic());
+    assert!(Primitive::Integer(None).is_numberic());
+    assert!(Primitive::Float(None).is_numberic());
+    assert!(!Primitive::EnumObject(None).is_numberic());
+    assert!(!Primitive::Date(None).is_numberic());
+    assert!(!Primitive::DateTime(None).is_numberic());
+    assert!(!Primitive::DataSpec(None).is_numberic());
+    assert!(!Primitive::Interval(None).is_numberic());
+    assert!(!Primitive::Guid.is_numberic());
+    assert!(!Primitive::Reference.is_numberic());
+    assert!(!Primitive::Object.is_numberic());
+    assert!(!Primitive::List(None).is_numberic());
+    assert!(!Primitive::Set(None).is_numberic());
+    assert!(!Primitive::Map(None).is_numberic());
+    assert!(!Primitive::Sequence.is_numberic());
+    assert!(!Primitive::Edge.is_numberic());
+    assert!(!Primitive::Walk.is_numberic());
+    assert!(!Primitive::EnumClass.is_numberic());
+    assert!(!Primitive::Property.is_numberic());
+    assert!(!Primitive::Attribute.is_numberic());
+    assert!(!Primitive::Class.is_numberic());
+    assert!(!Primitive::Tuple.is_numberic());
+    assert!(!Primitive::Blob.is_numberic());
+    assert!(!Primitive::Identifier.is_numberic());
+}
+
+#[test]
+fn is_basic() {
+    assert!(Primitive::Boolean(None).is_basic());
+    assert!(Primitive::Character(None).is_basic());
+    assert!(Primitive::Integer(None).is_basic());
+    assert!(Primitive::Float(None).is_basic());
+    assert!(Primitive::EnumObject(None).is_basic());
+    assert!(Primitive::Date(None).is_basic());
+    assert!(Primitive::DateTime(None).is_basic());
+    assert!(!Primitive::DataSpec(None).is_basic());
+    assert!(Primitive::Interval(None).is_basic());
+    assert!(!Primitive::Reference.is_basic());
+    assert!(!Primitive::Object.is_basic());
+    assert!(!Primitive::List(None).is_basic());
+    assert!(!Primitive::Set(None).is_basic());
+    assert!(!Primitive::Map(None).is_basic());
+    assert!(!Primitive::Sequence.is_basic());
+    assert!(!Primitive::Edge.is_basic());
+    assert!(!Primitive::Walk.is_basic());
+    assert!(!Primitive::EnumClass.is_basic());
+    assert!(!Primitive::Property.is_basic());
+    assert!(!Primitive::Attribute.is_basic());
+    assert!(!Primitive::Class.is_basic());
+    assert!(!Primitive::Tuple.is_basic());
+    assert!(!Primitive::Blob.is_basic());
+    assert!(Primitive::Identifier.is_basic());
+}
+
+#[test]
+fn is_collection() {
+    assert!(!Primitive::Boolean(None).is_collection());
+    assert!(!Primitive::Character(None).is_collection());
+    assert!(!Primitive::Integer(None).is_collection());
+    assert!(!Primitive::Float(None).is_collection());
+    assert!(!Primitive::EnumObject(None).is_collection());
+    assert!(!Primitive::Date(None).is_collection());
+    assert!(!Primitive::DateTime(None).is_collection());
+    assert!(!Primitive::DataSpec(None).is_collection());
+    assert!(!Primitive::Interval(None).is_collection());
+    assert!(!Primitive::Reference.is_collection());
+    assert!(!Primitive::Object.is_collection());
+    assert!(Primitive::List(None).is_collection());
+    assert!(Primitive::Set(None).is_collection());
+    assert!(Primitive::Map(None).is_collection());
+    assert!(!Primitive::Sequence.is_collection());
+    assert!(!Primitive::Edge.is_collection());
+    assert!(!Primitive::Walk.is_collection());
+    assert!(!Primitive::EnumClass.is_collection());
+    assert!(!Primitive::Property.is_collection());
+    assert!(!Primitive::Attribute.is_collection());
+    assert!(!Primitive::Class.is_collection());
+    assert!(!Primitive::Tuple.is_collection());
+    assert!(!Primitive::Blob.is_collection());
+    assert!(!Primitive::Identifier.is_collection());
+}
+
+#[test]
+fn is_object_or_reference() {
+    assert!(!Primitive::Boolean(None).is_object_or_reference());
+    assert!(!Primitive::Character(None).is_object_or_reference());
+    assert!(!Primitive::Integer(None).is_object_or_reference());
+    assert!(!Primitive::Float(None).is_object_or_reference());
+    assert!(!Primitive::EnumObject(None).is_object_or_reference());
+    assert!(!Primitive::Date(None).is_object_or_reference());
+    assert!(!Primitive::DateTime(None).is_object_or_reference());
+    assert!(!Primitive::DataSpec(None).is_object_or_reference());
+    assert!(!Primitive::Interval(None).is_object_or_reference());
+    assert!(Primitive::Reference.is_object_or_reference());
+    assert!(Primitive::Object.is_object_or_reference());
+    assert!(!Primitive::List(None).is_object_or_reference());
+    assert!(!Primitive::Set(None).is_object_or_reference());
+    assert!(!Primitive::Map(None).is_object_or_reference());
+    assert!(!Primitive::Sequence.is_object_or_reference());
+    assert!(!Primitive::Edge.is_object_or_reference());
+    assert!(!Primitive::Walk.is_object_or_reference());
+    assert!(!Primitive::EnumClass.is_object_or_reference());
+    assert!(!Primitive::Property.is_object_or_reference());
+    assert!(!Primitive::Attribute.is_object_or_reference());
+    assert!(!Primitive::Class.is_object_or_reference());
+    assert!(!Primitive::Tuple.is_object_or_reference());
+    assert!(!Primitive::Blob.is_object_or_reference());
+    assert!(!Primitive::Identifier.is_object_or_reference());
+}
+
+#[test]
+fn is_sequenceable() {
+    assert!(!Primitive::Boolean(None).is_sequenceable());
+    assert!(!Primitive::Character(None).is_sequenceable());
+    assert!(!Primitive::Integer(None).is_sequenceable());
+    assert!(!Primitive::Float(None).is_sequenceable());
+    assert!(!Primitive::EnumObject(None).is_sequenceable());
+    assert!(!Primitive::Date(None).is_sequenceable());
+    assert!(!Primitive::DateTime(None).is_sequenceable());
+    assert!(!Primitive::DataSpec(None).is_sequenceable());
+    assert!(!Primitive::Interval(None).is_sequenceable());
+    assert!(!Primitive::Reference.is_sequenceable());
+    assert!(!Primitive::Object.is_sequenceable());
+    assert!(Primitive::List(None).is_sequenceable());
+    assert!(Primitive::Set(None).is_sequenceable());
+    assert!(Primitive::Map(None).is_sequenceable());
+    assert!(Primitive::Sequence.is_sequenceable());
+    assert!(!Primitive::Edge.is_sequenceable());
+    assert!(!Primitive::Walk.is_sequenceable());
+    assert!(!Primitive::EnumClass.is_sequenceable());
+    assert!(!Primitive::Property.is_sequenceable());
+    assert!(!Primitive::Attribute.is_sequenceable());
+    assert!(!Primitive::Class.is_sequenceable());
+    assert!(!Primitive::Tuple.is_sequenceable());
+    assert!(!Primitive::Blob.is_sequenceable());
+    assert!(!Primitive::Identifier.is_sequenceable());
+}
+
+#[test]
+fn is_schema() {
+    assert!(!Primitive::Boolean(None).is_schema());
+    assert!(!Primitive::Character(None).is_schema());
+    assert!(!Primitive::Integer(None).is_schema());
+    assert!(!Primitive::Float(None).is_schema());
+    assert!(!Primitive::EnumObject(None).is_schema());
+    assert!(!Primitive::Date(None).is_schema());
+    assert!(!Primitive::DateTime(None).is_schema());
+    assert!(!Primitive::DataSpec(None).is_schema());
+    assert!(!Primitive::Interval(None).is_schema());
+    assert!(!Primitive::Reference.is_schema());
+    assert!(!Primitive::Object.is_schema());
+    assert!(!Primitive::List(None).is_schema());
+    assert!(!Primitive::Set(None).is_schema());
+    assert!(!Primitive::Map(None).is_schema());
+    assert!(!Primitive::Sequence.is_schema());
+    assert!(!Primitive::Edge.is_schema());
+    assert!(!Primitive::Walk.is_schema());
+    assert!(Primitive::EnumClass.is_schema());
+    assert!(Primitive::Property.is_schema());
+    assert!(Primitive::Attribute.is_schema());
+    assert!(Primitive::Class.is_schema());
+    assert!(!Primitive::Tuple.is_schema());
+    assert!(!Primitive::Blob.is_schema());
+    assert!(!Primitive::Identifier.is_schema());
+}
