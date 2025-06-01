@@ -1,8 +1,8 @@
 use crate::{
     data_spec::{DataSpecLevel, DataSpecType},
+    data_spec_builders::float_spec_builder::FloatSpecBuilder,
     primitive::Primitive,
     primitive_specs::float_spec::FloatStorage,
-    spec_builders::float_spec_builder::FloatSpecBuilder,
 };
 
 #[test]

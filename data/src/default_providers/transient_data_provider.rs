@@ -16,6 +16,7 @@ use super::{
     transient_boolean_adaptor::TransientBooleanAdaptor,
     transient_float_adaptor::TransientFloatAdaptor,
     transient_integer_adaptor::TransientIntegerAdaptor,
+    transient_list_adaptor::TransientListAdaptor,
 };
 
 pub struct TransientDataProvider {}
@@ -37,6 +38,48 @@ impl DataProvider for TransientDataProvider {
         Box::new(TransientBooleanAdaptor::new())
     }
     fn blob_adaptor(&self, _spec: &Arc<BlobSpec>) -> Box<dyn BlobAdaptor> {
+        todo!()
+    }
+    fn list_adaptor(
+        &self,
+        spec: &Arc<crate::primitive_specs::list_spec::ListSpec>,
+    ) -> Box<dyn crate::adaptors::collection_adaptors::list_adaptor::ListAdaptor> {
+        Box::new(TransientListAdaptor::new(spec.clone()))
+    }
+    fn set_adaptor(
+        &self,
+        _spec: &Arc<crate::primitive_specs::set_spec::SetSpec>,
+    ) -> Box<dyn crate::adaptors::collection_adaptors::set_adaptor::SetAdaptor> {
+        todo!()
+    }
+    fn map_adaptor(
+        &self,
+        _spec: &Arc<crate::primitive_specs::map_spec::MapSpec>,
+    ) -> Box<dyn crate::adaptors::collection_adaptors::map_adaptor::MapAdaptor> {
+        todo!()
+    }
+    fn byte_string_adaptor(
+        &self,
+        _spec: &Arc<crate::primitive_specs::string_spec::StringSpec>,
+    ) -> Box<dyn crate::adaptors::string_adaptors::byte_string_adaptor::ByteStringAdaptor> {
+        todo!()
+    }
+    fn utf_8_string_adaptor(
+        &self,
+        _spec: &Arc<crate::primitive_specs::string_spec::StringSpec>,
+    ) -> Box<dyn crate::adaptors::string_adaptors::utf8_string_adaptor::Utf8StringAdaptor> {
+        todo!()
+    }
+    fn utf_16_string_adaptor(
+        &self,
+        _spec: &Arc<crate::primitive_specs::string_spec::StringSpec>,
+    ) -> Box<dyn crate::adaptors::string_adaptors::utf16_string_adaptor::Utf16StringAdaptor> {
+        todo!()
+    }
+    fn utf_32_string_adaptor(
+        &self,
+        _spec: &Arc<crate::primitive_specs::string_spec::StringSpec>,
+    ) -> Box<dyn crate::adaptors::string_adaptors::utf32_string_adaptor::Utf32StringAdaptor> {
         todo!()
     }
 }

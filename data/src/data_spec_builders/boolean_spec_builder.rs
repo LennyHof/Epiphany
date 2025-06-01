@@ -12,7 +12,7 @@ use std::sync::Arc;
 ///
 /// Create a boolean data specification:
 /// ```rust
-/// use data::spec_builders::boolean_spec_builder::BooleanSpecBuilder;
+/// use data::data_spec_builders::boolean_spec_builder::BooleanSpecBuilder;
 /// let boolean_data_spec = BooleanSpecBuilder::new().build();   
 /// ```
 pub struct BooleanSpecBuilder {}

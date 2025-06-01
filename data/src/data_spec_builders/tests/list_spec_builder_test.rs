@@ -1,19 +1,16 @@
 use crate::{
     data_spec::{DataSpecLevel, DataSpecType},
-    primitive::Primitive,
-    primitive_specs::list_spec::ListStorage,
-    spec_builders::{
+    data_spec_builders::{
         boolean_spec_builder::BooleanSpecBuilder, integer_spec_builder::IntegerSpecBuilder,
         list_spec_builder::ListSpecBuilder,
     },
+    primitive::Primitive,
+    primitive_specs::list_spec::ListStorage,
 };
 
 #[test]
 fn list_storage_display() {
-    assert_eq!(
-        ListStorage::FixedSize(10).to_string(),
-        "FixedSize(10)"
-    );
+    assert_eq!(ListStorage::FixedSize(10).to_string(), "FixedSize(10)");
     assert_eq!(
         ListStorage::FixedCapacity(10).to_string(),
         "FixedCapacity(10)"
@@ -22,10 +19,7 @@ fn list_storage_display() {
         ListStorage::InitialCapacity(10).to_string(),
         "InitialCapacity(10)"
     );
-    assert_eq!(
-        ListStorage::VariableSize.to_string(),
-        "VariableSize"
-    );
+    assert_eq!(ListStorage::VariableSize.to_string(), "VariableSize");
 }
 
 #[test]

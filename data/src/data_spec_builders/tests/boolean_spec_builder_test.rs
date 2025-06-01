@@ -1,7 +1,7 @@
 use crate::{
     data_spec::{DataSpecLevel, DataSpecType},
     primitive::Primitive,
-    spec_builders::boolean_spec_builder::BooleanSpecBuilder,
+    data_spec_builders::boolean_spec_builder::BooleanSpecBuilder,
 };
 
 #[test]

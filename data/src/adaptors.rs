@@ -12,6 +12,10 @@ pub mod date_time_adaptors;
 pub mod enum_object_adaptor;
 /// The `FloatAdaptor` trait.
 pub mod float_adaptor;
+/// The `GuidAdaptor` trait.
+pub mod guid_adaptor;
+/// The `IdentifierAdaptor` trait.
+pub mod identifier_adaptor;
 /// The `IntegerAdaptor` trait.
 pub mod integer_adaptor;
 /// The `ReferenceAdaptor` trait.

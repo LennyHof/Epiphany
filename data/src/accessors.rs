@@ -18,6 +18,10 @@ pub mod enum_object;
 pub mod float;
 /// All concrete graph acessors.
 pub mod graph;
+/// The Guid accessor.
+pub mod guid;
+/// The `Identifier` accessor.
+pub mod identifier;
 /// The `Integer` accessor.
 pub mod integer;
 /// The `Object` accessor.

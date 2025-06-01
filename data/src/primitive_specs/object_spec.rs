@@ -16,6 +16,11 @@ impl ObjectSpec {
     pub fn object_class(&self) -> &Class {
         &self.object_class
     }
+
+    /// Returns if this object spec is compatible with the required spec.
+    pub fn is_compatible_with(&self, required: &Self) -> bool {
+        self.object_class.is_compatible_with(&required.object_class)
+    }
 }
 
 impl PrimitiveSpec for ObjectSpec {}

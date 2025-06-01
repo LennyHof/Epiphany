@@ -14,7 +14,7 @@ use std::sync::Arc;
 ///
 /// Create a data specification for a variable list of signed 64 bit integers:
 /// ```rust
-/// use data::spec_builders::{list_spec_builder::ListSpecBuilder, integer_spec_builder::IntegerSpecBuilder};
+/// use data::data_spec_builders::{list_spec_builder::ListSpecBuilder, integer_spec_builder::IntegerSpecBuilder};
 /// use data::primitive_specs::integer_spec::{IntegerEncoding, IntegerStorage};
 /// use data::primitive_specs::list_spec::ListStorage;
 ///
@@ -59,6 +59,24 @@ impl ListSpecBuilder {
     /// Setting a storage type but not setting an element specification will result in build panicing.
     /// </p>
     pub fn set_storage(&mut self, storage: ListStorage) -> &mut ListSpecBuilder {
+        match storage {
+            ListStorage::FixedSize(size) => {
+                if size == 0 {
+                    panic!("ListSpecBuilder: FixedSize cannot be zero.");
+                }
+            }
+            ListStorage::FixedCapacity(capacity) => {
+                if capacity == 0 {
+                    panic!("ListSpecBuilder: FixedCapacity cannot be zero.");
+                }
+            }
+            ListStorage::InitialCapacity(capacity) => {
+                if capacity == 0 {
+                    panic!("ListSpecBuilder: InitialCapacity cannot be zero.");
+                }
+            }
+            ListStorage::VariableSize => {}
+        }
         self.storage = Some(storage);
         self
     }

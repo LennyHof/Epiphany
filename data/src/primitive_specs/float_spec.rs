@@ -36,7 +36,7 @@ pub struct FloatSpec {
 
 impl FloatSpec {
     /// Returns an initialized float spec.
-    /// Prefer to use the [`FloatSpecBuilder`](crate::spec_builders::float_spec_builder::FloatSpecBuilder) to create a float spec.
+    /// Prefer to use the [`FloatSpecBuilder`](crate::data_spec_builders::float_spec_builder::FloatSpecBuilder) to create a float spec.
     pub fn new(storage: Option<FloatStorage>) -> FloatSpec {
         FloatSpec { storage: (storage) }
     }
@@ -44,6 +44,15 @@ impl FloatSpec {
     /// Returns the float's IEEE storage.
     pub fn storage(&self) -> &Option<FloatStorage> {
         &self.storage
+    }
+    /// Returns if this float spec is compatible with the required spec.
+    pub fn is_compatible_with(&self, required: &Self) -> bool {
+        match (self.storage, required.storage) {
+            (Some(s), Some(r)) => s == r,
+            (None, None) => true,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+        }
     }
 }
 

@@ -44,3 +44,22 @@ impl Display for PrimitiveCategory {
         )
     }
 }
+
+impl PrimitiveCategory {
+    /// Returns if this PrimitiveCategory that is compatible with a required PrimitiveCategory.
+    pub fn is_compatible_with(&self, required: &PrimitiveCategory) -> bool {
+        match (self, required) {
+            (Self::All, _) | (_, Self::All) => true,
+            (Self::Numeric, Self::Numeric) => true,
+            (Self::String, Self::String) => true,
+            (Self::Basic, Self::Basic) => true,
+            (Self::Simple, Self::Simple) => true,
+            (Self::ObjectOrReference, Self::ObjectOrReference) => true,
+            (Self::Collection, Self::Collection) => true,
+            (Self::Sequenceable, Self::Sequenceable) => true,
+            (Self::Collection, Self::Sequenceable) => true,
+            (Self::Schema, Self::Schema) => true,
+            _ => false,
+        }
+    }
+}

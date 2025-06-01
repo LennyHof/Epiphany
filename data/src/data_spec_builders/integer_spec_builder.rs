@@ -13,7 +13,7 @@ use std::sync::Arc;
 ///
 /// Create an integer data specification with signed encoding and base64 storage:
 /// ```rust
-/// use data::spec_builders::integer_spec_builder::IntegerSpecBuilder;
+/// use data::data_spec_builders::integer_spec_builder::IntegerSpecBuilder;
 /// use data::primitive_specs::integer_spec::{IntegerEncoding, IntegerStorage};
 ///
 /// let integer_data_spec = IntegerSpecBuilder::new()

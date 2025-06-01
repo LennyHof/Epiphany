@@ -8,6 +8,13 @@ impl GuidSpec {
     pub fn new() -> GuidSpec {
         GuidSpec {}
     }
+
+    /// Returns if this GUID spec is compatible with the required spec.
+    pub fn is_compatible_with(&self, _required: &Self) -> bool {
+        // For now, we assume all GUID specs are compatible with each other.
+        // This can be extended later to check specific compatibility rules.
+        true
+    }
 }
 
 impl Default for GuidSpec {

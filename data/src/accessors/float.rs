@@ -3,10 +3,10 @@ use std::{error::Error, fmt::Display, sync::Arc};
 use crate::{
     adaptors::float_adaptor::FloatAdaptor,
     data_provider::{DataProvider, default_data_provider},
+    data_spec_builders::float_spec_builder::FloatSpecBuilder,
     primitive_def::Accessor,
     primitive_specs::float_spec::{FloatSpec, FloatStorage},
     provider_error::ProviderError,
-    spec_builders::float_spec_builder::FloatSpecBuilder,
     variable::Variable,
 };
 

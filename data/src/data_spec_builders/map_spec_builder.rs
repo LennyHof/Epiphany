@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use crate::{
+    accessors::collections::map::Map,
     data_spec::{DataSpec, DataSpecLevel},
     primitive::Primitive,
     primitive_def::PrimitiveDef,
@@ -13,7 +14,7 @@ use crate::{
 ///
 /// Create a map data specification with string key and string element specifications:    
 /// ```rust
-/// use data::spec_builders::{map_spec_builder::MapSpecBuilder, string_spec_builder::StringSpecBuilder};
+/// use data::data_spec_builders::{map_spec_builder::MapSpecBuilder, string_spec_builder::StringSpecBuilder};
 /// use data::primitive_specs::string_spec::{StringEncoding, StringStorage};  
 /// use data::data_spec::DataSpec;
 /// use data::primitive_specs::map_spec::MapSpec;
@@ -58,6 +59,12 @@ impl MapSpecBuilder {
     /// Builds and returns an initialized data specification.
     pub fn build(&self) -> Arc<DataSpec> {
         let primitive_spec = Arc::new(MapSpec::new(&self.key_spec, &self.element_spec));
+
+        let mut primitive_def: Option<PrimitiveDef<MapSpec, Map>> = None;
+        if self.key_spec.is_some() || self.element_spec.is_some() {
+            primitive_def = Some(PrimitiveDef::new(primitive_spec, None));
+        }
+
         let specification_level = if self.key_spec.is_some()
             && self.key_spec.as_ref().unwrap().specification_level() == DataSpecLevel::Access
             && self.element_spec.is_some()
@@ -67,7 +74,7 @@ impl MapSpecBuilder {
         } else {
             DataSpecLevel::Compare
         };
-        let primitive_def = Some(PrimitiveDef::new(primitive_spec, None));
+
         Arc::new(DataSpec::new_primitive(
             Primitive::Map(primitive_def),
             specification_level,

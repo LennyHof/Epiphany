@@ -16,7 +16,7 @@ pub struct TransientIntegerAdaptor {
 }
 
 impl TransientIntegerAdaptor {
-    pub fn new(spec: Arc<IntegerSpec>) -> TransientIntegerAdaptor {
+    pub fn new(spec: Arc<IntegerSpec>) -> Self {
         TransientIntegerAdaptor {
             spec: (spec.clone()),
             value: (if spec.is_signed() {

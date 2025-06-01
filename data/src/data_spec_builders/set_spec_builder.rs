@@ -14,7 +14,7 @@ use crate::{
 ///
 /// Create a data specification for a set of integers:
 /// ```rust
-/// use data::spec_builders::{set_spec_builder::SetSpecBuilder, integer_spec_builder::IntegerSpecBuilder};
+/// use data::data_spec_builders::{set_spec_builder::SetSpecBuilder, integer_spec_builder::IntegerSpecBuilder};
 /// use data::primitive_specs::integer_spec::{IntegerEncoding, IntegerStorage};
 ///
 /// let set_of_integers_data_spec = SetSpecBuilder::new()

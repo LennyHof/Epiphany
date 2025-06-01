@@ -2,7 +2,7 @@ use crate::{
     accessors::integer::IntegerError,
     data_provider::{DataProvider, default_data_provider},
     primitive_specs::integer_spec::{IntegerEncoding, IntegerStorage},
-    spec_builders::integer_spec_builder::IntegerSpecBuilder,
+    data_spec_builders::integer_spec_builder::IntegerSpecBuilder,
     variable::Variable,
 };
 

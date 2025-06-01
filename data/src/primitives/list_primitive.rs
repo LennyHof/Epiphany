@@ -7,7 +7,7 @@ pub struct ListPrimitive {
     /// The list's specification.
     pub spec: Rc<ListSpec>,
     /// The list's storage.
-    pub storage: Option<Box<dyn List>>,
+    pub storage: Option<Arc<dyn List>>,
 }
 
 impl ListPrimitive {
@@ -30,7 +30,7 @@ impl ListPrimitive {
     }
 
     /// Returns the primitive's storage.
-    pub fn storage(&self) -> &Option<Box<dyn List>> {
+    pub fn storage(&self) -> &Option<Arc<dyn List>> {
         &self.storage
     }
 }
