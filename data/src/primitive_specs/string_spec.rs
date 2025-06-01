@@ -11,7 +11,7 @@ use crate::primitive_def::PrimitiveSpec;
 /// encoded. More specifically, each option constrains the number, size, and type of the
 /// code units used for representing the characters.
 /// </p>
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub enum StringEncoding {
     /// Byte (8-bit) encoding.
     /// <p>
@@ -98,7 +98,7 @@ pub struct StringSpec {
 
 impl StringSpec {
     /// Returns an initialized string spec.
-    /// Prefer to use the [`StringSpecBuilder`](crate::spec_builders::string_spec_builder::StringSpecBuilder) to create a string spec.
+    /// Prefer to use the [`StringSpecBuilder`](crate::data_spec_builders::string_spec_builder::StringSpecBuilder) to create a string spec.
     pub fn new(encoding: StringEncoding, storage: Option<StringStorage>) -> StringSpec {
         StringSpec {
             encoding: (encoding),
@@ -114,6 +114,20 @@ impl StringSpec {
     /// Returns the string's storage.
     pub fn storage(&self) -> &Option<StringStorage> {
         &self.storage
+    }
+    /// Returns if this string spec is compatible with the required spec.
+    pub fn is_compatible_with(&self, required: &Self) -> bool {
+        if self.encoding != required.encoding {
+            return false;
+        }
+        if let Some(storage) = &self.storage {
+            if let Some(required_storage) = &required.storage {
+                return storage == required_storage;
+            }
+        } else if required.storage.is_some() {
+            return false;
+        }
+        true
     }
 }
 

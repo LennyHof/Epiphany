@@ -1,5 +1,10 @@
 use crate::{
-    accessors::{boolean::Boolean, float::Float, integer::Integer},
+    accessors::{
+        boolean::Boolean,
+        collections::{list::List, map::Map, set::Set},
+        float::Float,
+        integer::Integer,
+    },
     data_spec::{DataSpec, DataSpecLevel, DataSpecType},
     primitive::Primitive,
 };
@@ -105,6 +110,96 @@ impl Variable {
                     def.mut_access()
                 }
                 _ => panic!("Not a boolean."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the List accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn list(&self) -> &List {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::List(list_def) => {
+                    let def = &list_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a list."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the List accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn list_mut(&mut self) -> &mut List {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::List(list_def) => {
+                    let def = list_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a list."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the Set accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn set(&self) -> &Set {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Set(set_def) => {
+                    let def = &set_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a set."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the Set accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn set_mut(&mut self) -> &mut Set {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Set(set_def) => {
+                    let def = set_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a set."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the Map accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn map(&self) -> &Map {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Map(map_def) => {
+                    let def = &map_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a map."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the Map accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn map_mut(&mut self) -> &mut Map {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Map(map_def) => {
+                    let def = map_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a map."),
             },
             _ => panic!("Not a primitive."),
         }

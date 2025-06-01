@@ -1,9 +1,9 @@
 use crate::{
     adaptors::boolean_adaptor::BooleanAdaptor,
     data_provider::{DataProvider, default_data_provider},
+    data_spec_builders::boolean_spec_builder::BooleanSpecBuilder,
     primitive_def::Accessor,
     provider_error::ProviderError,
-    spec_builders::boolean_spec_builder::BooleanSpecBuilder,
     variable::Variable,
 };
 

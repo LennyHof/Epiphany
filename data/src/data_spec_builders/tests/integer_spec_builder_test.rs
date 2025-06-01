@@ -1,8 +1,8 @@
 use crate::{
     data_spec::{DataSpecLevel, DataSpecType},
+    data_spec_builders::integer_spec_builder::IntegerSpecBuilder,
     primitive::Primitive,
     primitive_specs::integer_spec::{IntegerEncoding, IntegerStorage},
-    spec_builders::integer_spec_builder::IntegerSpecBuilder,
 };
 
 #[test]

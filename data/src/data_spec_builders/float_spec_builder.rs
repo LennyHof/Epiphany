@@ -13,7 +13,7 @@ use std::sync::Arc;
 ///
 /// Create a float data specification with base64 storage:
 /// ```rust
-/// use data::spec_builders::float_spec_builder::FloatSpecBuilder;
+/// use data::data_spec_builders::float_spec_builder::FloatSpecBuilder;
 /// use data::primitive_specs::float_spec::FloatStorage;
 /// let float_data_spec = FloatSpecBuilder::new()
 ///    .set_storage(FloatStorage::B64)

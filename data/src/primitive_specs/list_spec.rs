@@ -39,7 +39,7 @@ pub struct ListSpec {
 
 impl ListSpec {
     /// Returns an initialized list spec.
-    /// Prefer to use the [`ListSpecBuilder`](crate::spec_builders::list_spec_builder::ListSpecBuilder) to create a list spec.
+    /// Prefer to use the [`ListSpecBuilder`](crate::data_spec_builders::list_spec_builder::ListSpecBuilder) to create a list spec.
     pub fn new(element_spec: &Option<Arc<DataSpec>>, storage: &Option<ListStorage>) -> ListSpec {
         ListSpec {
             element_spec: (element_spec.clone()),
@@ -59,6 +59,27 @@ impl ListSpec {
     /// If the list has a storage type, this will return Some(storage), where storage is the storage type.
     pub fn storage(&self) -> &Option<ListStorage> {
         &self.storage
+    }
+    /// Returns if this list spec is compatible with the required spec.
+    pub fn is_compatible_with(&self, required: &Self) -> bool {
+        if self.element_spec.is_some() && required.element_spec.is_some() {
+            if let Some(element_spec) = self.element_spec.as_ref() {
+                if let Some(required_element_spec) = required.element_spec.as_ref() {
+                    if !element_spec.is_compatible_with(required_element_spec) {
+                        return false;
+                    }
+                }
+            }
+        } else if self.element_spec.is_none() && required.element_spec.is_some() {
+            return false;
+        }
+
+        match (self.storage, required.storage) {
+            (Some(s), Some(r)) => s == r,
+            (None, None) => true,
+            (Some(_), None) => true, // required does not specify storage, so we assume compatibility
+            (None, Some(_)) => false,
+        }
     }
 }
 

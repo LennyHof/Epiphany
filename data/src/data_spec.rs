@@ -77,6 +77,29 @@ impl DataSpec {
         self.specification_level
     }
 
+    /// Returns if this data specification is compatible with a required data specification.
+    pub fn is_compatible_with(&self, required: &DataSpec) -> bool {
+        // Check if the specification levels are compatible
+        if required.specification_level == DataSpecLevel::Access
+            && self.specification_level == DataSpecLevel::Compare
+        {
+            return false;
+        }
+
+        // Check if the specification types are compatible
+        match (&self.specification_type, &required.specification_type) {
+            (DataSpecType::None, DataSpecType::None) => true,
+            (DataSpecType::Primitive(p1), DataSpecType::Primitive(p2)) => p1.is_compatible_with(p2),
+            (DataSpecType::PrimitiveCategory(c1), DataSpecType::PrimitiveCategory(c2)) => {
+                c1.is_compatible_with(c2)
+            }
+            (DataSpecType::Primitive(p), DataSpecType::PrimitiveCategory(c)) => {
+                p.is_compatible_with_category(c)
+            }
+            _ => false,
+        }
+    }
+
     /// Returns the specification type.
     pub fn specification_type(&self) -> &DataSpecType {
         &self.specification_type

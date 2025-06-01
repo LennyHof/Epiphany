@@ -2,7 +2,7 @@ use crate::{
     accessors::float::FloatError,
     data_provider::{DataProvider, default_data_provider},
     primitive_specs::float_spec::FloatStorage,
-    spec_builders::float_spec_builder::FloatSpecBuilder,
+    data_spec_builders::float_spec_builder::FloatSpecBuilder,
     variable::Variable,
 };
 

@@ -4,6 +4,7 @@ use crate::primitive_def::PrimitiveSpec;
 
 /// DateTimeStorage defines an enumeration that captures the supported storage
 /// characteristics for DateTime values.
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DateTimeStorage {
     /// DateTime storage (8 bytes).
     DateTime,
@@ -38,6 +39,11 @@ impl DateTimeSpec {
     /// Returns the float's storage.
     pub fn storage(&self) -> &DateTimeStorage {
         &self.storage
+    }
+
+    /// Returns if this DateTime spec is compatible with the required spec.
+    pub fn is_compatible_with(&self, required: &Self) -> bool {
+        self.storage == required.storage
     }
 }
 

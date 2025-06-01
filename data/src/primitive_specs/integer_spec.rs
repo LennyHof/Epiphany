@@ -37,7 +37,7 @@ impl Display for IntegerEncoding {
 /// These values correspond to the size in bytes for each type; do not change
 /// as this assumption is used in other places.
 /// </p>
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum IntegerStorage {
     /// One byte per integer.
     B8 = 1,
@@ -72,7 +72,7 @@ pub struct IntegerSpec {
 
 impl IntegerSpec {
     /// Returns an initialized integer spec.
-    /// Prefer to use the [`IntegerSpecBuilder`](crate::spec_builders::integer_spec_builder::IntegerSpecBuilder) to create an interger spec.
+    /// Prefer to use the [`IntegerSpecBuilder`](crate::data_spec_builders::integer_spec_builder::IntegerSpecBuilder) to create an interger spec.
 
     pub fn new(encoding: Option<IntegerEncoding>, storage: Option<IntegerStorage>) -> IntegerSpec {
         IntegerSpec {
@@ -95,6 +95,24 @@ impl IntegerSpec {
     /// Panics if encoding has not been specified.
     pub fn is_signed(&self) -> bool {
         self.encoding.unwrap() == IntegerEncoding::Signed
+    }
+
+    /// Returns if this Integer spec is compatible with the required spec.
+    pub fn is_compatible_with(&self, required: &Self) -> bool {
+        if !match (self.encoding, required.encoding) {
+            (Some(s), Some(r)) => s == r,
+            (None, None) => true,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+        } {
+            return false;
+        }
+        match (self.storage, required.storage) {
+            (Some(s), Some(r)) => s == r,
+            (None, None) => true,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+        }
     }
 }
 

@@ -1,10 +1,23 @@
 use std::sync::Arc;
 
 use crate::{
-    accessors::{boolean::Boolean, float::Float, integer::Integer},
+    accessors::{
+        blob::Blob,
+        boolean::Boolean,
+        collections::{list::List, map::Map, set::Set},
+        float::Float,
+        integer::Integer,
+        strings::{
+            byte_string::ByteString, utf8_string::Utf8String, utf16_string::Utf16String,
+            utf32_string::Utf32String,
+        },
+    },
     adaptors::{
         blob_adaptor::BlobAdaptor,
         boolean_adaptor::BooleanAdaptor,
+        collection_adaptors::{
+            list_adaptor::ListAdaptor, map_adaptor::MapAdaptor, set_adaptor::SetAdaptor,
+        },
         float_adaptor::FloatAdaptor,
         integer_adaptor::IntegerAdaptor,
         string_adaptors::{
@@ -17,7 +30,8 @@ use crate::{
     primitive_def::PrimitiveDef,
     primitive_specs::{
         blob_spec::BlobSpec, boolean_spec::BooleanSpec, float_spec::FloatSpec,
-        integer_spec::IntegerSpec, string_spec::StringSpec,
+        integer_spec::IntegerSpec, list_spec::ListSpec, map_spec::MapSpec, set_spec::SetSpec,
+        string_spec::StringSpec,
     },
     variable::Variable,
 };
@@ -60,6 +74,54 @@ pub trait DataProvider {
                 let accessor = Boolean::new(self.boolean_adaptor(boolean_spec));
                 let def = Some(PrimitiveDef::new(boolean_spec.clone(), Some(accessor)));
                 Variable::new(Primitive::Boolean(def))
+            }
+            Primitive::ByteString(string_def) => {
+                let string_spec = string_def.as_ref().unwrap().spec();
+                let accessor = ByteString::new(self.byte_string_adaptor(string_spec));
+                let def = Some(PrimitiveDef::new(string_spec.clone(), Some(accessor)));
+                Variable::new(Primitive::ByteString(def))
+            }
+            Primitive::Utf8String(string_def) => {
+                let string_spec = string_def.as_ref().unwrap().spec();
+                let accessor = Utf8String::new(self.utf_8_string_adaptor(string_spec));
+                let def = Some(PrimitiveDef::new(string_spec.clone(), Some(accessor)));
+                Variable::new(Primitive::Utf8String(def))
+            }
+            Primitive::Utf16String(string_def) => {
+                let string_spec = string_def.as_ref().unwrap().spec();
+                let accessor = Utf16String::new(self.utf_16_string_adaptor(string_spec));
+                let def = Some(PrimitiveDef::new(string_spec.clone(), Some(accessor)));
+                Variable::new(Primitive::Utf16String(def))
+            }
+            Primitive::Utf32String(string_def) => {
+                let string_spec = string_def.as_ref().unwrap().spec();
+                let accessor = Utf32String::new(self.utf_32_string_adaptor(string_spec));
+                let def = Some(PrimitiveDef::new(string_spec.clone(), Some(accessor)));
+                Variable::new(Primitive::Utf32String(def))
+            }
+            Primitive::Blob(blob_def) => {
+                let blob_spec = blob_def.as_ref().unwrap().spec();
+                let accessor = Blob::new(self.blob_adaptor(blob_spec));
+                let def = Some(PrimitiveDef::new(blob_spec.clone(), Some(accessor)));
+                Variable::new(Primitive::Blob(def))
+            }
+            Primitive::List(list_def) => {
+                let list_spec = list_def.as_ref().unwrap().spec();
+                let accessor = List::new(self.list_adaptor(list_spec));
+                let def = Some(PrimitiveDef::new(list_spec.clone(), Some(accessor)));
+                Variable::new(Primitive::List(def))
+            }
+            Primitive::Set(set_def) => {
+                let set_spec = set_def.as_ref().unwrap().spec();
+                let accessor = Set::new(self.set_adaptor(set_spec));
+                let def = Some(PrimitiveDef::new(set_spec.clone(), Some(accessor)));
+                Variable::new(Primitive::Set(def))
+            }
+            Primitive::Map(map_def) => {
+                let map_spec = map_def.as_ref().unwrap().spec();
+                let accessor = Map::new(self.map_adaptor(map_spec));
+                let def = Some(PrimitiveDef::new(map_spec.clone(), Some(accessor)));
+                Variable::new(Primitive::Map(def))
             }
             _ => todo!(),
         }
@@ -128,11 +190,35 @@ pub trait DataProvider {
             self.name()
         );
     }
+
+    /// Returns a list adaptor according to the given spec.
+    fn list_adaptor(&self, _spec: &Arc<ListSpec>) -> Box<dyn ListAdaptor> {
+        panic!(
+            "Lists are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns a set adaptor according to the given spec.
+    fn set_adaptor(&self, _spec: &Arc<SetSpec>) -> Box<dyn SetAdaptor> {
+        panic!(
+            "Sets are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns a map adaptor according to the given spec.
+    fn map_adaptor(&self, _spec: &Arc<MapSpec>) -> Box<dyn MapAdaptor> {
+        panic!(
+            "Maps are not supported by the {} data provider",
+            self.name()
+        );
+    }
 }
 
 // /// Registry for data providers.
 // pub struct DataProviderRegistry {
-//     providers: Mutex<HashMap<String, Box<dyn DataProvider>>>,
+//     providers: Mutex<HashMap<String, Arc<dyn DataProvider>>>,
 // }
 
 // impl DataProviderRegistry {
@@ -143,13 +229,13 @@ pub trait DataProvider {
 //     }
 
 //     /// Adds a data provider to the registry.
-//     pub fn add_provider(&self, provider: Box<dyn DataProvider>) {
+//     pub fn add_provider(&self, provider: Arc<dyn DataProvider>) {
 //         let mut providers = self.providers.lock().unwrap();
 //         providers.insert(provider.name(), provider);
 //     }
 
 //     /// Returns the map of registered data providers.
-//     pub fn providers(&self) -> &Mutex<HashMap<String, Box<dyn DataProvider>>> {
+//     pub fn providers(&self) -> &Mutex<HashMap<String, Arc<dyn DataProvider>>> {
 //         &self.providers
 //     }
 // }

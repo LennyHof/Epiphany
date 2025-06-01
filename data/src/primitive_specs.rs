@@ -16,6 +16,8 @@ pub mod date_spec;
 pub mod date_time_spec;
 /// The `EdgeSpec` struct.
 pub mod edge_spec;
+/// The `EnumClassSpec` struct.
+pub mod enum_class_spec;
 /// The `EnumObjectSpec` struct.
 pub mod enum_object_spec;
 /// The `FloatSpec` struct.

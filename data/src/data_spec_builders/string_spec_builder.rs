@@ -15,7 +15,7 @@ use crate::{
 /// # Examples
 /// Create a string data specification with UTF-8 encoding and variable storage:
 /// ```rust
-/// use data::spec_builders::string_spec_builder::StringSpecBuilder;
+/// use data::data_spec_builders::string_spec_builder::StringSpecBuilder;
 /// use data::primitive_specs::string_spec::{StringEncoding, StringStorage};
 /// let string_data_spec = StringSpecBuilder::new(StringEncoding::Utf8)
 ///     .set_storage(StringStorage::VariableSize)

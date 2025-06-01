@@ -1,7 +1,19 @@
-use crate::primitive_def::Accessor;
+use crate::{
+    adaptors::string_adaptors::byte_string_adaptor::ByteStringAdaptor, primitive_def::Accessor,
+};
 
 /// ByteString provides access to <i>byte strings</i>, which are strings of 8-bit
 /// characters.
-pub struct ByteString {}
+pub struct ByteString {
+    // The adaptor for the byte string.
+    adaptor: Box<dyn ByteStringAdaptor>,
+}
 
 impl Accessor for ByteString {}
+
+impl ByteString {
+    /// Creates a new ByteString accessor.
+    pub fn new(adaptor: Box<dyn ByteStringAdaptor>) -> Self {
+        Self { adaptor }
+    }
+}

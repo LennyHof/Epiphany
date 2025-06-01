@@ -24,7 +24,7 @@ pub mod primitive_category_specs;
 pub mod data_spec;
 
 /// Data spec builders.
-pub mod spec_builders;
+pub mod data_spec_builders;
 
 /// All accessors.
 pub mod accessors;
@@ -44,12 +44,8 @@ pub mod data_provider;
 /// The `SchemaProvider` trait.
 pub mod schema_provider;
 
-mod default_providers {
-    pub mod transient_boolean_adaptor;
-    pub mod transient_data_provider;
-    pub mod transient_float_adaptor;
-    pub mod transient_integer_adaptor;
-}
+/// Default data provider implementations.
+mod default_providers;
 
 #[cfg(test)]
 mod tests {

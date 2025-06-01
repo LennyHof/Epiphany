@@ -1,6 +1,6 @@
 use crate::{
     data_provider::{DataProvider, default_data_provider},
-    spec_builders::boolean_spec_builder::BooleanSpecBuilder,
+    data_spec_builders::boolean_spec_builder::BooleanSpecBuilder,
     variable::Variable,
 };
 
