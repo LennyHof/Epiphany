@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{fmt::Debug, sync::Arc};
 
 /// A marker trait for primitive specifications.
 pub trait PrimitiveSpec {}
@@ -7,6 +7,7 @@ pub trait PrimitiveSpec {}
 pub trait Accessor {}
 
 /// PropertyDef pairs a primitive spec and a primitive accessor.
+#[derive(Debug, PartialEq)]
 pub struct PrimitiveDef<S, A>
 where
     S: PrimitiveSpec,

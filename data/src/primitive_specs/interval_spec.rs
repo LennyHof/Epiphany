@@ -1,6 +1,7 @@
 use crate::primitive_def::PrimitiveSpec;
 
 /// A primitive spec for intervals.
+#[derive(Debug, PartialEq)]
 pub struct IntervalSpec {}
 
 impl PrimitiveSpec for IntervalSpec {}
@@ -16,5 +17,11 @@ impl IntervalSpec {
         // For now, we assume all interval specs are compatible with each other.
         // This can be extended later to check specific compatibility rules.
         true
+    }
+}
+
+impl std::fmt::Display for IntervalSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Interval")
     }
 }

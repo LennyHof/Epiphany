@@ -3,6 +3,7 @@ use std::sync::Arc;
 use crate::{data_spec::DataSpec, primitive_def::PrimitiveSpec};
 
 /// A primitive spec for maps.
+#[derive(Debug, PartialEq)]
 pub struct MapSpec {
     key_spec: Option<Arc<DataSpec>>,
     element_spec: Option<Arc<DataSpec>>,
@@ -61,5 +62,22 @@ impl MapSpec {
         }
 
         true
+    }
+}
+
+impl std::fmt::Display for MapSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Map {{ key_spec: {}, element_spec: {} }}",
+            self.key_spec
+                .as_ref()
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| "None".to_string()),
+            self.element_spec
+                .as_ref()
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| "None".to_string())
+        )
     }
 }

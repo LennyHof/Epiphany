@@ -10,7 +10,7 @@ use crate::primitive_def::PrimitiveSpec;
 /// An IntegerEncoding option describes how integer values are translated to bits or bytes
 /// in storage.
 /// </p>
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum IntegerEncoding {
     /// Two's complement integer encoding.
     Signed,
@@ -37,7 +37,7 @@ impl Display for IntegerEncoding {
 /// These values correspond to the size in bytes for each type; do not change
 /// as this assumption is used in other places.
 /// </p>
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum IntegerStorage {
     /// One byte per integer.
     B8 = 1,
@@ -65,6 +65,7 @@ impl Display for IntegerStorage {
 }
 
 /// A primitive spec for integers.
+#[derive(Debug, PartialEq)]
 pub struct IntegerSpec {
     encoding: Option<IntegerEncoding>,
     storage: Option<IntegerStorage>,
@@ -73,7 +74,6 @@ pub struct IntegerSpec {
 impl IntegerSpec {
     /// Returns an initialized integer spec.
     /// Prefer to use the [`IntegerSpecBuilder`](crate::data_spec_builders::integer_spec_builder::IntegerSpecBuilder) to create an interger spec.
-
     pub fn new(encoding: Option<IntegerEncoding>, storage: Option<IntegerStorage>) -> IntegerSpec {
         IntegerSpec {
             encoding: (encoding),
@@ -117,3 +117,14 @@ impl IntegerSpec {
 }
 
 impl PrimitiveSpec for IntegerSpec {}
+
+impl Display for IntegerSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Integer {{ encoding: {}, storage: {} }}",
+            self.encoding.map_or("None".to_string(), |e| e.to_string()),
+            self.storage.map_or("None".to_string(), |s| s.to_string())
+        )
+    }
+}

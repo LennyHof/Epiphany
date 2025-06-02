@@ -52,3 +52,34 @@ pub mod time_spec;
 pub mod tuple_spec;
 /// The `WalkSpec` struct.
 pub mod walk_spec;
+
+#[cfg(test)]
+mod tests {
+    mod attribute_spec_test;
+    mod blob_spec_test;
+    mod boolean_spec_test;
+    mod character_spec_test;
+    mod class_spec_test;
+    mod data_spec_spec_test;
+    mod date_spec_test;
+    mod date_time_spec_test;
+    mod edge_spec_test;
+    mod enum_class_spec_test;
+    mod enum_object_spec_test;
+    mod float_spec_test;
+    mod guid_spec_test;
+    mod identifier_spec_test;
+    mod integer_spec_test;
+    mod interval_spec_test;
+    mod list_spec_test;
+    mod map_spec_test;
+    mod object_spec_test;
+    mod property_spec_test;
+    mod reference_spec_test;
+    mod sequence_spec_test;
+    mod set_spec_test;
+    mod string_spec_test;
+    mod time_spec_test;
+    mod tuple_spec_test;
+    mod walk_spec_test;
+}

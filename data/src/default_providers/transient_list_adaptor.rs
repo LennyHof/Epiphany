@@ -25,8 +25,8 @@ pub struct TransientListAdaptor {
 impl TransientListAdaptor {
     /// Creates a new TransientListAdaptor with the given specification.
     pub fn new(spec: Arc<ListSpec>) -> Self {
-        let mut vector = Vec::new();
-        let mut fized_size: bool = false;
+        let mut items = Vec::new();
+        let mut is_fixed_size: bool = false;
         let mut fixed_capacity: Option<usize> = None;
         if spec.storage().is_some() {
             match spec.storage().unwrap() {
@@ -34,16 +34,16 @@ impl TransientListAdaptor {
                     if size == 0 {
                         panic!("Cannot create a TransientListAdaptor with a fixed size of 0.");
                     }
-                    vector.resize_with(size as usize, || {
+                    items.resize_with(size as usize, || {
                         default_data_provider().variable_for(spec.element_spec().as_ref().unwrap())
                     });
-                    fized_size = true;
+                    is_fixed_size = true;
                 }
                 ListStorage::FixedCapacity(capacity) => {
                     if capacity == 0 {
                         panic!("Cannot create a TransientListAdaptor with a fixed capacity of 0.");
                     }
-                    vector.reserve(capacity as usize);
+                    items.reserve(capacity as usize);
                     fixed_capacity = Some(capacity as usize);
                 }
                 ListStorage::InitialCapacity(capacity) => {
@@ -52,7 +52,7 @@ impl TransientListAdaptor {
                             "Cannot create a TransientListAdaptor with an initial capacity of 0."
                         );
                     }
-                    vector.reserve(capacity as usize);
+                    items.reserve(capacity as usize);
                 }
                 ListStorage::VariableSize => {
                     // Variable size lists can be created without any restrictions.
@@ -60,10 +60,10 @@ impl TransientListAdaptor {
             }
         }
         TransientListAdaptor {
-            items: vector,
-            spec: spec,
-            fixed_capacity: fixed_capacity,
-            is_fixed_size: fized_size,
+            items,
+            spec,
+            fixed_capacity,
+            is_fixed_size,
         }
     }
 }

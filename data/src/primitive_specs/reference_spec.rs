@@ -1,6 +1,7 @@
 use crate::{accessors::schema::class::Class, primitive_def::PrimitiveSpec};
 
 /// A primitive spec for references.
+#[derive(Debug, PartialEq)]
 pub struct ReferenceSpec {
     referenced_class: Class,
 }
@@ -26,3 +27,9 @@ impl ReferenceSpec {
 }
 
 impl PrimitiveSpec for ReferenceSpec {}
+
+impl std::fmt::Display for ReferenceSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Reference {{ class: {} }}", self.referenced_class.name())
+    }
+}

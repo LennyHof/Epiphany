@@ -1,6 +1,7 @@
 use crate::primitive_def::PrimitiveSpec;
 
 /// A primitive spec for characters.
+#[derive(Debug, PartialEq)]
 pub struct CharacterSpec {}
 
 impl CharacterSpec {
@@ -18,3 +19,9 @@ impl CharacterSpec {
 }
 
 impl PrimitiveSpec for CharacterSpec {}
+
+impl std::fmt::Display for CharacterSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Character")
+    }
+}

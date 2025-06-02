@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::fmt::{Debug, Display};
 
 use crate::accessors::blob::Blob;
 use crate::accessors::collections::list::List;
@@ -64,7 +64,6 @@ use crate::primitive_specs::walk_spec::WalkSpec;
 // TODO: Add a decimal primitive.
 
 /// Primitive captures the different types of supported primitives.
-//#[derive(Copy, Clone)]
 pub enum Primitive {
     /// A value that can either be 'true' or 'false'.
     Boolean(Option<PrimitiveDef<BooleanSpec, Boolean>>),
@@ -97,9 +96,9 @@ pub enum Primitive {
     /// A globally unique identifier (GUID), also called a universally unique
     /// identifier (UUID).
     Guid(Option<PrimitiveDef<GuidSpec, Guid>>),
-    /// A reference to an object of a schema class; an object identifier (OID).
+    /// A reference to an object of a class.
     Reference(Option<PrimitiveDef<ReferenceSpec, Reference>>),
-    /// An object of a schema class.
+    /// An object of a class.
     Object(Option<PrimitiveDef<ObjectSpec, Object>>),
     /// An ordered grouping of potentially non-unique values.
     List(Option<PrimitiveDef<ListSpec, List>>),
@@ -132,47 +131,6 @@ pub enum Primitive {
     Identifier(Option<PrimitiveDef<IdentifierSpec, Identifier>>),
 }
 
-impl Display for Primitive {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}",
-            match *self {
-                Self::Boolean(_) => "Boolean".to_string(),
-                Self::Character(_) => "Character".to_string(),
-                Self::Integer(_) => "Integer".to_string(),
-                Self::Float(_) => "Float".to_string(),
-                Self::EnumObject(_) => "EnumObject".to_string(),
-                Self::Date(_) => "Date".to_string(),
-                Self::Time(_) => "Time".to_string(),
-                Self::DateTime(_) => "DateTime".to_string(),
-                Self::ByteString(_) => "ByteString".to_string(),
-                Self::Utf8String(_) => "Utf8String".to_string(),
-                Self::Utf16String(_) => "Utf16String".to_string(),
-                Self::Utf32String(_) => "Utf32String".to_string(),
-                Self::DataSpec(_) => "DataSpec".to_string(),
-                Self::Interval(_) => "Interval".to_string(),
-                Self::Guid(_) => "Guid".to_string(),
-                Self::Reference(_) => "Reference".to_string(),
-                Self::Object(_) => "Object".to_string(),
-                Self::List(_) => "List".to_string(),
-                Self::Set(_) => "Set".to_string(),
-                Self::Map(_) => "Map".to_string(),
-                Self::Sequence(_) => "Sequence".to_string(),
-                Self::Edge(_) => "Edge".to_string(),
-                Self::Walk(_) => "Walk".to_string(),
-                Self::EnumClass(_) => "EnumClass".to_string(),
-                Self::Property(_) => "Property".to_string(),
-                Self::Attribute(_) => "Attribute".to_string(),
-                Self::Class(_) => "Class".to_string(),
-                Self::Tuple(_) => "Tuple".to_string(),
-                Self::Blob(_) => "Blob".to_string(),
-                Self::Identifier(_) => "Identifier".to_string(),
-            }
-        )
-    }
-}
-
 impl Primitive {
     /// Returns if the primitive is compatible with a required primitive.
     pub fn is_compatible_with(&self, required: &Primitive) -> bool {
@@ -183,10 +141,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Character(p), Self::Character(r)) => {
@@ -195,10 +151,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Integer(p), Self::Integer(r)) => {
@@ -207,10 +161,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Float(p), Self::Float(r)) => {
@@ -219,10 +171,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::EnumObject(p), Self::EnumObject(r)) => {
@@ -231,10 +181,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Date(p), Self::Date(r)) => {
@@ -243,10 +191,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Time(p), Self::Time(r)) => {
@@ -255,10 +201,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::DateTime(p), Self::DateTime(r)) => {
@@ -267,10 +211,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::ByteString(p), Self::ByteString(r)) => {
@@ -279,10 +221,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Utf8String(p), Self::Utf8String(r)) => {
@@ -291,10 +231,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Utf16String(p), Self::Utf16String(r)) => {
@@ -303,10 +241,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Utf32String(p), Self::Utf32String(r)) => {
@@ -315,10 +251,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::DataSpec(p), Self::DataSpec(r)) => {
@@ -327,10 +261,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Interval(p), Self::Interval(r)) => {
@@ -339,10 +271,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Guid(p), Self::Guid(r)) => {
@@ -351,10 +281,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Reference(p), Self::Reference(r)) => {
@@ -363,10 +291,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Object(p), Self::Object(r)) => {
@@ -375,10 +301,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::List(p), Self::List(r)) => {
@@ -387,10 +311,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Set(p), Self::Set(r)) => {
@@ -399,10 +321,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Map(p), Self::Map(r)) => {
@@ -411,10 +331,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Sequence(p), Self::Sequence(r)) => {
@@ -423,10 +341,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Edge(p), Self::Edge(r)) => {
@@ -435,10 +351,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Walk(p), Self::Walk(r)) => {
@@ -447,10 +361,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::EnumClass(p), Self::EnumClass(r)) => {
@@ -459,10 +371,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Property(p), Self::Property(r)) => {
@@ -471,10 +381,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Attribute(p), Self::Attribute(r)) => {
@@ -483,10 +391,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Class(p), Self::Class(r)) => {
@@ -495,10 +401,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Tuple(p), Self::Tuple(r)) => {
@@ -507,10 +411,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Blob(p), Self::Blob(r)) => {
@@ -519,10 +421,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             (Self::Identifier(p), Self::Identifier(r)) => {
@@ -531,10 +431,8 @@ impl Primitive {
                         .unwrap()
                         .spec()
                         .is_compatible_with(r.as_ref().unwrap().spec())
-                } else if p.is_none() && r.is_some() {
-                    false
                 } else {
-                    true
+                    !(p.is_none() && r.is_some())
                 }
             }
             _ => false,
@@ -620,5 +518,451 @@ impl Primitive {
     /// Returns true if the primitive belongs to the all category; false otherwise.
     pub fn is_all(&self) -> bool {
         true
+    }
+}
+
+impl Display for Primitive {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Boolean(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Boolean".to_string()
+                    }
+                }
+                Self::Character(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Character".to_string()
+                    }
+                }
+                Self::Integer(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Integer".to_string()
+                    }
+                }
+                Self::Float(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Float".to_string()
+                    }
+                }
+                Self::EnumObject(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "EnumObject".to_string()
+                    }
+                }
+                Self::Date(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Date".to_string()
+                    }
+                }
+                Self::Time(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Time".to_string()
+                    }
+                }
+                Self::DateTime(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "DateTime".to_string()
+                    }
+                }
+                Self::ByteString(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "ByteString".to_string()
+                    }
+                }
+                Self::Utf8String(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Utf8String".to_string()
+                    }
+                }
+                Self::Utf16String(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Utf16String".to_string()
+                    }
+                }
+                Self::Utf32String(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Utf32String".to_string()
+                    }
+                }
+                Self::DataSpec(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "DataSpec".to_string()
+                    }
+                }
+                Self::Interval(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Interval".to_string()
+                    }
+                }
+                Self::Guid(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Guid".to_string()
+                    }
+                }
+                Self::Reference(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Reference".to_string()
+                    }
+                }
+                Self::Object(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Object".to_string()
+                    }
+                }
+                Self::List(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "List".to_string()
+                    }
+                }
+                Self::Set(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Set".to_string()
+                    }
+                }
+                Self::Map(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Map".to_string()
+                    }
+                }
+                Self::Sequence(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Sequence".to_string()
+                    }
+                }
+                Self::Edge(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Edge".to_string()
+                    }
+                }
+                Self::Walk(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Walk".to_string()
+                    }
+                }
+                Self::EnumClass(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "EnumClass".to_string()
+                    }
+                }
+                Self::Property(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Property".to_string()
+                    }
+                }
+                Self::Attribute(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Attribute".to_string()
+                    }
+                }
+                Self::Class(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Class".to_string()
+                    }
+                }
+                Self::Tuple(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Tuple".to_string()
+                    }
+                }
+                Self::Blob(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Blob".to_string()
+                    }
+                }
+                Self::Identifier(def) => {
+                    if let Some(as_def) = def {
+                        as_def.spec().to_string()
+                    } else {
+                        "Identifier".to_string()
+                    }
+                }
+            }
+        )
+    }
+}
+
+impl Debug for Primitive {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Primitive({})", self)
+    }
+}
+
+impl PartialEq for Primitive {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Boolean(p), Self::Boolean(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Character(p), Self::Character(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Integer(p), Self::Integer(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Float(p), Self::Float(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::EnumObject(p), Self::EnumObject(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Date(p), Self::Date(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Time(p), Self::Time(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::DateTime(p), Self::DateTime(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::ByteString(p), Self::ByteString(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Utf8String(p), Self::Utf8String(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Utf16String(p), Self::Utf16String(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Utf32String(p), Self::Utf32String(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::DataSpec(p), Self::DataSpec(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Interval(p), Self::Interval(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Guid(p), Self::Guid(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Reference(p), Self::Reference(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Object(p), Self::Object(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::List(p), Self::List(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Set(p), Self::Set(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Map(p), Self::Map(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Sequence(p), Self::Sequence(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Edge(p), Self::Edge(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Walk(p), Self::Walk(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::EnumClass(p), Self::EnumClass(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Property(p), Self::Property(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Attribute(p), Self::Attribute(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Class(p), Self::Class(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Tuple(p), Self::Tuple(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Blob(p), Self::Blob(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            (Self::Identifier(p), Self::Identifier(r)) => {
+                if let (Some(p), Some(r)) = (p, r) {
+                    p.spec() == r.spec()
+                } else {
+                    p.is_none() && r.is_none()
+                }
+            }
+            // If the primitives are of different types, they are not equal.
+            _ => false,
+        }
     }
 }

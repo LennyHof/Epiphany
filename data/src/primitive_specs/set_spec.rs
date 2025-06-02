@@ -3,6 +3,7 @@ use std::sync::Arc;
 use crate::{data_spec::DataSpec, primitive_def::PrimitiveSpec};
 
 /// A primitive spec for sets.
+#[derive(Debug, PartialEq)]
 pub struct SetSpec {
     element_spec: Option<Arc<DataSpec>>,
 }
@@ -42,5 +43,18 @@ impl SetSpec {
 impl Default for SetSpec {
     fn default() -> Self {
         Self::new(&None)
+    }
+}
+
+impl std::fmt::Display for SetSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Set {{ element_spec: {} }}",
+            self.element_spec
+                .as_ref()
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| "None".to_string())
+        )
     }
 }
