@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     adaptors::collection_adaptors::list_adaptor::ListAdaptor, primitive_def::Accessor,
@@ -20,7 +20,7 @@ impl List {
     }
 
     /// Returns the list's specification.
-    pub fn spec(&self) -> &Arc<ListSpec> {
+    pub fn spec(&self) -> &Rc<ListSpec> {
         self.adaptor.spec()
     }
 
@@ -67,6 +67,11 @@ impl List {
     /// Returns the list's capacity.
     pub fn capacity(&self) -> usize {
         self.adaptor.capacity()
+    }
+
+    /// Returns whether the list is empty.
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
     }
 }
 

@@ -5,7 +5,7 @@ use crate::{
     primitive_def::PrimitiveDef,
     primitive_specs::integer_spec::{IntegerEncoding, IntegerSpec, IntegerStorage},
 };
-use std::sync::Arc;
+use std::rc::Rc;
 
 /// Builder for integer data specifications.
 ///
@@ -48,17 +48,17 @@ impl IntegerSpecBuilder {
     }
 
     /// Builds and returns an initialized data specification.
-    pub fn build(&self) -> Arc<DataSpec> {
+    pub fn build(&self) -> Rc<DataSpec> {
         let mut primitive_def: Option<PrimitiveDef<IntegerSpec, Integer>> = None;
         let mut specification_level = DataSpecLevel::Compare;
         if self.encoding.is_some() || self.storage.is_some() {
-            let primitive_spec = Arc::new(IntegerSpec::new(self.encoding, self.storage));
+            let primitive_spec = Rc::new(IntegerSpec::new(self.encoding, self.storage));
             primitive_def = Some(PrimitiveDef::new(primitive_spec, None));
             if self.encoding.is_some() && self.storage.is_some() {
                 specification_level = DataSpecLevel::Access;
             }
         }
-        Arc::new(DataSpec::new_primitive(
+        Rc::new(DataSpec::new_primitive(
             Primitive::Integer(primitive_def),
             specification_level,
         ))

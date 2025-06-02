@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     accessors::collections::list::ListError,
@@ -11,7 +11,7 @@ use crate::{
 pub struct TransientListAdaptor {
     /// The specification of the list.  
     /// This is used to define the type of items in the list.
-    spec: Arc<ListSpec>,
+    spec: Rc<ListSpec>,
     /// The list of items in the adaptor.
     items: Vec<Variable>,
     /// The maximum size of the list, if applicable.
@@ -24,7 +24,7 @@ pub struct TransientListAdaptor {
 
 impl TransientListAdaptor {
     /// Creates a new TransientListAdaptor with the given specification.
-    pub fn new(spec: Arc<ListSpec>) -> Self {
+    pub fn new(spec: Rc<ListSpec>) -> Self {
         let mut items = Vec::new();
         let mut is_fixed_size: bool = false;
         let mut fixed_capacity: Option<usize> = None;
@@ -69,7 +69,7 @@ impl TransientListAdaptor {
 }
 
 impl ListAdaptor for TransientListAdaptor {
-    fn spec(&self) -> &Arc<ListSpec> {
+    fn spec(&self) -> &Rc<ListSpec> {
         &self.spec
     }
 

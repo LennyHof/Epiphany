@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     accessors::{
@@ -128,7 +128,7 @@ pub trait DataProvider {
     }
 
     /// Returns a Boolean adaptor according to the given spec.
-    fn boolean_adaptor(&self, _spec: &Arc<BooleanSpec>) -> Box<dyn BooleanAdaptor> {
+    fn boolean_adaptor(&self, _spec: &Rc<BooleanSpec>) -> Box<dyn BooleanAdaptor> {
         panic!(
             "Booleans are not supported by the {} data provider",
             self.name()
@@ -136,7 +136,7 @@ pub trait DataProvider {
     }
 
     /// Returns an blob adaptor according to the given spec.
-    fn blob_adaptor(&self, _spec: &Arc<BlobSpec>) -> Box<dyn BlobAdaptor> {
+    fn blob_adaptor(&self, _spec: &Rc<BlobSpec>) -> Box<dyn BlobAdaptor> {
         panic!(
             "Blobs are not supported by the {} data provider",
             self.name()
@@ -144,7 +144,7 @@ pub trait DataProvider {
     }
 
     /// Returns an integer adaptor according to the given spec.
-    fn integer_adaptor(&self, _spec: &Arc<IntegerSpec>) -> Box<dyn IntegerAdaptor> {
+    fn integer_adaptor(&self, _spec: &Rc<IntegerSpec>) -> Box<dyn IntegerAdaptor> {
         panic!(
             "Integers are not supported by the {} data provider",
             self.name()
@@ -152,7 +152,7 @@ pub trait DataProvider {
     }
 
     /// Returns a float adaptor according to the given spec.
-    fn float_adaptor(&self, _spec: &Arc<FloatSpec>) -> Box<dyn FloatAdaptor> {
+    fn float_adaptor(&self, _spec: &Rc<FloatSpec>) -> Box<dyn FloatAdaptor> {
         panic!(
             "Floats are not supported by the {} data provider",
             self.name()
@@ -160,7 +160,7 @@ pub trait DataProvider {
     }
 
     /// Returns a byte string adaptor according to the given spec.
-    fn byte_string_adaptor(&self, _spec: &Arc<StringSpec>) -> Box<dyn ByteStringAdaptor> {
+    fn byte_string_adaptor(&self, _spec: &Rc<StringSpec>) -> Box<dyn ByteStringAdaptor> {
         panic!(
             "Byte strings are not supported by the {} data provider",
             self.name()
@@ -168,7 +168,7 @@ pub trait DataProvider {
     }
 
     /// Returns a UTF-8 string adaptor according to the given spec.
-    fn utf_8_string_adaptor(&self, _spec: &Arc<StringSpec>) -> Box<dyn Utf8StringAdaptor> {
+    fn utf_8_string_adaptor(&self, _spec: &Rc<StringSpec>) -> Box<dyn Utf8StringAdaptor> {
         panic!(
             "UTF-8 strings are not supported by the {} data provider",
             self.name()
@@ -176,7 +176,7 @@ pub trait DataProvider {
     }
 
     /// Returns a UTF-16 string adaptor according to the given spec.
-    fn utf_16_string_adaptor(&self, _spec: &Arc<StringSpec>) -> Box<dyn Utf16StringAdaptor> {
+    fn utf_16_string_adaptor(&self, _spec: &Rc<StringSpec>) -> Box<dyn Utf16StringAdaptor> {
         panic!(
             "UTF-16 strings are not supported by the {} data provider",
             self.name()
@@ -184,7 +184,7 @@ pub trait DataProvider {
     }
 
     /// Returns a UTF-32 string adaptor according to the given spec.
-    fn utf_32_string_adaptor(&self, _spec: &Arc<StringSpec>) -> Box<dyn Utf32StringAdaptor> {
+    fn utf_32_string_adaptor(&self, _spec: &Rc<StringSpec>) -> Box<dyn Utf32StringAdaptor> {
         panic!(
             "UTF-32 strings are not supported by the {} data provider",
             self.name()
@@ -192,7 +192,7 @@ pub trait DataProvider {
     }
 
     /// Returns a list adaptor according to the given spec.
-    fn list_adaptor(&self, _spec: &Arc<ListSpec>) -> Box<dyn ListAdaptor> {
+    fn list_adaptor(&self, _spec: &Rc<ListSpec>) -> Box<dyn ListAdaptor> {
         panic!(
             "Lists are not supported by the {} data provider",
             self.name()
@@ -200,7 +200,7 @@ pub trait DataProvider {
     }
 
     /// Returns a set adaptor according to the given spec.
-    fn set_adaptor(&self, _spec: &Arc<SetSpec>) -> Box<dyn SetAdaptor> {
+    fn set_adaptor(&self, _spec: &Rc<SetSpec>) -> Box<dyn SetAdaptor> {
         panic!(
             "Sets are not supported by the {} data provider",
             self.name()
@@ -208,7 +208,7 @@ pub trait DataProvider {
     }
 
     /// Returns a map adaptor according to the given spec.
-    fn map_adaptor(&self, _spec: &Arc<MapSpec>) -> Box<dyn MapAdaptor> {
+    fn map_adaptor(&self, _spec: &Rc<MapSpec>) -> Box<dyn MapAdaptor> {
         panic!(
             "Maps are not supported by the {} data provider",
             self.name()
@@ -218,7 +218,7 @@ pub trait DataProvider {
 
 // /// Registry for data providers.
 // pub struct DataProviderRegistry {
-//     providers: Mutex<HashMap<String, Arc<dyn DataProvider>>>,
+//     providers: Mutex<HashMap<String, Rc<dyn DataProvider>>>,
 // }
 
 // impl DataProviderRegistry {
@@ -229,13 +229,13 @@ pub trait DataProvider {
 //     }
 
 //     /// Adds a data provider to the registry.
-//     pub fn add_provider(&self, provider: Arc<dyn DataProvider>) {
+//     pub fn add_provider(&self, provider: Rc<dyn DataProvider>) {
 //         let mut providers = self.providers.lock().unwrap();
 //         providers.insert(provider.name(), provider);
 //     }
 
 //     /// Returns the map of registered data providers.
-//     pub fn providers(&self) -> &Mutex<HashMap<String, Arc<dyn DataProvider>>> {
+//     pub fn providers(&self) -> &Mutex<HashMap<String, Rc<dyn DataProvider>>> {
 //         &self.providers
 //     }
 // }

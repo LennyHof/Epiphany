@@ -1,4 +1,4 @@
-use std::{error::Error, fmt::Display, sync::Arc};
+use std::{error::Error, fmt::Display, rc::Rc};
 
 use crate::{
     adaptors::integer_adaptor::IntegerAdaptor,
@@ -22,7 +22,7 @@ impl Integer {
     }
 
     /// Returns the integer's specification
-    pub fn spec(&self) -> &Arc<IntegerSpec> {
+    pub fn spec(&self) -> &Rc<IntegerSpec> {
         self.adaptor.spec()
     }
 

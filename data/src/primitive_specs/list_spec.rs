@@ -1,4 +1,4 @@
-use std::{fmt::Display, sync::Arc};
+use std::{fmt::Display, rc::Rc};
 
 use crate::{data_spec::DataSpec, primitive_def::PrimitiveSpec};
 
@@ -34,14 +34,14 @@ impl Display for ListStorage {
 /// A primitive spec for lists.
 #[derive(Debug, PartialEq)]
 pub struct ListSpec {
-    element_spec: Option<Arc<DataSpec>>,
+    element_spec: Option<Rc<DataSpec>>,
     storage: Option<ListStorage>,
 }
 
 impl ListSpec {
     /// Returns an initialized list spec.
     /// Prefer to use the [`ListSpecBuilder`](crate::data_spec_builders::list_spec_builder::ListSpecBuilder) to create a list spec.
-    pub fn new(element_spec: &Option<Arc<DataSpec>>, storage: &Option<ListStorage>) -> ListSpec {
+    pub fn new(element_spec: &Option<Rc<DataSpec>>, storage: &Option<ListStorage>) -> ListSpec {
         ListSpec {
             element_spec: element_spec.clone(),
             storage: *storage,
@@ -51,7 +51,7 @@ impl ListSpec {
     /// Returns the list' element specification.
     /// If the list does not have an element specification, this will return None.
     /// If the list has an element specification, this will return Some(spec), where spec is the element specification.
-    pub fn element_spec(&self) -> &Option<Arc<DataSpec>> {
+    pub fn element_spec(&self) -> &Option<Rc<DataSpec>> {
         &self.element_spec
     }
 

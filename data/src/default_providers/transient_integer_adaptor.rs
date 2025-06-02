@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     accessors::integer::IntegerError, adaptor::Adaptor, adaptors::integer_adaptor::IntegerAdaptor,
@@ -11,12 +11,12 @@ enum IntegerValue {
 }
 
 pub struct TransientIntegerAdaptor {
-    spec: Arc<IntegerSpec>,
+    spec: Rc<IntegerSpec>,
     value: IntegerValue,
 }
 
 impl TransientIntegerAdaptor {
-    pub fn new(spec: Arc<IntegerSpec>) -> Self {
+    pub fn new(spec: Rc<IntegerSpec>) -> Self {
         TransientIntegerAdaptor {
             spec: (spec.clone()),
             value: (if spec.is_signed() {
@@ -31,7 +31,7 @@ impl TransientIntegerAdaptor {
 impl Adaptor for TransientIntegerAdaptor {}
 
 impl IntegerAdaptor for TransientIntegerAdaptor {
-    fn spec(&self) -> &Arc<IntegerSpec> {
+    fn spec(&self) -> &Rc<IntegerSpec> {
         &self.spec
     }
 

@@ -1,4 +1,4 @@
-use std::{error::Error, fmt::Display, sync::Arc};
+use std::{error::Error, fmt::Display, rc::Rc};
 
 use crate::{
     adaptors::float_adaptor::FloatAdaptor,
@@ -22,7 +22,7 @@ impl Float {
     }
 
     /// Returns the float's specification
-    pub fn spec(&self) -> &Arc<FloatSpec> {
+    pub fn spec(&self) -> &Rc<FloatSpec> {
         self.adaptor.spec()
     }
 

@@ -1,4 +1,4 @@
-use std::{fmt::Debug, sync::Arc};
+use std::{fmt::Debug, rc::Rc};
 
 /// A marker trait for primitive specifications.
 pub trait PrimitiveSpec {}
@@ -13,7 +13,7 @@ where
     S: PrimitiveSpec,
     A: Accessor,
 {
-    spec: Arc<S>,
+    spec: Rc<S>,
     access: Option<A>,
 }
 
@@ -23,7 +23,7 @@ where
     A: Accessor,
 {
     /// Returns an initialized PrimitiveDef.
-    pub fn new(spec: Arc<S>, access: Option<A>) -> PrimitiveDef<S, A> {
+    pub fn new(spec: Rc<S>, access: Option<A>) -> PrimitiveDef<S, A> {
         PrimitiveDef {
             spec: (spec),
             access: (access),
@@ -31,7 +31,7 @@ where
     }
 
     /// Returns the property's specification.
-    pub fn spec(&self) -> &Arc<S> {
+    pub fn spec(&self) -> &Rc<S> {
         &self.spec
     }
 

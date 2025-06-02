@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     accessors::collections::list::ListError, primitive_specs::list_spec::ListSpec,
@@ -10,7 +10,7 @@ use crate::{
 /// An adaptor for lists.
 pub trait ListAdaptor {
     /// Returns the list's specification.
-    fn spec(&self) -> &Arc<ListSpec>;
+    fn spec(&self) -> &Rc<ListSpec>;
 
     /// Returns whether the list is of fixed size.
     fn is_fixed_size(&self) -> bool;
