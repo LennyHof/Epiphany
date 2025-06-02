@@ -1,6 +1,7 @@
 use crate::primitive_def::PrimitiveSpec;
 
 /// A primitive spec for GUIDs.
+#[derive(Debug, PartialEq)]
 pub struct GuidSpec {}
 
 impl GuidSpec {
@@ -24,3 +25,9 @@ impl Default for GuidSpec {
 }
 
 impl PrimitiveSpec for GuidSpec {}
+
+impl std::fmt::Display for GuidSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Guid")
+    }
+}

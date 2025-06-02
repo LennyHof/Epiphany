@@ -1,6 +1,7 @@
 use crate::primitive_def::PrimitiveSpec;
 
 /// A primitive spec for dates.
+#[derive(Debug, PartialEq)]
 pub struct DateSpec {}
 
 impl DateSpec {
@@ -17,3 +18,9 @@ impl DateSpec {
 }
 
 impl PrimitiveSpec for DateSpec {}
+
+impl std::fmt::Display for DateSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Date")
+    }
+}

@@ -26,6 +26,7 @@ impl Display for DateTimeStorage {
 }
 
 /// A primitive spec for date-times.
+#[derive(Debug, PartialEq)]
 pub struct DateTimeSpec {
     storage: DateTimeStorage,
 }
@@ -48,3 +49,9 @@ impl DateTimeSpec {
 }
 
 impl PrimitiveSpec for DateTimeSpec {}
+
+impl Display for DateTimeSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "DateTime {{ storage: {} }}", self.storage)
+    }
+}

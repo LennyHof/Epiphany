@@ -4,7 +4,7 @@ use super::primitive::Primitive;
 use super::primitive_category::PrimitiveCategory;
 
 /// Specifies if the data specification is for compare only or is valid for data access.
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum DataSpecLevel {
     /// The data specification is valid only for comparison purposes.
     Compare,
@@ -26,6 +26,7 @@ impl Display for DataSpecLevel {
 }
 
 /// Specifies the data specification's type.
+#[derive(Debug, PartialEq)]
 pub enum DataSpecType {
     /// No type.
     None,
@@ -58,6 +59,7 @@ pub enum DataSpecType {
 /// An application uses a DataSpecBuilder to build a data specification.
 /// </p>
 ///
+#[derive(Debug, PartialEq)]
 pub struct DataSpec {
     specification_level: DataSpecLevel,
     specification_type: DataSpecType,
@@ -108,5 +110,19 @@ impl DataSpec {
     /// Returns the specification type as a mutable reference.
     pub fn specification_type_mut(&mut self) -> &mut DataSpecType {
         &mut self.specification_type
+    }
+}
+
+impl Display for DataSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match &self.specification_type {
+                DataSpecType::None => "None".to_string(),
+                DataSpecType::Primitive(p) => p.to_string(),
+                DataSpecType::PrimitiveCategory(c) => c.to_string(),
+            }
+        )
     }
 }

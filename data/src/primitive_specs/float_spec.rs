@@ -8,7 +8,7 @@ use crate::primitive_def::PrimitiveSpec;
 /// These values correspond to the size in bytes for each type; do not change
 /// as this assumption is used in other places.
 /// </p>
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum FloatStorage {
     /// Four bytes per float.
     B32 = 4,
@@ -30,6 +30,7 @@ impl Display for FloatStorage {
 }
 
 /// A primitive spec for floats.
+#[derive(Debug, PartialEq)]
 pub struct FloatSpec {
     storage: Option<FloatStorage>,
 }
@@ -53,6 +54,18 @@ impl FloatSpec {
             (Some(_), None) => true,
             (None, Some(_)) => false,
         }
+    }
+}
+
+impl Display for FloatSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Float {{ storage: {} }}",
+            self.storage
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| "None".to_string())
+        )
     }
 }
 

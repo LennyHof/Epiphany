@@ -1,6 +1,7 @@
 use crate::{accessors::schema::class::Class, primitive_def::PrimitiveSpec};
 
 /// A primitive spec for objects.
+#[derive(Debug, PartialEq)]
 pub struct ObjectSpec {
     object_class: Class,
 }
@@ -24,3 +25,9 @@ impl ObjectSpec {
 }
 
 impl PrimitiveSpec for ObjectSpec {}
+
+impl std::fmt::Display for ObjectSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Object {{class: {} }}", self.object_class.name())
+    }
+}

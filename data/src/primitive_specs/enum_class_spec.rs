@@ -1,6 +1,7 @@
 use crate::primitive_def::PrimitiveSpec;
 
 /// The `EnumClassSpec` represents a specification for an enum class.
+#[derive(Debug, PartialEq)]
 pub struct EnumClassSpec {}
 impl EnumClassSpec {
     /// Creates a new `EnumClassSpec`.
@@ -16,3 +17,9 @@ impl EnumClassSpec {
     }
 }
 impl PrimitiveSpec for EnumClassSpec {}
+
+impl std::fmt::Display for EnumClassSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "EnumClass")
+    }
+}

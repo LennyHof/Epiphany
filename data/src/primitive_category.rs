@@ -3,7 +3,7 @@ use std::fmt::Display;
 // TODO: Add a Real category.
 
 /// PrimitiveCategory captures the different categories that Primitives may belong.
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum PrimitiveCategory {
     /// Category of primitives representing numbers.
     Numeric,
@@ -25,6 +25,25 @@ pub enum PrimitiveCategory {
     All,
 }
 
+impl PrimitiveCategory {
+    /// Returns if this PrimitiveCategory that is compatible with a required PrimitiveCategory.
+    pub fn is_compatible_with(&self, required: &PrimitiveCategory) -> bool {
+        match (self, required) {
+            (Self::All, _) | (_, Self::All) => true,
+            (Self::Numeric, Self::Numeric) => true,
+            (Self::String, Self::String) => true,
+            (Self::Basic, Self::Basic) => true,
+            (Self::Simple, Self::Simple) => true,
+            (Self::ObjectOrReference, Self::ObjectOrReference) => true,
+            (Self::Collection, Self::Collection) => true,
+            (Self::Sequenceable, Self::Sequenceable) => true,
+            (Self::Collection, Self::Sequenceable) => true,
+            (Self::Schema, Self::Schema) => true,
+            _ => false,
+        }
+    }
+}
+
 impl Display for PrimitiveCategory {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
@@ -42,24 +61,5 @@ impl Display for PrimitiveCategory {
                 Self::All => "All".to_string(),
             }
         )
-    }
-}
-
-impl PrimitiveCategory {
-    /// Returns if this PrimitiveCategory that is compatible with a required PrimitiveCategory.
-    pub fn is_compatible_with(&self, required: &PrimitiveCategory) -> bool {
-        match (self, required) {
-            (Self::All, _) | (_, Self::All) => true,
-            (Self::Numeric, Self::Numeric) => true,
-            (Self::String, Self::String) => true,
-            (Self::Basic, Self::Basic) => true,
-            (Self::Simple, Self::Simple) => true,
-            (Self::ObjectOrReference, Self::ObjectOrReference) => true,
-            (Self::Collection, Self::Collection) => true,
-            (Self::Sequenceable, Self::Sequenceable) => true,
-            (Self::Collection, Self::Sequenceable) => true,
-            (Self::Schema, Self::Schema) => true,
-            _ => false,
-        }
     }
 }

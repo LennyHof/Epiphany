@@ -168,3 +168,782 @@ fn is_schema() {
     assert!(!Primitive::Blob(None).is_schema());
     assert!(!Primitive::Identifier(None).is_schema());
 }
+
+#[test]
+fn is_compatible_with_none_none() {
+    assert!(Primitive::Boolean(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(Primitive::Character(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(Primitive::Integer(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(Primitive::Float(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(Primitive::EnumObject(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(Primitive::Date(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(Primitive::Time(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(Primitive::DateTime(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(Primitive::ByteString(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(Primitive::Utf8String(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(Primitive::Utf32String(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(Primitive::DataSpec(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(Primitive::Interval(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(Primitive::Guid(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(Primitive::Reference(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(Primitive::Object(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(Primitive::List(None).is_compatible_with(&Primitive::List(None)));
+    assert!(Primitive::Set(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(Primitive::Map(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(Primitive::Sequence(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(Primitive::Edge(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(Primitive::Walk(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(Primitive::EnumClass(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(Primitive::Property(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(Primitive::Attribute(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(Primitive::Class(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(Primitive::Tuple(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(Primitive::Blob(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(Primitive::Identifier(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+
+#[test]
+fn boolean_is_not_compatible_with() {
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn character_is_not_compatible_with() {
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn integer_is_not_compatible_with() {
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn float_is_not_compatible_with() {
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn enum_object_is_not_compatible_with() {
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn date_is_not_compatible_with() {
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn date_time_is_not_compatible_with() {
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn data_spec_is_not_compatible_with() {
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn interval_is_not_compatible_with() {
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn reference_is_not_compatible_with() {
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn object_is_not_compatible_with() {
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn list_is_not_compatible_with() {
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn set_is_not_compatible_with() {
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+
+#[test]
+fn map_is_not_compatible_with() {
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+
+#[test]
+fn sequence_is_not_compatible_with() {
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn edge_is_not_compatible_with() {
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn walk_is_not_compatible_with() {
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn enum_class_is_not_compatible_with() {
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn property_is_not_compatible_with() {
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn attribute_is_not_compatible_with() {
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn class_is_not_compatible_with() {
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn tuple_is_not_compatible_with() {
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn blob_is_not_compatible_with() {
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn identifier_is_not_compatible_with() {
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Blob(None)));
+}

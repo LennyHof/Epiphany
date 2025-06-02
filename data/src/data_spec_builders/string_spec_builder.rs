@@ -33,7 +33,7 @@ impl StringSpecBuilder {
     /// Returns an initialized StringSpecBuilder.
     pub fn new(encoding: StringEncoding) -> StringSpecBuilder {
         StringSpecBuilder {
-            encoding: encoding,
+            encoding,
             storage: None,
         }
     }

@@ -93,11 +93,10 @@ impl ListSpecBuilder {
             let primitive_spec = Arc::new(ListSpec::new(&self.element_spec, &self.storage));
             primitive_def = Some(PrimitiveDef::new(primitive_spec, None));
             specification_level = self.element_spec.as_ref().unwrap().specification_level();
-        } else {
-            if self.storage.is_some() {
-                panic!("ListSpecBuilder: list storage is set but no element spec is set.");
-            }
+        } else if self.storage.is_some() {
+            panic!("ListSpecBuilder: list storage is set but no element spec is set.");
         }
+
         Arc::new(DataSpec::new_primitive(
             Primitive::List(primitive_def),
             specification_level,

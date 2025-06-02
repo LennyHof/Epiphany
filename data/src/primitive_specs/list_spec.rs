@@ -32,6 +32,7 @@ impl Display for ListStorage {
 }
 
 /// A primitive spec for lists.
+#[derive(Debug, PartialEq)]
 pub struct ListSpec {
     element_spec: Option<Arc<DataSpec>>,
     storage: Option<ListStorage>,
@@ -42,8 +43,8 @@ impl ListSpec {
     /// Prefer to use the [`ListSpecBuilder`](crate::data_spec_builders::list_spec_builder::ListSpecBuilder) to create a list spec.
     pub fn new(element_spec: &Option<Arc<DataSpec>>, storage: &Option<ListStorage>) -> ListSpec {
         ListSpec {
-            element_spec: (element_spec.clone()),
-            storage: (storage.clone()),
+            element_spec: element_spec.clone(),
+            storage: *storage,
         }
     }
 
@@ -84,3 +85,20 @@ impl ListSpec {
 }
 
 impl PrimitiveSpec for ListSpec {}
+
+impl Display for ListSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "List {{ element_spec: {}, storage: {} }}",
+            self.element_spec
+                .as_ref()
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| "None".to_string()),
+            self.storage
+                .as_ref()
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| "None".to_string())
+        )
+    }
+}

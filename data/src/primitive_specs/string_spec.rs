@@ -90,7 +90,7 @@ impl Display for StringStorage {
 }
 
 /// A primitive spec for strings.
-#[derive(Copy, Clone)]
+#[derive(Debug, PartialEq)]
 pub struct StringSpec {
     encoding: StringEncoding,
     storage: Option<StringStorage>,
@@ -132,3 +132,17 @@ impl StringSpec {
 }
 
 impl PrimitiveSpec for StringSpec {}
+
+impl Display for StringSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "String {{ encoding: {}, storage: {} }}",
+            self.encoding,
+            self.storage
+                .as_ref()
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| "None".to_string())
+        )
+    }
+}

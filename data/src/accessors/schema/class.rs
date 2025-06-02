@@ -1,6 +1,7 @@
 use crate::primitive_def::Accessor;
 
 /// Class provides access to schema classes.
+#[derive(Debug, PartialEq)]
 pub struct Class {
     name: String,
 }

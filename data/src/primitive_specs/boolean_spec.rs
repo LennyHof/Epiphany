@@ -1,6 +1,9 @@
+use std::fmt::Display;
+
 use crate::primitive_def::PrimitiveSpec;
 
 /// A primitive spec for Booleans.
+#[derive(Debug, PartialEq)]
 pub struct BooleanSpec {}
 
 impl BooleanSpec {
@@ -12,13 +15,17 @@ impl BooleanSpec {
 
     /// Returns if this Boolean spec is compatible with the required spec.
     pub fn is_compatible_with(&self, _required: &Self) -> bool {
-        // For now, we assume all Boolean specs are compatible with each other.
-        // This can be extended later to check specific compatibility rules.
-        true
+        true // Boolean specs don't have any specializations.
     }
 }
 
 impl PrimitiveSpec for BooleanSpec {}
+
+impl Display for BooleanSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Boolean")
+    }
+}
 
 impl Default for BooleanSpec {
     fn default() -> Self {

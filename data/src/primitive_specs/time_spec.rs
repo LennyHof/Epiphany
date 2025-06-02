@@ -1,6 +1,7 @@
 use crate::primitive_def::PrimitiveSpec;
 
 /// A primitive spec for times.
+#[derive(Debug, PartialEq)]
 pub struct TimeSpec {}
 
 impl TimeSpec {
@@ -18,3 +19,9 @@ impl TimeSpec {
 }
 
 impl PrimitiveSpec for TimeSpec {}
+
+impl std::fmt::Display for TimeSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Time")
+    }
+}
