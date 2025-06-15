@@ -1,4 +1,5 @@
 use crate::primitive_specs::boolean_spec::BooleanSpec;
+use crate::spec_compatibility::SpecCompatibility;
 
 #[test]
 fn boolean_spec_new() {

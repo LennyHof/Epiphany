@@ -4,7 +4,7 @@ use crate::{
     primitive_def::PrimitiveDef,
     primitive_specs::boolean_spec::BooleanSpec,
 };
-use std::sync::Arc;
+use std::rc::Rc;
 
 /// Builder for boolean data specifications.
 ///
@@ -24,10 +24,10 @@ impl BooleanSpecBuilder {
     }
 
     /// Builds and returns an initialized data specification.
-    pub fn build(&self) -> Arc<DataSpec> {
-        let primitive_spec = Arc::new(BooleanSpec::new());
+    pub fn build(&self) -> Rc<DataSpec> {
+        let primitive_spec = Rc::new(BooleanSpec::new());
         let primitive_def = Some(PrimitiveDef::new(primitive_spec, None));
-        Arc::new(DataSpec::new_primitive(
+        Rc::new(DataSpec::new_primitive(
             Primitive::Boolean(primitive_def),
             DataSpecLevel::Access,
         ))

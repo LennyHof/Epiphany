@@ -60,6 +60,7 @@ use crate::accessors::strings::utf16_string::Utf16String;
 use crate::accessors::strings::utf32_string::Utf32String;
 use crate::primitive_specs::tuple_spec::TupleSpec;
 use crate::primitive_specs::walk_spec::WalkSpec;
+use crate::spec_compatibility::SpecCompatibility;
 
 // TODO: Add a decimal primitive.
 

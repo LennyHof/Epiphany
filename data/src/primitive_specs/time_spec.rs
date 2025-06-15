@@ -1,4 +1,4 @@
-use crate::primitive_def::PrimitiveSpec;
+use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
 
 /// A primitive spec for times.
 #[derive(Debug, PartialEq)]
@@ -9,9 +9,10 @@ impl TimeSpec {
     pub fn new() -> TimeSpec {
         TimeSpec {}
     }
+}
 
-    /// Returns if this time spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, _required: &Self) -> bool {
+impl SpecCompatibility for TimeSpec {
+    fn is_compatible_with(&self, _required: &Self) -> bool {
         // For now, we assume all time specs are compatible with each other.
         // This can be extended later to check specific compatibility rules.
         true

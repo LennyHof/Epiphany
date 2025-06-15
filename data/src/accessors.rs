@@ -44,4 +44,5 @@ mod tests {
     mod boolean_test;
     mod float_test;
     mod integer_test;
+    mod list_test;
 }

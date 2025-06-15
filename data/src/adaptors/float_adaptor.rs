@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     accessors::float::FloatError,
@@ -8,7 +8,7 @@ use crate::{
 /// An adaptor for floats.
 pub trait FloatAdaptor {
     /// Returns the float's specification.
-    fn spec(&self) -> &Arc<FloatSpec>;
+    fn spec(&self) -> &Rc<FloatSpec>;
 
     /// Sets the float value as a 64 bit value.
     fn set_f64(&mut self, value: f64) -> Result<(), FloatError> {

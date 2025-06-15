@@ -1,4 +1,7 @@
-use crate::primitive_def::Accessor;
+use crate::{
+    primitive_def::Accessor,
+    set_equal_to::{SetEqualTo, SetEqualToError},
+};
 
 /// Class provides access to schema classes.
 #[derive(Debug, PartialEq)]
@@ -17,11 +20,15 @@ impl Class {
         &self.name
     }
 
-    /// Returns if this class accessor is compatible with the required class accessor.
+    /// Returns if this class is compatible with required class.
     pub fn is_compatible_with(&self, required: &Self) -> bool {
-        // For now, we assume all class accessors are compatible with each other.
-        // This can be extended later to check specific compatibility rules.
         self.name == required.name
+    }
+}
+
+impl SetEqualTo for Class {
+    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+        todo!("Implement set_equal_to for Class");
     }
 }
 

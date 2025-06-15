@@ -1,17 +1,20 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
-    accessors::collections::list::ListError,
-    adaptors::collection_adaptors::list_adaptor::ListAdaptor,
+    accessors::{collections::list::ListError, sequence::SequenceIter},
+    adaptors::{collection_adaptors::list_adaptor::ListAdaptor, sequence_adaptor::SequenceAdaptor},
     data_provider::{DataProvider, default_data_provider},
-    primitive_specs::list_spec::{ListSpec, ListStorage},
+    primitive_specs::{
+        list_spec::{ListSpec, ListStorage},
+        sequence_spec::SequenceSpec,
+    },
     variable::Variable,
 };
 
 pub struct TransientListAdaptor {
     /// The specification of the list.  
     /// This is used to define the type of items in the list.
-    spec: Arc<ListSpec>,
+    spec: Rc<ListSpec>,
     /// The list of items in the adaptor.
     items: Vec<Variable>,
     /// The maximum size of the list, if applicable.
@@ -24,7 +27,7 @@ pub struct TransientListAdaptor {
 
 impl TransientListAdaptor {
     /// Creates a new TransientListAdaptor with the given specification.
-    pub fn new(spec: Arc<ListSpec>) -> Self {
+    pub fn new(spec: Rc<ListSpec>) -> Self {
         let mut items = Vec::new();
         let mut is_fixed_size: bool = false;
         let mut fixed_capacity: Option<usize> = None;
@@ -43,7 +46,7 @@ impl TransientListAdaptor {
                     if capacity == 0 {
                         panic!("Cannot create a TransientListAdaptor with a fixed capacity of 0.");
                     }
-                    items.reserve(capacity as usize);
+                    items.reserve_exact(capacity as usize);
                     fixed_capacity = Some(capacity as usize);
                 }
                 ListStorage::InitialCapacity(capacity) => {
@@ -69,7 +72,7 @@ impl TransientListAdaptor {
 }
 
 impl ListAdaptor for TransientListAdaptor {
-    fn spec(&self) -> &Arc<ListSpec> {
+    fn spec(&self) -> &Rc<ListSpec> {
         &self.spec
     }
 
@@ -125,4 +128,57 @@ impl ListAdaptor for TransientListAdaptor {
     fn fixed_capacity(&self) -> Option<usize> {
         self.fixed_capacity
     }
+
+    fn elements(&self) -> Box<dyn SequenceAdaptor> {
+        let spec = Rc::new(SequenceSpec::new(&self.spec.element_spec()));
+        Box::new(ElementSequence::new(spec, Rc::new(self.items.to_vec())))
+    }
 }
+
+struct ElementSequence {
+    spec: Rc<SequenceSpec>,
+    items: Rc<Vec<Variable>>,
+}
+
+impl ElementSequence {
+    fn new(spec: Rc<SequenceSpec>, items: Rc<Vec<Variable>>) -> Self {
+        Self {
+            spec: spec.clone(),
+            items: items.clone(),
+        }
+    }
+}
+
+impl SequenceAdaptor for ElementSequence {
+    fn spec(&self) -> &Rc<SequenceSpec> {
+        &self.spec
+    }
+
+    fn iter(&self) -> Box<dyn SequenceIter> {
+        Box::new(ElementSequenceIter {
+            items: self.items.clone(),
+            index: 0,
+        })
+    }
+}
+
+struct ElementSequenceIter {
+    items: Rc<Vec<Variable>>,
+    index: usize,
+}
+
+impl std::iter::Iterator for ElementSequenceIter {
+    type Item = Result<Variable, crate::accessors::sequence::SequenceError>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.index < self.items.len() {
+            let item = self.items[self.index].clone();
+            self.index += 1;
+            Some(Ok(item))
+        } else {
+            None
+        }
+    }
+}
+
+impl SequenceIter for ElementSequenceIter {}

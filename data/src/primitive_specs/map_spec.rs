@@ -1,12 +1,14 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
-use crate::{data_spec::DataSpec, primitive_def::PrimitiveSpec};
+use crate::{
+    data_spec::DataSpec, primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for maps.
 #[derive(Debug, PartialEq)]
 pub struct MapSpec {
-    key_spec: Option<Arc<DataSpec>>,
-    element_spec: Option<Arc<DataSpec>>,
+    key_spec: Option<Rc<DataSpec>>,
+    element_spec: Option<Rc<DataSpec>>,
 }
 
 impl PrimitiveSpec for MapSpec {}
@@ -14,7 +16,7 @@ impl PrimitiveSpec for MapSpec {}
 impl MapSpec {
     /// Returns an initialized map spec.
     /// Prefer to use the [`MapSpecBuilder`](crate::data_spec_builders::map_spec_builder::MapSpecBuilder) to create a map spec.
-    pub fn new(key_spec: &Option<Arc<DataSpec>>, element_spec: &Option<Arc<DataSpec>>) -> MapSpec {
+    pub fn new(key_spec: &Option<Rc<DataSpec>>, element_spec: &Option<Rc<DataSpec>>) -> MapSpec {
         MapSpec {
             key_spec: (key_spec.clone()),
             element_spec: (element_spec.clone()),
@@ -25,18 +27,20 @@ impl MapSpec {
     /// If the map does not have a key specification, this will return None.
     /// If the map has a key specification, this will return Some(spec), where spec is the key specification.
     /// Returns the map's key specification.
-    pub fn key_spec(&self) -> &Option<Arc<DataSpec>> {
+    pub fn key_spec(&self) -> &Option<Rc<DataSpec>> {
         &self.key_spec
     }
 
     /// Returns the map's element specification.
     /// If the map does not have an element specification, this will return None.
     /// If the map has an element specification, this will return Some(spec), where spec is the element specification.
-    pub fn element_spec(&self) -> &Option<Arc<DataSpec>> {
+    pub fn element_spec(&self) -> &Option<Rc<DataSpec>> {
         &self.element_spec
     }
-    /// Returns if this map spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
+}
+
+impl SpecCompatibility for MapSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         if self.key_spec.is_some() && required.key_spec.is_some() {
             if let Some(key_spec) = self.key_spec.as_ref() {
                 if let Some(required_key_spec) = required.key_spec.as_ref() {

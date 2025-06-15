@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     accessors::strings::{
@@ -49,18 +49,18 @@ impl StringSpecBuilder {
     /// # Panics
     ///
     /// If the fixed-sized storage is combined with UTF-8 or UTF-16 encoding.
-    pub fn build(&self) -> Arc<DataSpec> {
+    pub fn build(&self) -> Rc<DataSpec> {
         let specification_level = if self.storage.is_some() {
             DataSpecLevel::Access
         } else {
             DataSpecLevel::Compare
         };
-        let primitive_spec = Arc::new(StringSpec::new(self.encoding, self.storage));
+        let primitive_spec = Rc::new(StringSpec::new(self.encoding, self.storage));
         match self.encoding {
             StringEncoding::Byte => {
                 let primitive_def: Option<PrimitiveDef<StringSpec, ByteString>> =
                     Some(PrimitiveDef::new(primitive_spec, None));
-                Arc::new(DataSpec::new_primitive(
+                Rc::new(DataSpec::new_primitive(
                     Primitive::ByteString(primitive_def),
                     specification_level,
                 ))
@@ -73,7 +73,7 @@ impl StringSpecBuilder {
                 }
                 let primitive_def: Option<PrimitiveDef<StringSpec, Utf8String>> =
                     Some(PrimitiveDef::new(primitive_spec, None));
-                Arc::new(DataSpec::new_primitive(
+                Rc::new(DataSpec::new_primitive(
                     Primitive::Utf8String(primitive_def),
                     specification_level,
                 ))
@@ -86,7 +86,7 @@ impl StringSpecBuilder {
                 }
                 let primitive_def: Option<PrimitiveDef<StringSpec, Utf16String>> =
                     Some(PrimitiveDef::new(primitive_spec, None));
-                Arc::new(DataSpec::new_primitive(
+                Rc::new(DataSpec::new_primitive(
                     Primitive::Utf16String(primitive_def),
                     specification_level,
                 ))
@@ -94,7 +94,7 @@ impl StringSpecBuilder {
             StringEncoding::Utf32 => {
                 let primitive_def: Option<PrimitiveDef<StringSpec, Utf32String>> =
                     Some(PrimitiveDef::new(primitive_spec, None));
-                Arc::new(DataSpec::new_primitive(
+                Rc::new(DataSpec::new_primitive(
                     Primitive::Utf32String(primitive_def),
                     specification_level,
                 ))

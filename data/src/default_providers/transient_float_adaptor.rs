@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     accessors::float::FloatError, adaptor::Adaptor, adaptors::float_adaptor::FloatAdaptor,
@@ -11,12 +11,12 @@ enum FloatValue {
 }
 
 pub struct TransientFloatAdaptor {
-    spec: Arc<FloatSpec>,
+    spec: Rc<FloatSpec>,
     value: FloatValue,
 }
 
 impl TransientFloatAdaptor {
-    pub fn new(spec: Arc<FloatSpec>) -> TransientFloatAdaptor {
+    pub fn new(spec: Rc<FloatSpec>) -> TransientFloatAdaptor {
         TransientFloatAdaptor {
             spec,
             value: FloatValue::B32(0.0),
@@ -27,7 +27,7 @@ impl TransientFloatAdaptor {
 impl Adaptor for TransientFloatAdaptor {}
 
 impl FloatAdaptor for TransientFloatAdaptor {
-    fn spec(&self) -> &Arc<FloatSpec> {
+    fn spec(&self) -> &Rc<FloatSpec> {
         &self.spec
     }
 

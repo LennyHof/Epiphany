@@ -1,10 +1,12 @@
-use std::{fmt::Debug, sync::Arc};
+use std::{fmt::Debug, rc::Rc};
 
-/// A marker trait for primitive specifications.
-pub trait PrimitiveSpec {}
+use crate::{set_equal_to::SetEqualTo, spec_compatibility::SpecCompatibility};
 
-/// A marker trait for primitive accessors.
-pub trait Accessor {}
+/// A trait for primitive specifications.
+pub trait PrimitiveSpec: SpecCompatibility {}
+
+/// A trait for primitive accessors.
+pub trait Accessor: SetEqualTo {}
 
 /// PropertyDef pairs a primitive spec and a primitive accessor.
 #[derive(Debug, PartialEq)]
@@ -13,7 +15,7 @@ where
     S: PrimitiveSpec,
     A: Accessor,
 {
-    spec: Arc<S>,
+    spec: Rc<S>,
     access: Option<A>,
 }
 
@@ -23,7 +25,7 @@ where
     A: Accessor,
 {
     /// Returns an initialized PrimitiveDef.
-    pub fn new(spec: Arc<S>, access: Option<A>) -> PrimitiveDef<S, A> {
+    pub fn new(spec: Rc<S>, access: Option<A>) -> PrimitiveDef<S, A> {
         PrimitiveDef {
             spec: (spec),
             access: (access),
@@ -31,7 +33,7 @@ where
     }
 
     /// Returns the property's specification.
-    pub fn spec(&self) -> &Arc<S> {
+    pub fn spec(&self) -> &Rc<S> {
         &self.spec
     }
 

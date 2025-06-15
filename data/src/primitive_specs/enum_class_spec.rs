@@ -1,4 +1,4 @@
-use crate::primitive_def::PrimitiveSpec;
+use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
 
 /// The `EnumClassSpec` represents a specification for an enum class.
 #[derive(Debug, PartialEq)]
@@ -8,14 +8,16 @@ impl EnumClassSpec {
     pub fn new() -> Self {
         Self {}
     }
+}
 
-    /// Returns if this enum class spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, _required: &Self) -> bool {
+impl SpecCompatibility for EnumClassSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         // For now, we assume all enum class specs are compatible with each other.
         // This can be extended later to check specific compatibility rules.
         true
     }
 }
+
 impl PrimitiveSpec for EnumClassSpec {}
 
 impl std::fmt::Display for EnumClassSpec {

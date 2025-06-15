@@ -1,19 +1,19 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
-use crate::{data_spec::DataSpec, primitive_def::PrimitiveSpec};
+use crate::{
+    data_spec::DataSpec, primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for sets.
 #[derive(Debug, PartialEq)]
 pub struct SetSpec {
-    element_spec: Option<Arc<DataSpec>>,
+    element_spec: Option<Rc<DataSpec>>,
 }
-
-impl PrimitiveSpec for SetSpec {}
 
 impl SetSpec {
     /// Returns an initialized set spec.
     /// Prefer to use the [`SetSpecBuilder`](crate::data_spec_builders::set_spec_builder::SetSpecBuilder) to create a set spec.
-    pub fn new(element_spec: &Option<Arc<DataSpec>>) -> SetSpec {
+    pub fn new(element_spec: &Option<Rc<DataSpec>>) -> SetSpec {
         SetSpec {
             element_spec: (element_spec.clone()),
         }
@@ -22,11 +22,13 @@ impl SetSpec {
     /// Returns the set's element specification.
     /// If the set does not have an element specification, this will return None.
     /// If the set has an element specification, this will return Some(spec), where spec is the element specification.
-    pub fn element_spec(&self) -> &Option<Arc<DataSpec>> {
+    pub fn element_spec(&self) -> &Option<Rc<DataSpec>> {
         &self.element_spec
     }
-    /// Returns if this set spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
+}
+
+impl SpecCompatibility for SetSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         if self.element_spec.is_some() && required.element_spec.is_some() {
             if let Some(element_spec) = self.element_spec.as_ref() {
                 if let Some(required_element_spec) = required.element_spec.as_ref() {
@@ -39,6 +41,8 @@ impl SetSpec {
         true
     }
 }
+
+impl PrimitiveSpec for SetSpec {}
 
 impl Default for SetSpec {
     fn default() -> Self {

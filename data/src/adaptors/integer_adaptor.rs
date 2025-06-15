@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use crate::{
     accessors::integer::IntegerError,
@@ -9,7 +9,7 @@ use crate::{
 /// Adaptor for integer values.
 pub trait IntegerAdaptor: Adaptor {
     /// Returns the integer's specification.
-    fn spec(&self) -> &Arc<IntegerSpec>;
+    fn spec(&self) -> &Rc<IntegerSpec>;
 
     /// Sets the integer value as an unsigned 64 bit value.
     fn set_u64(&mut self, value: u64) -> Result<(), IntegerError> {

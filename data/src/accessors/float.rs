@@ -1,4 +1,4 @@
-use std::{error::Error, fmt::Display, sync::Arc};
+use std::{error::Error, fmt::Display, rc::Rc};
 
 use crate::{
     adaptors::float_adaptor::FloatAdaptor,
@@ -7,6 +7,8 @@ use crate::{
     primitive_def::Accessor,
     primitive_specs::float_spec::{FloatSpec, FloatStorage},
     provider_error::ProviderError,
+    set_equal_to::{SetEqualTo, SetEqualToError},
+    spec_compatibility::SpecCompatibility,
     variable::Variable,
 };
 
@@ -22,7 +24,7 @@ impl Float {
     }
 
     /// Returns the float's specification
-    pub fn spec(&self) -> &Arc<FloatSpec> {
+    pub fn spec(&self) -> &Rc<FloatSpec> {
         self.adaptor.spec()
     }
 
@@ -37,7 +39,22 @@ impl Float {
     }
 }
 
+impl SetEqualTo for Float {
+    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+        self.spec().as_ref().check_compatible_with(other.spec())?;
+        let value = other.f64()?;
+        self.set_f64(value)?;
+        Ok(())
+    }
+}
+
 impl Accessor for Float {}
+
+impl PartialEq for Float {
+    fn eq(&self, other: &Self) -> bool {
+        self.f64().unwrap() == other.f64().unwrap()
+    }
+}
 
 // Convert all float types to a Variable
 impl TryFrom<f32> for Variable {
@@ -121,5 +138,11 @@ impl From<String> for FloatError {
 impl From<ProviderError> for FloatError {
     fn from(value: ProviderError) -> Self {
         FloatError::ProviderError(value)
+    }
+}
+
+impl From<FloatError> for SetEqualToError {
+    fn from(error: FloatError) -> Self {
+        SetEqualToError::FloatError(error)
     }
 }

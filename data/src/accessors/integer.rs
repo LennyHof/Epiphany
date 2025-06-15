@@ -1,4 +1,4 @@
-use std::{error::Error, fmt::Display, sync::Arc};
+use std::{error::Error, fmt::Display, rc::Rc};
 
 use crate::{
     adaptors::integer_adaptor::IntegerAdaptor,
@@ -7,6 +7,8 @@ use crate::{
     primitive_def::Accessor,
     primitive_specs::integer_spec::{IntegerEncoding, IntegerSpec, IntegerStorage},
     provider_error::ProviderError,
+    set_equal_to::{SetEqualTo, SetEqualToError},
+    spec_compatibility::SpecCompatibility,
     variable::Variable,
 };
 
@@ -22,7 +24,7 @@ impl Integer {
     }
 
     /// Returns the integer's specification
-    pub fn spec(&self) -> &Arc<IntegerSpec> {
+    pub fn spec(&self) -> &Rc<IntegerSpec> {
         self.adaptor.spec()
     }
 
@@ -47,7 +49,46 @@ impl Integer {
     }
 }
 
+impl SetEqualTo for Integer {
+    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+        self.spec().as_ref().check_compatible_with(other.spec())?;
+        match self.spec().encoding() {
+            Some(IntegerEncoding::Unsigned) => {
+                let value = other.u64()?;
+                self.set_u64(value)?;
+                Ok(())
+            }
+            Some(IntegerEncoding::Signed) => {
+                let value = other.i64()?;
+                self.set_i64(value)?;
+                Ok(())
+            }
+            None => panic!(), // should never happen, as the spec should always have an encoding
+        }
+    }
+}
+
+impl From<IntegerError> for SetEqualToError {
+    fn from(error: IntegerError) -> Self {
+        SetEqualToError::IntegerError(error)
+    }
+}
+
 impl Accessor for Integer {}
+
+impl PartialEq for Integer {
+    fn eq(&self, other: &Self) -> bool {
+        match (self.spec().encoding(), other.spec().encoding()) {
+            (Some(IntegerEncoding::Unsigned), Some(IntegerEncoding::Unsigned)) => {
+                self.u64().unwrap() == other.u64().unwrap()
+            }
+            (Some(IntegerEncoding::Signed), Some(IntegerEncoding::Signed)) => {
+                self.i64().unwrap() == other.i64().unwrap()
+            }
+            _ => false,
+        }
+    }
+}
 
 impl TryFrom<Variable> for u8 {
     type Error = IntegerError;
@@ -272,5 +313,11 @@ impl From<String> for IntegerError {
 impl From<ProviderError> for IntegerError {
     fn from(value: ProviderError) -> Self {
         IntegerError::ProviderError(value)
+    }
+}
+
+impl From<IntegerError> for String {
+    fn from(value: IntegerError) -> Self {
+        value.to_string()
     }
 }

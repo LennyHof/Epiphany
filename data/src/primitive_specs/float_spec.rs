@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::primitive_def::PrimitiveSpec;
+use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
 
 /// FloatStorage defines an enumeration that captures the supported
 /// characteristics for IEEE floats.
@@ -46,8 +46,10 @@ impl FloatSpec {
     pub fn storage(&self) -> &Option<FloatStorage> {
         &self.storage
     }
-    /// Returns if this float spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
+}
+
+impl SpecCompatibility for FloatSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         match (self.storage, required.storage) {
             (Some(s), Some(r)) => s == r,
             (None, None) => true,

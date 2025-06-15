@@ -5,7 +5,7 @@ use crate::{
     primitive_def::PrimitiveDef,
     primitive_specs::float_spec::{FloatSpec, FloatStorage},
 };
-use std::sync::Arc;
+use std::rc::Rc;
 
 /// Builder for float data specifications.
 ///
@@ -36,15 +36,15 @@ impl FloatSpecBuilder {
     }
 
     /// Builds and returns an initialized data specification.
-    pub fn build(&self) -> Arc<DataSpec> {
+    pub fn build(&self) -> Rc<DataSpec> {
         let mut primitive_def: Option<PrimitiveDef<FloatSpec, Float>> = None;
         let mut specification_level = DataSpecLevel::Compare;
         if self.storage.is_some() {
-            let primitive_spec = Arc::new(FloatSpec::new(self.storage));
+            let primitive_spec = Rc::new(FloatSpec::new(self.storage));
             primitive_def = Some(PrimitiveDef::new(primitive_spec, None));
             specification_level = DataSpecLevel::Access;
         }
-        Arc::new(DataSpec::new_primitive(
+        Rc::new(DataSpec::new_primitive(
             Primitive::Float(primitive_def),
             specification_level,
         ))
