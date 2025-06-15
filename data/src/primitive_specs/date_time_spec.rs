@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::primitive_def::PrimitiveSpec;
+use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
 
 /// DateTimeStorage defines an enumeration that captures the supported storage
 /// characteristics for DateTime values.
@@ -41,14 +41,15 @@ impl DateTimeSpec {
     pub fn storage(&self) -> &DateTimeStorage {
         &self.storage
     }
-
-    /// Returns if this DateTime spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
-        self.storage == required.storage
-    }
 }
 
 impl PrimitiveSpec for DateTimeSpec {}
+
+impl SpecCompatibility for DateTimeSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
+        self.storage == required.storage
+    }
+}
 
 impl Display for DateTimeSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

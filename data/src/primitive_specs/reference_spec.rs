@@ -1,4 +1,7 @@
-use crate::{accessors::schema::class::Class, primitive_def::PrimitiveSpec};
+use crate::{
+    accessors::schema::class::Class, primitive_def::PrimitiveSpec,
+    spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for references.
 #[derive(Debug, PartialEq)]
@@ -17,10 +20,10 @@ impl ReferenceSpec {
     pub fn referenced_class(&self) -> &Class {
         &self.referenced_class
     }
-    /// Returns if this reference spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
-        // For now, we assume all reference specs are compatible with each other.
-        // This can be extended later to check specific compatibility rules.
+}
+
+impl SpecCompatibility for ReferenceSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         self.referenced_class
             .is_compatible_with(&required.referenced_class)
     }

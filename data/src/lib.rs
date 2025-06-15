@@ -5,6 +5,12 @@
 /// The `ProviderError` enum.
 pub mod provider_error;
 
+/// The `SpecCompatibility` trait.
+pub mod spec_compatibility;
+
+/// The `SetEqualTo` trait.
+pub mod set_equal_to;
+
 /// Specifications for specific primitives.
 pub mod primitive_specs;
 
@@ -49,6 +55,7 @@ mod default_providers;
 
 #[cfg(test)]
 mod tests {
+    mod data_spec_test;
     mod primitive_test;
     mod primitive_type_category_test;
 }

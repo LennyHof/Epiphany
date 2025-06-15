@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::primitive_def::PrimitiveSpec;
+use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
 
 /// StringEncoding defines an enumeration that captures the supported encoding
 /// schemes for strings.
@@ -115,8 +115,10 @@ impl StringSpec {
     pub fn storage(&self) -> &Option<StringStorage> {
         &self.storage
     }
-    /// Returns if this string spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
+}
+
+impl SpecCompatibility for StringSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         if self.encoding != required.encoding {
             return false;
         }

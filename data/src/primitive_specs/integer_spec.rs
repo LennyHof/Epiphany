@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::primitive_def::PrimitiveSpec;
+use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
 
 /// IntegerEncoding defines an enumeration that captures the supported encoding
 /// characteristics for integers and unsigned integers.
@@ -96,9 +96,12 @@ impl IntegerSpec {
     pub fn is_signed(&self) -> bool {
         self.encoding.unwrap() == IntegerEncoding::Signed
     }
+}
 
-    /// Returns if this Integer spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
+impl PrimitiveSpec for IntegerSpec {}
+
+impl SpecCompatibility for IntegerSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         if !match (self.encoding, required.encoding) {
             (Some(s), Some(r)) => s == r,
             (None, None) => true,
@@ -115,8 +118,6 @@ impl IntegerSpec {
         }
     }
 }
-
-impl PrimitiveSpec for IntegerSpec {}
 
 impl Display for IntegerSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

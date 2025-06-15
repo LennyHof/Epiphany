@@ -1,11 +1,13 @@
 use std::rc::Rc;
 
 use crate::{
-    accessors::collections::list::ListError, primitive_specs::list_spec::ListSpec,
+    accessors::collections::list::ListError,
+    adaptors::sequence_adaptor::SequenceAdaptor,
+    data_provider::{DataProvider, default_data_provider},
+    primitive_specs::list_spec::ListSpec,
+    spec_compatibility::SpecCompatibility,
     variable::Variable,
 };
-
-// TODO: Add element capatibility tests and capacity limit tests.
 
 /// An adaptor for lists.
 pub trait ListAdaptor {
@@ -47,6 +49,9 @@ pub trait ListAdaptor {
 
     /// Sets the value at the specified index.
     fn set(&mut self, index: usize, value: Variable) -> Result<(), ListError> {
+        value
+            .data_spec()
+            .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
         if index < self.len() {
             self.do_set(index, value)
         } else {
@@ -59,9 +64,17 @@ pub trait ListAdaptor {
 
     /// Appends a value to the end of the list.
     fn push(&mut self, value: Variable) -> Result<(), ListError> {
+        value
+            .data_spec()
+            .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
         if self.is_fixed_size() {
-            Err(ListError::FixedSizeList)
+            Err(ListError::FixedSizeViolation)
         } else {
+            if let Some(c) = self.fixed_capacity() {
+                if self.len() >= c {
+                    return Err(ListError::FixedCapacityViolation(c));
+                }
+            }
             self.do_push(value)
         }
     }
@@ -71,8 +84,11 @@ pub trait ListAdaptor {
 
     /// Removes and returns the last value from the list.
     fn pop(&mut self) -> Result<Option<Variable>, ListError> {
+        if self.len() == 0 {
+            return Err(ListError::CannotPopOnEmpty);
+        }
         if self.is_fixed_size() {
-            Err(ListError::FixedSizeList)
+            Err(ListError::FixedSizeViolation)
         } else {
             self.do_pop()
         }
@@ -84,8 +100,16 @@ pub trait ListAdaptor {
     /// Inserts a value at the specified index.
     /// If the index is greater than the current length, it will return an error.
     fn insert(&mut self, index: usize, value: Variable) -> Result<(), ListError> {
+        value
+            .data_spec()
+            .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
         if self.is_fixed_size() {
-            return Err(ListError::FixedSizeList);
+            return Err(ListError::FixedSizeViolation);
+        }
+        if let Some(c) = self.fixed_capacity() {
+            if self.len() >= c {
+                return Err(ListError::FixedCapacityViolation(c));
+            }
         }
         if index <= self.len() {
             self.do_insert(index, value)
@@ -101,7 +125,7 @@ pub trait ListAdaptor {
     /// Returns the removed value if it exists.
     fn remove(&mut self, index: usize) -> Result<(), ListError> {
         if self.is_fixed_size() {
-            return Err(ListError::FixedSizeList);
+            return Err(ListError::FixedSizeViolation);
         }
         if index < self.len() {
             self.do_remove(index)
@@ -116,7 +140,7 @@ pub trait ListAdaptor {
     /// Clears the list.
     fn clear(&mut self) -> Result<(), ListError> {
         if self.is_fixed_size() {
-            Err(ListError::FixedSizeList)
+            Err(ListError::FixedSizeViolation)
         } else {
             self.do_clear()
         }
@@ -128,4 +152,19 @@ pub trait ListAdaptor {
     /// Returns the lists' capacity.
     /// Note: This is not the same as the length, as it may be larger than the current number of elements.
     fn capacity(&self) -> usize;
+
+    /// Returns the lists' elements as a sequence.
+    fn elements(&self) -> Box<dyn SequenceAdaptor>;
+
+    /// Returns a boxed clone of the list adaptor.
+    fn box_clone(&self) -> Box<dyn ListAdaptor> {
+        let mut new_adaptor = default_data_provider().list_adaptor(self.spec());
+        let mut i = 0;
+        while i < self.len() {
+            let elem = self.get(i).unwrap().clone();
+            new_adaptor.push(elem).unwrap();
+            i += 1;
+        }
+        new_adaptor
+    }
 }

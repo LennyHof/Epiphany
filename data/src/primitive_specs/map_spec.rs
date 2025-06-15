@@ -1,6 +1,8 @@
 use std::rc::Rc;
 
-use crate::{data_spec::DataSpec, primitive_def::PrimitiveSpec};
+use crate::{
+    data_spec::DataSpec, primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for maps.
 #[derive(Debug, PartialEq)]
@@ -35,8 +37,10 @@ impl MapSpec {
     pub fn element_spec(&self) -> &Option<Rc<DataSpec>> {
         &self.element_spec
     }
-    /// Returns if this map spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
+}
+
+impl SpecCompatibility for MapSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         if self.key_spec.is_some() && required.key_spec.is_some() {
             if let Some(key_spec) = self.key_spec.as_ref() {
                 if let Some(required_key_spec) = required.key_spec.as_ref() {

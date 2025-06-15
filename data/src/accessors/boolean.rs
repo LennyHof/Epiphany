@@ -3,7 +3,10 @@ use crate::{
     data_provider::{DataProvider, default_data_provider},
     data_spec_builders::boolean_spec_builder::BooleanSpecBuilder,
     primitive_def::Accessor,
+    primitive_specs::boolean_spec::BooleanSpec,
     provider_error::ProviderError,
+    set_equal_to::{SetEqualTo, SetEqualToError},
+    spec_compatibility::SpecCompatibility,
     variable::Variable,
 };
 
@@ -18,6 +21,11 @@ impl Boolean {
         Self { adaptor }
     }
 
+    /// Returns the boolean's specification.
+    pub fn spec(&self) -> &BooleanSpec {
+        self.adaptor.spec()
+    }
+
     /// Returns the value of the boolean.
     pub fn boolean(&self) -> Result<bool, ProviderError> {
         self.adaptor.boolean()
@@ -29,7 +37,25 @@ impl Boolean {
     }
 }
 
+impl SetEqualTo for Boolean {
+    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+        self.spec().check_compatible_with(other.spec())?;
+        let value = other.boolean()?;
+        self.set_boolean(value)?;
+        Ok(())
+    }
+}
+
 impl Accessor for Boolean {}
+
+impl PartialEq for Boolean {
+    fn eq(&self, other: &Self) -> bool {
+        match (self.adaptor.boolean(), other.adaptor.boolean()) {
+            (Ok(a), Ok(b)) => a == b,
+            _ => false,
+        }
+    }
+}
 
 impl TryFrom<bool> for Variable {
     type Error = ProviderError;

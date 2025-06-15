@@ -1,4 +1,7 @@
-use crate::{accessors::schema::class::Class, primitive_def::PrimitiveSpec};
+use crate::{
+    accessors::schema::class::Class, primitive_def::PrimitiveSpec,
+    spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for objects.
 #[derive(Debug, PartialEq)]
@@ -17,9 +20,10 @@ impl ObjectSpec {
     pub fn object_class(&self) -> &Class {
         &self.object_class
     }
+}
 
-    /// Returns if this object spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
+impl SpecCompatibility for ObjectSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         self.object_class.is_compatible_with(&required.object_class)
     }
 }

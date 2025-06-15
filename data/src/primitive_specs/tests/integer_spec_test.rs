@@ -1,4 +1,5 @@
 use crate::primitive_specs::integer_spec::{IntegerEncoding, IntegerSpec, IntegerStorage};
+use crate::spec_compatibility::SpecCompatibility;
 
 #[test]
 fn integer_spec_no_encoding_no_storage() {

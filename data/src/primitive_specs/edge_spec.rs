@@ -1,4 +1,4 @@
-use crate::primitive_def::PrimitiveSpec;
+use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
 
 /// A primitive spec for edges.
 #[derive(Debug, PartialEq)]
@@ -11,9 +11,10 @@ impl EdgeSpec {
     pub fn new() -> Self {
         Self {}
     }
+}
 
-    /// Returns if this edge spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, _required: &Self) -> bool {
+impl SpecCompatibility for EdgeSpec {
+    fn is_compatible_with(&self, _required: &Self) -> bool {
         // For now, we assume all edge specs are compatible with each other.
         // This can be extended later to check specific compatibility rules.
         true

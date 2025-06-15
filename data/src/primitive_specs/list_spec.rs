@@ -1,6 +1,8 @@
 use std::{fmt::Display, rc::Rc};
 
-use crate::{data_spec::DataSpec, primitive_def::PrimitiveSpec};
+use crate::{
+    data_spec::DataSpec, primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility,
+};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 /// The storage type for lists.
@@ -61,8 +63,10 @@ impl ListSpec {
     pub fn storage(&self) -> &Option<ListStorage> {
         &self.storage
     }
-    /// Returns if this list spec is compatible with the required spec.
-    pub fn is_compatible_with(&self, required: &Self) -> bool {
+}
+
+impl SpecCompatibility for ListSpec {
+    fn is_compatible_with(&self, required: &Self) -> bool {
         if self.element_spec.is_some() && required.element_spec.is_some() {
             if let Some(element_spec) = self.element_spec.as_ref() {
                 if let Some(required_element_spec) = required.element_spec.as_ref() {

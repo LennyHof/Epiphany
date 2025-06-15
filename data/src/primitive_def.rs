@@ -1,10 +1,12 @@
 use std::{fmt::Debug, rc::Rc};
 
-/// A marker trait for primitive specifications.
-pub trait PrimitiveSpec {}
+use crate::{set_equal_to::SetEqualTo, spec_compatibility::SpecCompatibility};
 
-/// A marker trait for primitive accessors.
-pub trait Accessor {}
+/// A trait for primitive specifications.
+pub trait PrimitiveSpec: SpecCompatibility {}
+
+/// A trait for primitive accessors.
+pub trait Accessor: SetEqualTo {}
 
 /// PropertyDef pairs a primitive spec and a primitive accessor.
 #[derive(Debug, PartialEq)]

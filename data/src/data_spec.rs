@@ -1,5 +1,7 @@
 use std::fmt::Display;
 
+use crate::spec_compatibility::SpecCompatibility;
+
 use super::primitive::Primitive;
 use super::primitive_category::PrimitiveCategory;
 
@@ -74,13 +76,56 @@ impl DataSpec {
         }
     }
 
+    /// Returns a DataSpec initialized to represent a primitive category.
+    pub fn new_primitive_category(primitive_category: PrimitiveCategory) -> DataSpec {
+        DataSpec {
+            specification_type: DataSpecType::PrimitiveCategory(primitive_category),
+            specification_level: DataSpecLevel::Compare,
+        }
+    }
+
     /// Returns the data specification's specification level
     pub fn specification_level(&self) -> DataSpecLevel {
         self.specification_level
     }
 
-    /// Returns if this data specification is compatible with a required data specification.
-    pub fn is_compatible_with(&self, required: &DataSpec) -> bool {
+    /// Returns the specification type.
+    pub fn specification_type(&self) -> &DataSpecType {
+        &self.specification_type
+    }
+
+    /// Returns the specification type as a mutable reference.
+    pub fn specification_type_mut(&mut self) -> &mut DataSpecType {
+        &mut self.specification_type
+    }
+}
+
+impl Default for DataSpec {
+    fn default() -> Self {
+        DataSpec {
+            specification_level: DataSpecLevel::Compare,
+            specification_type: DataSpecType::None,
+        }
+    }
+}
+
+impl Display for DataSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match &self.specification_type {
+                DataSpecType::None => "None".to_string(),
+                DataSpecType::Primitive(p) => p.to_string(),
+                DataSpecType::PrimitiveCategory(c) => c.to_string(),
+            }
+        )
+    }
+}
+
+impl SpecCompatibility for DataSpec {
+    /// Checks if this spec is compatible with the required spec.
+    fn is_compatible_with(&self, required: &Self) -> bool {
         // Check if the specification levels are compatible
         if required.specification_level == DataSpecLevel::Access
             && self.specification_level == DataSpecLevel::Compare
@@ -100,29 +145,5 @@ impl DataSpec {
             }
             _ => false,
         }
-    }
-
-    /// Returns the specification type.
-    pub fn specification_type(&self) -> &DataSpecType {
-        &self.specification_type
-    }
-
-    /// Returns the specification type as a mutable reference.
-    pub fn specification_type_mut(&mut self) -> &mut DataSpecType {
-        &mut self.specification_type
-    }
-}
-
-impl Display for DataSpec {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}",
-            match &self.specification_type {
-                DataSpecType::None => "None".to_string(),
-                DataSpecType::Primitive(p) => p.to_string(),
-                DataSpecType::PrimitiveCategory(c) => c.to_string(),
-            }
-        )
     }
 }
