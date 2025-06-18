@@ -61,67 +61,67 @@ pub trait DataProvider {
                 let int_spec = integer_def.as_ref().unwrap().spec();
                 let accessor = Integer::new(self.integer_adaptor(int_spec));
                 let def = Some(PrimitiveDef::new(int_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Integer(def))
+                Variable::new_primitive(Primitive::Integer(def))
             }
             Primitive::Float(float_def) => {
                 let float_spec = float_def.as_ref().unwrap().spec();
                 let accessor = Float::new(self.float_adaptor(float_spec));
                 let def = Some(PrimitiveDef::new(float_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Float(def))
+                Variable::new_primitive(Primitive::Float(def))
             }
             Primitive::Boolean(boolean_def) => {
                 let boolean_spec = boolean_def.as_ref().unwrap().spec();
                 let accessor = Boolean::new(self.boolean_adaptor(boolean_spec));
                 let def = Some(PrimitiveDef::new(boolean_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Boolean(def))
+                Variable::new_primitive(Primitive::Boolean(def))
             }
             Primitive::ByteString(string_def) => {
                 let string_spec = string_def.as_ref().unwrap().spec();
                 let accessor = ByteString::new(self.byte_string_adaptor(string_spec));
                 let def = Some(PrimitiveDef::new(string_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::ByteString(def))
+                Variable::new_primitive(Primitive::ByteString(def))
             }
             Primitive::Utf8String(string_def) => {
                 let string_spec = string_def.as_ref().unwrap().spec();
                 let accessor = Utf8String::new(self.utf_8_string_adaptor(string_spec));
                 let def = Some(PrimitiveDef::new(string_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Utf8String(def))
+                Variable::new_primitive(Primitive::Utf8String(def))
             }
             Primitive::Utf16String(string_def) => {
                 let string_spec = string_def.as_ref().unwrap().spec();
                 let accessor = Utf16String::new(self.utf_16_string_adaptor(string_spec));
                 let def = Some(PrimitiveDef::new(string_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Utf16String(def))
+                Variable::new_primitive(Primitive::Utf16String(def))
             }
             Primitive::Utf32String(string_def) => {
                 let string_spec = string_def.as_ref().unwrap().spec();
                 let accessor = Utf32String::new(self.utf_32_string_adaptor(string_spec));
                 let def = Some(PrimitiveDef::new(string_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Utf32String(def))
+                Variable::new_primitive(Primitive::Utf32String(def))
             }
             Primitive::Blob(blob_def) => {
                 let blob_spec = blob_def.as_ref().unwrap().spec();
                 let accessor = Blob::new(self.blob_adaptor(blob_spec));
                 let def = Some(PrimitiveDef::new(blob_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Blob(def))
+                Variable::new_primitive(Primitive::Blob(def))
             }
             Primitive::List(list_def) => {
                 let list_spec = list_def.as_ref().unwrap().spec();
                 let accessor = List::new(self.list_adaptor(list_spec));
                 let def = Some(PrimitiveDef::new(list_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::List(def))
+                Variable::new_primitive(Primitive::List(def))
             }
             Primitive::Set(set_def) => {
                 let set_spec = set_def.as_ref().unwrap().spec();
                 let accessor = Set::new(self.set_adaptor(set_spec));
                 let def = Some(PrimitiveDef::new(set_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Set(def))
+                Variable::new_primitive(Primitive::Set(def))
             }
             Primitive::Map(map_def) => {
                 let map_spec = map_def.as_ref().unwrap().spec();
                 let accessor = Map::new(self.map_adaptor(map_spec));
                 let def = Some(PrimitiveDef::new(map_spec.clone(), Some(accessor)));
-                Variable::new(Primitive::Map(def))
+                Variable::new_primitive(Primitive::Map(def))
             }
             _ => todo!(),
         }

@@ -1,6 +1,9 @@
 use std::fmt::Display;
 
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// IntegerEncoding defines an enumeration that captures the supported encoding
 /// characteristics for integers and unsigned integers.
@@ -98,8 +101,6 @@ impl IntegerSpec {
     }
 }
 
-impl PrimitiveSpec for IntegerSpec {}
-
 impl SpecCompatibility for IntegerSpec {
     fn is_compatible_with(&self, required: &Self) -> bool {
         if !match (self.encoding, required.encoding) {
@@ -118,6 +119,15 @@ impl SpecCompatibility for IntegerSpec {
         }
     }
 }
+
+impl IsOrdered for IntegerSpec {
+    fn is_ordered(&self) -> bool {
+        // Integers are hashable.
+        true
+    }
+}
+
+impl PrimitiveSpec for IntegerSpec {}
 
 impl Display for IntegerSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

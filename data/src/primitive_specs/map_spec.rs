@@ -1,7 +1,9 @@
 use std::rc::Rc;
 
 use crate::{
-    data_spec::DataSpec, primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility,
+    data_spec::DataSpec,
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
 };
 
 /// A primitive spec for maps.
@@ -10,8 +12,6 @@ pub struct MapSpec {
     key_spec: Option<Rc<DataSpec>>,
     element_spec: Option<Rc<DataSpec>>,
 }
-
-impl PrimitiveSpec for MapSpec {}
 
 impl MapSpec {
     /// Returns an initialized map spec.
@@ -66,6 +66,15 @@ impl SpecCompatibility for MapSpec {
         }
 
         true
+    }
+}
+
+impl PrimitiveSpec for MapSpec {}
+
+impl IsOrdered for MapSpec {
+    fn is_ordered(&self) -> bool {
+        // Maps are hashable if key spec is hashable.
+        self.key_spec.as_ref().map_or(true, |k| k.is_ordered())
     }
 }
 

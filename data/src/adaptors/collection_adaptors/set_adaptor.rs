@@ -1,8 +1,8 @@
 use std::rc::Rc;
 
 use crate::{
-    accessors::collections::set::SetError, primitive_specs::set_spec::SetSpec,
-    spec_compatibility::SpecCompatibility, variable::Variable,
+    accessors::collections::set::SetError, adaptors::sequence_adaptor::SequenceAdaptor,
+    primitive_specs::set_spec::SetSpec, spec_compatibility::SpecCompatibility, variable::Variable,
 };
 
 /// An adaptor for sets.
@@ -17,20 +17,21 @@ pub trait SetAdaptor {
     /// Returns `true` if the value is in the set, `false` otherwise.
     fn contains(&self, value: &Variable) -> Result<bool, SetError>;
 
-    /// Adds a value to the set.
+    /// Adds a value to the set. Returns `true` if the value was added, `false` if it was already present.
+    ///
     /// This method checks if the value's data specification is compatible with the set's element specification.
     /// If the value's data specification is not compatible, it returns a `SetError::SpecError`.
-    fn add(&mut self, value: Variable) -> Result<(), SetError> {
+    fn insert(&mut self, value: Variable) -> Result<bool, SetError> {
         // Check if the value's data specification is compatible with the set's element specification.
         value
             .data_spec()
             .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
 
-        self.do_add(value)
+        self.do_insert(value)
     }
 
-    /// Adds a value to the set.
-    fn do_add(&mut self, value: Variable) -> Result<(), SetError>;
+    /// Adds a value to the set. Returns `true` if the value was added, `false` if it was already present.
+    fn do_insert(&mut self, value: Variable) -> Result<bool, SetError>;
 
     /// Removes a value from the set.
     /// This method checks if the value's data specification is compatible with the set's element specification.
@@ -49,4 +50,7 @@ pub trait SetAdaptor {
 
     /// Clears the set.
     fn clear(&mut self) -> Result<(), SetError>;
+
+    /// Returns the lists' elements as a sequence.
+    fn elements(&self) -> Box<dyn SequenceAdaptor>;
 }

@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+use crate::primitive_def::IsOrdered;
 use crate::spec_compatibility::SpecCompatibility;
 
 use super::primitive::Primitive;
@@ -105,6 +106,16 @@ impl Default for DataSpec {
         DataSpec {
             specification_level: DataSpecLevel::Compare,
             specification_type: DataSpecType::None,
+        }
+    }
+}
+
+impl IsOrdered for DataSpec {
+    fn is_ordered(&self) -> bool {
+        match &self.specification_type {
+            DataSpecType::None => true,
+            DataSpecType::Primitive(p) => p.is_ordered(),
+            DataSpecType::PrimitiveCategory(..) => true,
         }
     }
 }

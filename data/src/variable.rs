@@ -1,3 +1,5 @@
+use std::{fmt::Display, hash::Hash};
+
 use crate::{
     accessors::{
         boolean::Boolean,
@@ -8,21 +10,24 @@ use crate::{
     data_provider::{DataProvider, default_data_provider},
     data_spec::{DataSpec, DataSpecLevel, DataSpecType},
     primitive::Primitive,
-    set_equal_to::SetEqualTo,
-    set_equal_to::SetEqualToError,
+    set_equal_to::{SetEqualTo, SetEqualToError},
     spec_compatibility::SpecCompatibility,
 };
-//use crate::data_specification::DataSpecLevel;
 
 /// A Variable holds, and provides access to primitives.
-#[derive(Debug)]
 pub struct Variable {
     data_spec: DataSpec,
 }
 
 impl Variable {
+    /// Creates a new Variable based on the provided DataSpec.
+    /// Uses the default data provider to initialize the variable.
+    pub fn new(data_spec: &DataSpec) -> Variable {
+        default_data_provider().variable_for(data_spec)
+    }
+
     /// Returns an initialized Variable based on a given primitive.
-    pub fn new(primitive: Primitive) -> Variable {
+    pub fn new_primitive(primitive: Primitive) -> Variable {
         Variable {
             data_spec: (DataSpec::new_primitive(primitive, DataSpecLevel::Access)),
         }
@@ -246,9 +251,116 @@ impl PartialEq for Variable {
                     let a2 = f2.as_ref().unwrap().borrow_access();
                     a1 == a2
                 }
+                (Primitive::Boolean(b1), Primitive::Boolean(b2)) => {
+                    let a1 = b1.as_ref().unwrap().borrow_access();
+                    let a2 = b2.as_ref().unwrap().borrow_access();
+                    a1 == a2
+                }
+                (Primitive::List(l1), Primitive::List(l2)) => {
+                    let a1 = l1.as_ref().unwrap().borrow_access();
+                    let a2 = l2.as_ref().unwrap().borrow_access();
+                    a1 == a2
+                }
+                (Primitive::Set(s1), Primitive::Set(s2)) => {
+                    let a1 = s1.as_ref().unwrap().borrow_access();
+                    let a2 = s2.as_ref().unwrap().borrow_access();
+                    a1 == a2
+                }
+                // (Primitive::Map(m1), Primitive::Map(m2)) => {
+                //     let a1 = m1.as_ref().unwrap().borrow_access();
+                //     let a2 = m2.as_ref().unwrap().borrow_access();
+                //     a1 == a2
+                // }
                 _ => false,
             },
             _ => false,
+        }
+    }
+}
+
+impl Eq for Variable {}
+
+impl PartialOrd for Variable {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        // Compare the data specifications first
+        match (
+            self.data_spec.specification_type(),
+            other.data_spec.specification_type(),
+        ) {
+            (DataSpecType::Primitive(p1), DataSpecType::Primitive(p2)) => match (p1, p2) {
+                (Primitive::Integer(i1), Primitive::Integer(i2)) => {
+                    let a1 = i1.as_ref().unwrap().borrow_access();
+                    let a2 = i2.as_ref().unwrap().borrow_access();
+                    Some(a1.cmp(a2))
+                }
+                (Primitive::Float(f1), Primitive::Float(f2)) => {
+                    let a1 = f1.as_ref().unwrap().borrow_access();
+                    let a2 = f2.as_ref().unwrap().borrow_access();
+                    Some(a1.cmp(a2))
+                }
+                (Primitive::Boolean(b1), Primitive::Boolean(b2)) => {
+                    let a1 = b1.as_ref().unwrap().borrow_access();
+                    let a2 = b2.as_ref().unwrap().borrow_access();
+                    Some(a1.cmp(a2))
+                }
+                (Primitive::List(l1), Primitive::List(l2)) => {
+                    let a1 = l1.as_ref().unwrap().borrow_access();
+                    let a2 = l2.as_ref().unwrap().borrow_access();
+                    Some(a1.cmp(a2))
+                }
+                (Primitive::Set(s1), Primitive::Set(s2)) => {
+                    let a1 = s1.as_ref().unwrap().borrow_access();
+                    let a2 = s2.as_ref().unwrap().borrow_access();
+                    Some(a1.cmp(a2))
+                }
+                _ => None,
+            },
+            _ => None,
+        }
+    }
+}
+
+impl Ord for Variable {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        // Use the PartialOrd implementation to compare
+        self.partial_cmp(other).unwrap_or(std::cmp::Ordering::Equal)
+    }
+}
+
+impl Hash for Variable {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        // Hash the value based on its type
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Integer(integer_def) => {
+                    let def = integer_def.as_ref().unwrap();
+                    def.borrow_access().hash(state);
+                }
+                Primitive::Float(float_def) => {
+                    let def = float_def.as_ref().unwrap();
+                    def.borrow_access().hash(state);
+                }
+                Primitive::Boolean(boolean_def) => {
+                    let def = boolean_def.as_ref().unwrap();
+                    def.borrow_access().hash(state);
+                }
+                Primitive::List(list_def) => {
+                    let def = list_def.as_ref().unwrap();
+                    def.borrow_access().hash(state);
+                }
+                Primitive::Set(set_def) => {
+                    let def = set_def.as_ref().unwrap();
+                    def.borrow_access().hash(state);
+                }
+                // Primitive::Map(map_def) => {
+                //     let def = map_def.as_ref().unwrap();
+                //     def.borrow_access().hash(state);
+                // }
+                _ => {
+                    todo!("Implement hash to for other primitive types");
+                }
+            },
+            _ => {}
         }
     }
 }
@@ -300,5 +412,43 @@ impl SetEqualTo for Variable {
 impl Clone for Variable {
     fn clone(&self) -> Self {
         self.try_clone().expect("Failed to clone Variable")
+    }
+}
+
+impl Display for Variable {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self.data_spec.specification_type() {
+                DataSpecType::Primitive(primitive) => match primitive {
+                    Primitive::Integer(_) => self.integer().to_string(),
+                    Primitive::Float(_) => self.float().to_string(),
+                    Primitive::Boolean(_) => self.boolean().to_string(),
+                    Primitive::List(_) => self.list().to_string(),
+                    Primitive::Set(_) => self.set().to_string(),
+                    //Primitive::Map(_) => self.map().to_string(),
+                    _ => "Unsupported primitive".to_string(),
+                },
+                _ => "Unsupported data spec type".to_string(),
+            }
+        )
+    }
+}
+
+impl std::fmt::Debug for Variable {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "spec: {}, value: {})",
+            self.data_spec(),
+            self.to_string()
+        )
+    }
+}
+
+impl From<DataSpec> for Variable {
+    fn from(data_spec: DataSpec) -> Self {
+        Variable::new(&data_spec)
     }
 }

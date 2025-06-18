@@ -1,6 +1,9 @@
 use std::fmt::Display;
 
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// StringEncoding defines an enumeration that captures the supported encoding
 /// schemes for strings.
@@ -130,6 +133,12 @@ impl SpecCompatibility for StringSpec {
             return false;
         }
         true
+    }
+}
+
+impl IsOrdered for StringSpec {
+    fn is_ordered(&self) -> bool {
+        true // Strings are hashable.
     }
 }
 

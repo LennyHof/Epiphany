@@ -1,10 +1,10 @@
-use crate::spec_compatibility::SpecCompatibility;
 use crate::{
     data_spec_builders::integer_spec_builder::IntegerSpecBuilder,
     primitive_specs::{
         integer_spec::IntegerStorage,
         list_spec::{ListSpec, ListStorage},
     },
+    spec_compatibility::SpecCompatibility,
 };
 
 #[test]

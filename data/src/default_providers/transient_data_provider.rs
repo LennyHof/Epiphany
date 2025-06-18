@@ -6,6 +6,7 @@ use crate::{
         integer_adaptor::IntegerAdaptor,
     },
     data_provider::DataProvider,
+    default_providers::transient_set_adaptor::TransientSetAdaptor,
     primitive_specs::{
         blob_spec::BlobSpec, boolean_spec::BooleanSpec, float_spec::FloatSpec,
         integer_spec::IntegerSpec,
@@ -48,9 +49,9 @@ impl DataProvider for TransientDataProvider {
     }
     fn set_adaptor(
         &self,
-        _spec: &Rc<crate::primitive_specs::set_spec::SetSpec>,
+        spec: &Rc<crate::primitive_specs::set_spec::SetSpec>,
     ) -> Box<dyn crate::adaptors::collection_adaptors::set_adaptor::SetAdaptor> {
-        todo!()
+        Box::new(TransientSetAdaptor::new(spec.clone()))
     }
     fn map_adaptor(
         &self,

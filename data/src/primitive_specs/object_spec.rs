@@ -1,5 +1,6 @@
 use crate::{
-    accessors::schema::class::Class, primitive_def::PrimitiveSpec,
+    accessors::schema::class::Class,
+    primitive_def::{IsOrdered, PrimitiveSpec},
     spec_compatibility::SpecCompatibility,
 };
 
@@ -25,6 +26,12 @@ impl ObjectSpec {
 impl SpecCompatibility for ObjectSpec {
     fn is_compatible_with(&self, required: &Self) -> bool {
         self.object_class.is_compatible_with(&required.object_class)
+    }
+}
+
+impl IsOrdered for ObjectSpec {
+    fn is_ordered(&self) -> bool {
+        todo!("Implement hashability for ObjectSpec");
     }
 }
 

@@ -1,10 +1,11 @@
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for attributes.
 #[derive(Debug, PartialEq)]
 pub struct AttributeSpec {}
-
-impl PrimitiveSpec for AttributeSpec {}
 
 impl AttributeSpec {
     /// Creates a new attribute spec.
@@ -27,3 +28,11 @@ impl SpecCompatibility for AttributeSpec {
         true
     }
 }
+
+impl IsOrdered for AttributeSpec {
+    fn is_ordered(&self) -> bool {
+        true // Attributes are hashable.
+    }
+}
+
+impl PrimitiveSpec for AttributeSpec {}

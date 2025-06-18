@@ -1,6 +1,9 @@
 use std::fmt::Display;
 
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for Booleans.
 #[derive(Debug, PartialEq)]
@@ -17,6 +20,12 @@ impl BooleanSpec {
 impl SpecCompatibility for BooleanSpec {
     fn is_compatible_with(&self, _required: &Self) -> bool {
         true // Boolean specs don't have any specializations.
+    }
+}
+
+impl IsOrdered for BooleanSpec {
+    fn is_ordered(&self) -> bool {
+        true // Booleans are hashable.
     }
 }
 

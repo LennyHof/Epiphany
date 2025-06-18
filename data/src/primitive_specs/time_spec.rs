@@ -1,4 +1,7 @@
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for times.
 #[derive(Debug, PartialEq)]
@@ -16,6 +19,12 @@ impl SpecCompatibility for TimeSpec {
         // For now, we assume all time specs are compatible with each other.
         // This can be extended later to check specific compatibility rules.
         true
+    }
+}
+
+impl IsOrdered for TimeSpec {
+    fn is_ordered(&self) -> bool {
+        true // Times are hashable.
     }
 }
 

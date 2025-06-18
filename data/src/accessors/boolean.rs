@@ -1,6 +1,10 @@
+use std::{
+    fmt::{Debug, Display},
+    hash::Hash,
+};
+
 use crate::{
     adaptors::boolean_adaptor::BooleanAdaptor,
-    data_provider::{DataProvider, default_data_provider},
     data_spec_builders::boolean_spec_builder::BooleanSpecBuilder,
     primitive_def::Accessor,
     primitive_specs::boolean_spec::BooleanSpec,
@@ -57,12 +61,46 @@ impl PartialEq for Boolean {
     }
 }
 
+impl Eq for Boolean {}
+
+impl PartialOrd for Boolean {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Boolean {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.boolean()
+            .unwrap_or(false)
+            .cmp(&other.boolean().unwrap_or(false))
+    }
+}
+
+impl Hash for Boolean {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.boolean().unwrap_or(false).hash(state);
+    }
+}
+
+impl Display for Boolean {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.boolean().unwrap_or(false))
+    }
+}
+
+impl Debug for Boolean {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+
 impl TryFrom<bool> for Variable {
     type Error = ProviderError;
 
     fn try_from(value: bool) -> Result<Self, Self::Error> {
         let spec = BooleanSpecBuilder::new().build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let boolean = var.boolean_mut();
         boolean.set_boolean(value)?;
         Ok(var)

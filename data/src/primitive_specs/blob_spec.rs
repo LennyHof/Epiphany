@@ -1,10 +1,11 @@
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for BLOBs.
 #[derive(Debug, PartialEq)]
 pub struct BlobSpec {}
-
-impl PrimitiveSpec for BlobSpec {}
 
 impl BlobSpec {
     /// Creates a new BLOB spec.
@@ -20,6 +21,15 @@ impl SpecCompatibility for BlobSpec {
         true
     }
 }
+
+impl IsOrdered for BlobSpec {
+    fn is_ordered(&self) -> bool {
+        // BLOBs are not hashable by default.
+        false
+    }
+}
+
+impl PrimitiveSpec for BlobSpec {}
 
 impl std::fmt::Display for BlobSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

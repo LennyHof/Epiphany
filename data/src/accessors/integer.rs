@@ -1,8 +1,12 @@
-use std::{error::Error, fmt::Display, rc::Rc};
+use std::{
+    error::Error,
+    fmt::{Debug, Display},
+    hash::Hash,
+    rc::Rc,
+};
 
 use crate::{
     adaptors::integer_adaptor::IntegerAdaptor,
-    data_provider::{DataProvider, default_data_provider},
     data_spec_builders::integer_spec_builder::IntegerSpecBuilder,
     primitive_def::Accessor,
     primitive_specs::integer_spec::{IntegerEncoding, IntegerSpec, IntegerStorage},
@@ -90,6 +94,62 @@ impl PartialEq for Integer {
     }
 }
 
+impl Eq for Integer {}
+
+impl PartialOrd for Integer {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        match (self.spec().encoding(), other.spec().encoding()) {
+            (Some(IntegerEncoding::Unsigned), Some(IntegerEncoding::Unsigned)) => {
+                self.u64().ok()?.partial_cmp(&other.u64().ok()?)
+            }
+            (Some(IntegerEncoding::Signed), Some(IntegerEncoding::Signed)) => {
+                self.i64().ok()?.partial_cmp(&other.i64().ok()?)
+            }
+            _ => None,
+        }
+    }
+}
+
+impl Ord for Integer {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        match (self.spec().encoding(), other.spec().encoding()) {
+            (Some(IntegerEncoding::Unsigned), Some(IntegerEncoding::Unsigned)) => {
+                self.u64().unwrap().cmp(&other.u64().unwrap())
+            }
+            (Some(IntegerEncoding::Signed), Some(IntegerEncoding::Signed)) => {
+                self.i64().unwrap().cmp(&other.i64().unwrap())
+            }
+            _ => panic!("Cannot compare integers with different encodings"),
+        }
+    }
+}
+
+impl Display for Integer {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.spec().encoding() {
+            Some(IntegerEncoding::Unsigned) => write!(f, "{}", self.u64().unwrap_or(0)),
+            Some(IntegerEncoding::Signed) => write!(f, "{}", self.i64().unwrap_or(0)),
+            None => write!(f, "No encoding specified"),
+        }
+    }
+}
+
+impl Debug for Integer {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+
+impl Hash for Integer {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        match self.spec().encoding() {
+            Some(IntegerEncoding::Unsigned) => self.u64().unwrap_or(0).hash(state),
+            Some(IntegerEncoding::Signed) => self.i64().unwrap_or(0).hash(state),
+            None => 0.hash(state), // No encoding, hash as 0
+        }
+    }
+}
+
 impl TryFrom<Variable> for u8 {
     type Error = IntegerError;
 
@@ -172,7 +232,7 @@ impl TryFrom<u8> for Variable {
             .set_storage(IntegerStorage::B8)
             .set_encoding(IntegerEncoding::Unsigned)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let int = var.integer_mut();
         int.set_u64(value as u64)?;
         Ok(var)
@@ -186,7 +246,7 @@ impl TryFrom<i8> for Variable {
             .set_storage(IntegerStorage::B8)
             .set_encoding(IntegerEncoding::Signed)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let int = var.integer_mut();
         int.set_i64(value as i64)?;
         Ok(var)
@@ -200,7 +260,7 @@ impl TryFrom<u16> for Variable {
             .set_storage(IntegerStorage::B16)
             .set_encoding(IntegerEncoding::Unsigned)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let int = var.integer_mut();
         int.set_u64(value as u64)?;
         Ok(var)
@@ -214,7 +274,7 @@ impl TryFrom<i16> for Variable {
             .set_storage(IntegerStorage::B16)
             .set_encoding(IntegerEncoding::Signed)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let int = var.integer_mut();
         int.set_i64(value as i64)?;
         Ok(var)
@@ -228,7 +288,7 @@ impl TryFrom<u32> for Variable {
             .set_storage(IntegerStorage::B32)
             .set_encoding(IntegerEncoding::Unsigned)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let int = var.integer_mut();
         int.set_u64(value as u64)?;
         Ok(var)
@@ -242,7 +302,7 @@ impl TryFrom<i32> for Variable {
             .set_storage(IntegerStorage::B32)
             .set_encoding(IntegerEncoding::Signed)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let int = var.integer_mut();
         int.set_i64(value as i64)?;
         Ok(var)
@@ -256,7 +316,7 @@ impl TryFrom<u64> for Variable {
             .set_storage(IntegerStorage::B64)
             .set_encoding(IntegerEncoding::Unsigned)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let int = var.integer_mut();
         int.set_u64(value)?;
         Ok(var)
@@ -270,7 +330,7 @@ impl TryFrom<i64> for Variable {
             .set_storage(IntegerStorage::B64)
             .set_encoding(IntegerEncoding::Signed)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let int = var.integer_mut();
         int.set_i64(value)?;
         Ok(var)

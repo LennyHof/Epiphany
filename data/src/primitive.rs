@@ -17,7 +17,7 @@ use crate::accessors::schema::property::Property;
 use crate::accessors::sequence::Sequence;
 use crate::accessors::tuple::Tuple;
 use crate::primitive_category::PrimitiveCategory;
-use crate::primitive_def::PrimitiveDef;
+use crate::primitive_def::{IsOrdered, PrimitiveDef};
 use crate::primitive_specs::attribute_spec::AttributeSpec;
 use crate::primitive_specs::blob_spec::BlobSpec;
 use crate::primitive_specs::boolean_spec::BooleanSpec;
@@ -964,6 +964,43 @@ impl PartialEq for Primitive {
             }
             // If the primitives are of different types, they are not equal.
             _ => false,
+        }
+    }
+}
+
+impl IsOrdered for Primitive {
+    fn is_ordered(&self) -> bool {
+        match self {
+            Self::Boolean(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Character(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Integer(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Float(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::EnumObject(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Date(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Time(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::DateTime(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::ByteString(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Utf8String(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Utf16String(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Utf32String(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::DataSpec(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Interval(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Guid(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Reference(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Object(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::List(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Set(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Map(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Sequence(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Edge(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Walk(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::EnumClass(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Property(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Attribute(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Class(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Tuple(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Blob(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
+            Self::Identifier(p) => p.as_ref().map_or(true, |p| p.spec().is_ordered()),
         }
     }
 }
