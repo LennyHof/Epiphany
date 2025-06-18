@@ -211,7 +211,7 @@ fn list_with_compare_element_spec() {
 }
 
 #[test]
-#[should_panic(expected = "ListSpecBuilder: list storage is set but no element spec is set.")]
+#[should_panic(expected = "ListSpecBuilder: storage is set but no element spec is set.")]
 fn list_with_storage_but_no_element_spec() {
     ListSpecBuilder::new()
         .set_storage(ListStorage::FixedSize(10))

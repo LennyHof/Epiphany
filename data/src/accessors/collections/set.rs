@@ -1,9 +1,10 @@
-use std::rc::Rc;
+use std::{hash::Hash, rc::Rc};
 
 use crate::{
+    accessors::sequence::Sequence,
     adaptors::collection_adaptors::set_adaptor::SetAdaptor,
     primitive_def::Accessor,
-    primitive_specs::set_spec::SetSpec,
+    primitive_specs::set_spec::{SetSpec, SetStorage},
     provider_error::ProviderError,
     set_equal_to::{SetEqualTo, SetEqualToError},
     spec_compatibility::{SpecCompatibility, SpecError},
@@ -28,6 +29,11 @@ impl Set {
         self.adaptor.spec()
     }
 
+    /// Checks if the set is empty.
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// Returns the length of the set.
     pub fn len(&self) -> usize {
         self.adaptor.len()
@@ -38,9 +44,9 @@ impl Set {
         self.adaptor.contains(value)
     }
 
-    /// Adds a value to the set.
-    pub fn add(&mut self, value: Variable) -> Result<(), SetError> {
-        self.adaptor.add(value)
+    /// Adds a value to the set. Returns `true` if the value was added, `false` if it was already present.
+    pub fn insert(&mut self, value: Variable) -> Result<bool, SetError> {
+        self.adaptor.insert(value)
     }
 
     /// Removes a value from the set.
@@ -52,32 +58,142 @@ impl Set {
     pub fn clear(&mut self) -> Result<(), SetError> {
         self.adaptor.clear()
     }
+
+    /// Returns the set's elements as a sequence of referenced elements.
+    /// This is useful for iterating over the elements in the list.
+    pub fn elements(&self) -> Sequence {
+        Sequence::new(self.adaptor.elements())
+    }
 }
 
 impl SetEqualTo for Set {
     fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
         self.spec().as_ref().check_compatible_with(other.spec())?;
         self.clear()?;
-        todo!("Implement set_equal_to for Set");
+        for element_result in other.elements().iter() {
+            match element_result {
+                Ok(element) => {
+                    let cloned_element = element.try_clone()?;
+                    self.insert(cloned_element)?;
+                }
+                Err(e) => return Err(SetEqualToError::from(e)),
+            }
+        }
+        Ok(())
     }
 }
 
 impl Accessor for Set {}
 
-// impl PartialEq for Set {
-//     fn eq(&self, other: &Self) -> bool {
-//         if self.len() == other.len() {
-//             for value in self.adaptor.spec().element_spec().as_ref().unwrap().iter() {
-//                 if !other.contains(value).unwrap_or(false) {
-//                     return false;
-//                 }
-//             }
-//             true
-//         } else {
-//             false
-//         }
-//     }
-// }
+impl PartialEq for Set {
+    fn eq(&self, other: &Self) -> bool {
+        if self.len() != other.len() {
+            return false;
+        }
+        for element_result in self.elements().iter() {
+            match element_result {
+                Ok(ref element) => {
+                    if !other.contains(element).unwrap_or(false) {
+                        return false;
+                    }
+                }
+                Err(_) => {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+}
+
+impl Eq for Set {}
+
+impl PartialOrd for Set {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Set {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        match self.spec().as_ref().storage() {
+            Some(SetStorage::Ordered) => {
+                if self.len() != other.len() {
+                    return self.len().cmp(&other.len());
+                }
+                for (a, b) in self.elements().iter().zip(other.elements().iter()) {
+                    match (a, b) {
+                        (Ok(a), Ok(b)) => {
+                            if a < b {
+                                return std::cmp::Ordering::Less;
+                            } else if a > b {
+                                return std::cmp::Ordering::Greater;
+                            }
+                        }
+                        (Err(_), Ok(_)) => return std::cmp::Ordering::Greater,
+                        (Ok(_), Err(_)) => return std::cmp::Ordering::Less,
+                        (Err(_), Err(_)) => continue, // Both are errors, continue to next
+                    }
+                }
+                std::cmp::Ordering::Equal
+            }
+            _ => {
+                panic!(
+                    "Comparison of unordered sets is not supported. Use a different method to compare sets."
+                );
+            }
+        }
+    }
+}
+
+impl Hash for Set {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        match self.spec().as_ref().storage() {
+            Some(SetStorage::Ordered) => {
+                // If the set is ordered, we can hash the elements in order.
+                self.len().hash(state);
+                for element in self.elements().iter() {
+                    if let Ok(ref value) = element {
+                        value.hash(state);
+                    }
+                }
+            }
+            _ => {
+                panic!(
+                    "Hashing of unordered sets is not supported. Use a different method to compare sets."
+                );
+            }
+        }
+    }
+}
+use std::fmt::{Debug, Display};
+
+impl Display for Set {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{{")?;
+        let mut first = true;
+        for element_result in self.elements().iter() {
+            if let Ok(element) = element_result {
+                if !first {
+                    write!(f, ", ")?;
+                }
+                write!(f, "{}", element)?;
+                first = false;
+            } else {
+                write!(f, "<error>")?;
+            }
+        }
+        write!(f, "}}")
+    }
+}
+
+impl Debug for Set {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Set (length: {})", self.len())?;
+        write!(f, ", value: ")?;
+        Display::fmt(self, f)
+    }
+}
 
 /// Errors that can occur when working with sets.
 #[derive(Debug, PartialEq)]

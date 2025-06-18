@@ -1,5 +1,6 @@
 use crate::{
-    accessors::schema::class::Class, primitive_def::PrimitiveSpec,
+    accessors::schema::class::Class,
+    primitive_def::{IsOrdered, PrimitiveSpec},
     spec_compatibility::SpecCompatibility,
 };
 
@@ -26,6 +27,12 @@ impl SpecCompatibility for ReferenceSpec {
     fn is_compatible_with(&self, required: &Self) -> bool {
         self.referenced_class
             .is_compatible_with(&required.referenced_class)
+    }
+}
+
+impl IsOrdered for ReferenceSpec {
+    fn is_ordered(&self) -> bool {
+        true // References are hashable.
     }
 }
 

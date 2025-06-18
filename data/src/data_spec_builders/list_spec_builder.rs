@@ -85,7 +85,7 @@ impl ListSpecBuilder {
     ///
     /// # Panics
     ///
-    /// If the list spec has a fixed size or fixed capacity but no element specification.
+    /// If the list spec has storage specified but no element specification.
     pub fn build(&self) -> Rc<DataSpec> {
         let mut primitive_def: Option<PrimitiveDef<ListSpec, List>> = None;
         let mut specification_level = DataSpecLevel::Compare;
@@ -94,7 +94,7 @@ impl ListSpecBuilder {
             primitive_def = Some(PrimitiveDef::new(primitive_spec, None));
             specification_level = self.element_spec.as_ref().unwrap().specification_level();
         } else if self.storage.is_some() {
-            panic!("ListSpecBuilder: list storage is set but no element spec is set.");
+            panic!("ListSpecBuilder: storage is set but no element spec is set.");
         }
 
         Rc::new(DataSpec::new_primitive(

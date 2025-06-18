@@ -1,8 +1,12 @@
-use std::{error::Error, fmt::Display, rc::Rc};
+use std::{
+    error::Error,
+    fmt::{Debug, Display},
+    hash::Hash,
+    rc::Rc,
+};
 
 use crate::{
     adaptors::float_adaptor::FloatAdaptor,
-    data_provider::{DataProvider, default_data_provider},
     data_spec_builders::float_spec_builder::FloatSpecBuilder,
     primitive_def::Accessor,
     primitive_specs::float_spec::{FloatSpec, FloatStorage},
@@ -56,6 +60,41 @@ impl PartialEq for Float {
     }
 }
 
+impl Eq for Float {}
+
+impl PartialOrd for Float {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.f64()
+            .ok()
+            .and_then(|a| other.f64().ok().and_then(|b| a.partial_cmp(&b)))
+            .or(Some(std::cmp::Ordering::Equal))
+    }
+}
+
+impl Ord for Float {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.partial_cmp(other).unwrap_or(std::cmp::Ordering::Equal)
+    }
+}
+
+impl Display for Float {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.f64().unwrap_or(0.0))
+    }
+}
+
+impl Debug for Float {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+
+impl Hash for Float {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.f64().unwrap_or(0.0).to_bits().hash(state);
+    }
+}
+
 // Convert all float types to a Variable
 impl TryFrom<f32> for Variable {
     type Error = FloatError;
@@ -64,7 +103,7 @@ impl TryFrom<f32> for Variable {
         let spec = FloatSpecBuilder::new()
             .set_storage(FloatStorage::B32)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let float = var.float_mut();
         float.set_f64(value as f64)?;
         Ok(var)
@@ -77,7 +116,7 @@ impl TryFrom<f64> for Variable {
         let spec = FloatSpecBuilder::new()
             .set_storage(FloatStorage::B64)
             .build();
-        let mut var = default_data_provider().variable_for(&spec);
+        let mut var = Variable::new(&spec);
         let float = var.float_mut();
         float.set_f64(value)?;
         Ok(var)

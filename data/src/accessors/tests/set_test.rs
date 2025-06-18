@@ -1,0 +1,374 @@
+use std::hash::{DefaultHasher, Hash, Hasher};
+
+use crate::{
+    accessors::collections::set::SetError,
+    data_spec_builders::{
+        integer_spec_builder::IntegerSpecBuilder, set_spec_builder::SetSpecBuilder,
+    },
+    primitive_specs::{
+        integer_spec::{IntegerEncoding, IntegerStorage},
+        set_spec::SetStorage,
+    },
+    set_equal_to::{SetEqualTo, SetEqualToError},
+    spec_compatibility::SpecError,
+    variable::Variable,
+};
+
+#[test]
+fn test_set_insert() {
+    let mut var = Variable::new(
+        &SetSpecBuilder::new()
+            .set_element_spec(
+                IntegerSpecBuilder::new()
+                    .set_encoding(IntegerEncoding::Unsigned)
+                    .set_storage(IntegerStorage::B64)
+                    .build(),
+            )
+            .build(),
+    );
+    let set = var.set_mut();
+    assert!(set.is_empty());
+    // test element values
+    let elem0_in = 55u64;
+    let elem1_in = 132u64;
+    let elem2_in = 99u64;
+
+    // add elements
+    set.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+    set.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+    set.insert(Variable::try_from(elem2_in).unwrap()).unwrap();
+    // check size
+    assert_eq!(set.len(), 3);
+    // check elements
+    assert!(
+        set.contains(&Variable::try_from(elem0_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set.contains(&Variable::try_from(elem1_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set.contains(&Variable::try_from(elem2_in).unwrap())
+            .unwrap()
+    );
+}
+
+#[test]
+fn test_set_insert_duplicate() {
+    let mut var = Variable::new(
+        &SetSpecBuilder::new()
+            .set_element_spec(
+                IntegerSpecBuilder::new()
+                    .set_encoding(IntegerEncoding::Unsigned)
+                    .set_storage(IntegerStorage::B64)
+                    .build(),
+            )
+            .build(),
+    );
+    let set = var.set_mut();
+    assert!(set.is_empty());
+    // test element values
+    let elem_in = 55u64;
+
+    // add element
+    set.insert(Variable::try_from(elem_in).unwrap()).unwrap();
+    // check size
+    assert_eq!(set.len(), 1);
+    // check element
+    assert!(set.contains(&Variable::try_from(elem_in).unwrap()).unwrap());
+
+    // try to add duplicate element
+    let res = set.insert(Variable::try_from(elem_in).unwrap());
+    assert!(res.is_ok());
+    assert!(!res.unwrap());
+    // check size
+    assert_eq!(set.len(), 1);
+}
+
+#[test]
+fn test_set_remove() {
+    let mut var = Variable::new(
+        &SetSpecBuilder::new()
+            .set_element_spec(
+                IntegerSpecBuilder::new()
+                    .set_encoding(IntegerEncoding::Unsigned)
+                    .set_storage(IntegerStorage::B64)
+                    .build(),
+            )
+            .build(),
+    );
+    let set = var.set_mut();
+    assert!(set.is_empty());
+    // test element values
+    let elem0_in = 55u64;
+    let elem1_in = 132u64;
+    let elem2_in = 99u64;
+
+    // add elements
+    set.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+    set.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+    set.insert(Variable::try_from(elem2_in).unwrap()).unwrap();
+    // check size
+    assert_eq!(set.len(), 3);
+    // check elements
+    assert!(
+        set.contains(&Variable::try_from(elem0_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set.contains(&Variable::try_from(elem1_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set.contains(&Variable::try_from(elem2_in).unwrap())
+            .unwrap()
+    );
+
+    // remove an element
+    let res = set.remove(&Variable::try_from(elem1_in).unwrap()).unwrap();
+    assert!(res);
+    // check size
+    assert_eq!(set.len(), 2);
+    // check elements
+    assert!(
+        set.contains(&Variable::try_from(elem0_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        !set.contains(&Variable::try_from(elem1_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set.contains(&Variable::try_from(elem2_in).unwrap())
+            .unwrap()
+    );
+    // try to remove an element that is not in the set
+    let res = set.remove(&Variable::try_from(999u64).unwrap()).unwrap();
+    assert!(!res);
+    // check size
+    assert_eq!(set.len(), 2);
+    // check elements
+    assert!(
+        set.contains(&Variable::try_from(elem0_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        !set.contains(&Variable::try_from(elem1_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set.contains(&Variable::try_from(elem2_in).unwrap())
+            .unwrap()
+    );
+}
+
+#[test]
+fn test_set_clear() {
+    let mut var = Variable::new(
+        &SetSpecBuilder::new()
+            .set_element_spec(
+                IntegerSpecBuilder::new()
+                    .set_encoding(IntegerEncoding::Unsigned)
+                    .set_storage(IntegerStorage::B64)
+                    .build(),
+            )
+            .build(),
+    );
+    let set = var.set_mut();
+    assert!(set.is_empty());
+    // test element values
+    let elem0_in = 55u64;
+    let elem1_in = 132u64;
+    let elem2_in = 99u64;
+
+    // add elements
+    set.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+    set.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+    set.insert(Variable::try_from(elem2_in).unwrap()).unwrap();
+    // check size
+    assert_eq!(set.len(), 3);
+    // check elements
+    assert!(
+        set.contains(&Variable::try_from(elem0_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set.contains(&Variable::try_from(elem1_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set.contains(&Variable::try_from(elem2_in).unwrap())
+            .unwrap()
+    );
+
+    // clear the set
+    set.clear().unwrap();
+    // check size
+    assert_eq!(set.len(), 0);
+}
+
+#[test]
+fn test_set_equal_to_compatible_specs() {
+    let spec = SetSpecBuilder::new()
+        .set_element_spec(
+            IntegerSpecBuilder::new()
+                .set_encoding(IntegerEncoding::Unsigned)
+                .set_storage(IntegerStorage::B64)
+                .build(),
+        )
+        .build();
+    let mut var1 = Variable::new(&spec);
+    let set1 = var1.set_mut();
+    // test element values
+    let elem0_in = 55u64;
+    let elem1_in = 132u64;
+    let elem2_in = 99u64;
+
+    // add elements to set1
+    set1.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+    set1.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+    set1.insert(Variable::try_from(elem2_in).unwrap()).unwrap();
+
+    // create another variable with the same spec
+    let mut var2 = Variable::new(&spec);
+    let set2 = var2.set_mut();
+
+    // set set2 equal to set1
+    assert!(set2.set_equal_to(&set1).is_ok());
+
+    // check that set2 has the same elements as set1
+    assert_eq!(set2.len(), 3);
+    assert!(
+        set2.contains(&Variable::try_from(elem0_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set2.contains(&Variable::try_from(elem1_in).unwrap())
+            .unwrap()
+    );
+    assert!(
+        set2.contains(&Variable::try_from(elem2_in).unwrap())
+            .unwrap()
+    );
+}
+
+#[test]
+fn test_set_equal_to_incompatible_specs() {
+    let spec1 = SetSpecBuilder::new()
+        .set_element_spec(
+            IntegerSpecBuilder::new()
+                .set_encoding(IntegerEncoding::Unsigned)
+                .set_storage(IntegerStorage::B64)
+                .build(),
+        )
+        .build();
+    let mut var1 = Variable::new(&spec1);
+    let set1 = var1.set_mut();
+    // test element values
+    let elem0_in = 55u64;
+
+    // add element to set1
+    set1.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+
+    // create another variable with an incompatible spec
+    let spec2 = SetSpecBuilder::new()
+        .set_element_spec(
+            IntegerSpecBuilder::new()
+                .set_encoding(IntegerEncoding::Signed) // different encoding
+                .set_storage(IntegerStorage::B64)
+                .build(),
+        )
+        .build();
+    let mut var2 = Variable::new(&spec2);
+    let set2 = var2.set_mut();
+
+    // Attempt to set set2 equal to set1 should fail due to incompatible specs
+    assert_eq!(
+        set2.set_equal_to(&set1).unwrap_err(),
+        SetEqualToError::SpecError(SpecError::IncompatibleSpec(
+            "Set { element_spec: Integer { encoding: Signed, storage: B64 }, storage: None }".to_string(),
+            "Set { element_spec: Integer { encoding: Unsigned, storage: B64 }, storage: None }".to_string()
+        ))
+    );
+}
+
+#[test]
+fn test_partial_eq_and_hash() {
+    let spec = SetSpecBuilder::new()
+        .set_element_spec(
+            IntegerSpecBuilder::new()
+                .set_encoding(IntegerEncoding::Unsigned)
+                .set_storage(IntegerStorage::B64)
+                .build(),
+        )
+        .set_storage(SetStorage::Ordered)
+        .build();
+    let mut var1 = Variable::new(&spec);
+    let mut var2 = Variable::new(&spec);
+    {
+        let set1 = var1.set_mut();
+        // test element values
+        let elem0_in = 55u64;
+        let elem1_in = 132u64;
+
+        // add elements to set1
+        set1.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+        set1.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+
+        // create another variable with the same spec
+        let set2 = var2.set_mut();
+
+        // add the same elements to set2
+        set2.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+        set2.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+
+        // check that the sets are equal
+        assert_eq!(set1, set2);
+        let mut hasher1 = DefaultHasher::new();
+        // check that the hash values of the sets are equal
+        set1.hash(&mut hasher1);
+        let mut hasher2 = DefaultHasher::new();
+        set2.hash(&mut hasher2);
+        assert_eq!(hasher1.finish(), hasher2.finish());
+    }
+    // check that the variables are equal
+    assert_eq!(var1, var2);
+    // check that the hash values of the variables are equal
+    {
+        let mut hasher1 = DefaultHasher::new();
+        var1.hash(&mut hasher1);
+        let mut hasher2 = DefaultHasher::new();
+        var2.hash(&mut hasher2);
+        assert_eq!(hasher1.finish(), hasher2.finish());
+    }
+    // modify set2 by adding a new element
+    let elem0_in = 99u64;
+    var2.set_mut()
+        .insert(Variable::try_from(elem0_in).unwrap())
+        .unwrap();
+
+    // check that the sets are not equal anymore
+    let set1 = var1.set();
+    let set2 = var2.set();
+    assert_ne!(set1, set2);
+    // check that the hash values of the sets are not equal anymore
+    {
+        let mut hasher1 = DefaultHasher::new();
+        set1.hash(&mut hasher1);
+        let mut hasher2 = DefaultHasher::new();
+        set2.hash(&mut hasher2);
+        assert_ne!(hasher1.finish(), hasher2.finish());
+    }
+
+    // check that the variables are not equal anymore
+    assert_ne!(var1, var2);
+    // check that the hash values of the variables are not equal anymore
+    {
+        let mut hasher1 = DefaultHasher::new();
+        var1.hash(&mut hasher1);
+        let mut hasher2 = DefaultHasher::new();
+        var2.hash(&mut hasher2);
+        assert_ne!(hasher1.finish(), hasher2.finish());
+    }
+}

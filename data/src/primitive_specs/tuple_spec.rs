@@ -1,4 +1,7 @@
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for tuples.
 #[derive(Debug, PartialEq)]
@@ -16,6 +19,12 @@ impl SpecCompatibility for TupleSpec {
         // For now, we assume all tuple specs are compatible with each other.
         // This can be extended later to check specific compatibility rules.
         true
+    }
+}
+
+impl IsOrdered for TupleSpec {
+    fn is_ordered(&self) -> bool {
+        todo!("Implement hashability for TupleSpec");
     }
 }
 

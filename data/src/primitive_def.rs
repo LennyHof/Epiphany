@@ -2,8 +2,19 @@ use std::{fmt::Debug, rc::Rc};
 
 use crate::{set_equal_to::SetEqualTo, spec_compatibility::SpecCompatibility};
 
+/// A trait to determine if a type is ordered.
+/// <p>
+/// This is used to check if the values based on a spec can be compared for
+/// ordering and provides a hash value, as anything unordered cannot compared
+/// or hashed reliably.
+/// </p>
+pub trait IsOrdered {
+    /// Returns true if the type is ordered, false otherwise.
+    fn is_ordered(&self) -> bool;
+}
+
 /// A trait for primitive specifications.
-pub trait PrimitiveSpec: SpecCompatibility {}
+pub trait PrimitiveSpec: SpecCompatibility + IsOrdered {}
 
 /// A trait for primitive accessors.
 pub trait Accessor: SetEqualTo {}

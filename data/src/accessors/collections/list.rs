@@ -1,4 +1,8 @@
-use std::rc::Rc;
+use std::{
+    fmt::{Debug, Display},
+    hash::Hash,
+    rc::Rc,
+};
 
 use crate::{
     accessors::sequence::Sequence,
@@ -16,8 +20,6 @@ use crate::{
 pub struct List {
     adaptor: Box<dyn ListAdaptor>,
 }
-
-impl Accessor for List {}
 
 impl List {
     /// Creates a new List accessor using the provided adaptor.
@@ -85,7 +87,7 @@ impl List {
         self.len() == 0
     }
 
-    /// Returns the lists' elements as a sequence of referenced elements.
+    /// Returns the list's elements as a sequence of referenced elements.
     /// This is useful for iterating over the elements in the list.
     pub fn elements(&self) -> Sequence {
         Sequence::new(self.adaptor.elements())
@@ -104,6 +106,8 @@ impl SetEqualTo for List {
     }
 }
 
+impl Accessor for List {}
+
 impl PartialEq for List {
     fn eq(&self, other: &Self) -> bool {
         if self.len() == other.len() {
@@ -115,6 +119,82 @@ impl PartialEq for List {
             return true;
         }
         false
+    }
+}
+
+impl Eq for List {}
+
+impl PartialOrd for List {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for List {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        if self.len() == other.len() {
+            for i in 0..self.len() {
+                match (self.get(i), other.get(i)) {
+                    (Ok(a), Ok(b)) => {
+                        if a < b {
+                            return std::cmp::Ordering::Less;
+                        } else if a > b {
+                            return std::cmp::Ordering::Greater;
+                        }
+                    }
+                    (Err(_), Ok(_)) => return std::cmp::Ordering::Greater,
+                    (Ok(_), Err(_)) => return std::cmp::Ordering::Less,
+                    (Err(_), Err(_)) => continue, // Both errors, treat as equal
+                }
+            }
+            std::cmp::Ordering::Equal
+        } else {
+            self.len().cmp(&other.len())
+        }
+    }
+}
+
+impl Display for List {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[")?;
+        for i in 0..self.len() {
+            if i > 0 {
+                write!(f, ", ")?;
+            }
+            match self.get(i) {
+                Ok(var) => write!(f, "{}", var)?,
+                Err(_) => write!(f, "<error>")?,
+            }
+        }
+        write!(f, "]")
+    }
+}
+
+impl Debug for List {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "List (length: {}", self.len())?;
+        write!(f, ", value: [")?;
+        for i in 0..self.len() {
+            if i > 0 {
+                write!(f, ", ")?;
+            }
+            match self.get(i) {
+                Ok(var) => write!(f, "{}", var)?,
+                Err(_) => write!(f, "<error>")?,
+            }
+        }
+        write!(f, "])")
+    }
+}
+
+impl Hash for List {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.len().hash(state);
+        for i in 0..self.len() {
+            if let Ok(var) = self.get(i) {
+                var.hash(state);
+            }
+        }
     }
 }
 

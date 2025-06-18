@@ -1,7 +1,9 @@
 use std::rc::Rc;
 
 use crate::{
-    data_spec::DataSpec, primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility,
+    data_spec::DataSpec,
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
 };
 
 /// A primitive spec for sequences.
@@ -38,6 +40,12 @@ impl SpecCompatibility for SequenceSpec {
             return false;
         }
         true
+    }
+}
+
+impl IsOrdered for SequenceSpec {
+    fn is_ordered(&self) -> bool {
+        false // Sequences are not hashable, as they cannot be a collection element.
     }
 }
 

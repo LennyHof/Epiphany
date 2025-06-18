@@ -1,8 +1,5 @@
 use crate::{
-    data_spec::{DataSpecLevel, DataSpecType},
-    primitive::Primitive,
-    primitive_specs::integer_spec::{IntegerEncoding, IntegerStorage},
-    data_spec_builders::{integer_spec_builder::IntegerSpecBuilder, set_spec_builder::SetSpecBuilder},
+    accessors::collections::set::Set, data_spec::{DataSpecLevel, DataSpecType}, data_spec_builders::{integer_spec_builder::IntegerSpecBuilder, set_spec_builder::SetSpecBuilder}, primitive::Primitive, primitive_specs::integer_spec::{IntegerEncoding, IntegerStorage}
 };
 
 #[test]
@@ -82,4 +79,36 @@ fn set_with_compare_element_spec() {
         DataSpecLevel::Compare => {}
         _ => assert!(false),
     }
+}
+
+#[test]
+#[should_panic(expected = "SetSpecBuilder: Sets require element's that are ordered so that they compare and hash reliably.")]
+fn ordered_set_with_unordered_element_spec() {
+    let element_spec = SetSpecBuilder::new()
+        .set_element_spec(IntegerSpecBuilder::new()
+            .set_encoding(IntegerEncoding::Signed)
+            .set_storage(IntegerStorage::B64)
+            .build())
+        .set_storage(crate::primitive_specs::set_spec::SetStorage::Unordered)
+        .build();
+    SetSpecBuilder::new()
+        .set_element_spec(element_spec)
+        .set_storage(crate::primitive_specs::set_spec::SetStorage::Ordered)
+        .build();
+}
+
+#[test]
+#[should_panic(expected = "SetSpecBuilder: Sets require element's that are ordered so that they compare and hash reliably.")]
+fn unordered_set_with_unordered_element_spec() {
+    let element_spec = SetSpecBuilder::new()
+        .set_element_spec(IntegerSpecBuilder::new()
+            .set_encoding(IntegerEncoding::Signed)
+            .set_storage(IntegerStorage::B64)
+            .build())
+        .set_storage(crate::primitive_specs::set_spec::SetStorage::Unordered)
+        .build();
+    SetSpecBuilder::new()
+        .set_element_spec(element_spec)
+        .set_storage(crate::primitive_specs::set_spec::SetStorage::Unordered)
+        .build();
 }

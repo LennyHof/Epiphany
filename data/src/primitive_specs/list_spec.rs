@@ -1,7 +1,9 @@
 use std::{fmt::Display, rc::Rc};
 
 use crate::{
-    data_spec::DataSpec, primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility,
+    data_spec::DataSpec,
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
 };
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -85,6 +87,15 @@ impl SpecCompatibility for ListSpec {
             (Some(_), None) => true, // required does not specify storage, so we assume compatibility
             (None, Some(_)) => false,
         }
+    }
+}
+
+impl IsOrdered for ListSpec {
+    fn is_ordered(&self) -> bool {
+        // Lists are hashable if their element spec is hashable.
+        self.element_spec
+            .as_ref()
+            .map_or(true, |spec| spec.is_ordered())
     }
 }
 

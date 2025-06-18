@@ -1,6 +1,9 @@
 use std::fmt::Display;
 
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// FloatStorage defines an enumeration that captures the supported
 /// characteristics for IEEE floats.
@@ -59,6 +62,15 @@ impl SpecCompatibility for FloatSpec {
     }
 }
 
+impl IsOrdered for FloatSpec {
+    fn is_ordered(&self) -> bool {
+        // Floats are hashable.
+        true
+    }
+}
+
+impl PrimitiveSpec for FloatSpec {}
+
 impl Display for FloatSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
@@ -70,5 +82,3 @@ impl Display for FloatSpec {
         )
     }
 }
-
-impl PrimitiveSpec for FloatSpec {}

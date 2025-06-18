@@ -1,10 +1,11 @@
-use crate::{primitive_def::PrimitiveSpec, spec_compatibility::SpecCompatibility};
+use crate::{
+    primitive_def::{IsOrdered, PrimitiveSpec},
+    spec_compatibility::SpecCompatibility,
+};
 
 /// A primitive spec for edges.
 #[derive(Debug, PartialEq)]
 pub struct EdgeSpec {}
-
-impl PrimitiveSpec for EdgeSpec {}
 
 impl EdgeSpec {
     /// Creates a new edge spec.
@@ -20,6 +21,14 @@ impl SpecCompatibility for EdgeSpec {
         true
     }
 }
+
+impl IsOrdered for EdgeSpec {
+    fn is_ordered(&self) -> bool {
+        false // Edges are not hashable.
+    }
+}
+
+impl PrimitiveSpec for EdgeSpec {}
 
 impl std::fmt::Display for EdgeSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
