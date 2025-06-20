@@ -24,7 +24,7 @@ impl SpecCompatibility for GuidSpec {
 
 impl IsOrdered for GuidSpec {
     fn is_ordered(&self) -> bool {
-        true // GUIDs are hashable.
+        true // GUIDs are ordered.
     }
 }
 

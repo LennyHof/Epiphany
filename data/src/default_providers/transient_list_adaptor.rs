@@ -38,7 +38,7 @@ impl TransientListAdaptor {
                         panic!("Cannot create a TransientListAdaptor with a fixed size of 0.");
                     }
                     items.resize_with(size as usize, || {
-                        default_data_provider().variable_for(spec.element_spec().as_ref().unwrap())
+                        default_data_provider().variable_for(spec.value_spec().as_ref().unwrap())
                     });
                     is_fixed_size = true;
                 }
@@ -129,8 +129,8 @@ impl ListAdaptor for TransientListAdaptor {
         self.fixed_capacity
     }
 
-    fn elements(&self) -> Box<dyn SequenceAdaptor> {
-        let spec = Rc::new(SequenceSpec::new(&self.spec.element_spec()));
+    fn values(&self) -> Box<dyn SequenceAdaptor> {
+        let spec = Rc::new(SequenceSpec::new(self.spec.value_spec()));
         Box::new(ElementSequence::new(spec, Rc::new(self.items.to_vec())))
     }
 }

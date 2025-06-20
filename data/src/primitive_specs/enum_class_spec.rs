@@ -23,7 +23,7 @@ impl SpecCompatibility for EnumClassSpec {
 
 impl IsOrdered for EnumClassSpec {
     fn is_ordered(&self) -> bool {
-        true // Enum classes are hashable.
+        true // Enum classes are ordered.
     }
 }
 

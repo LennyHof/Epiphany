@@ -1,13 +1,12 @@
 use std::hash::{DefaultHasher, Hash, Hasher};
 
 use crate::{
-    accessors::collections::set::SetError,
     data_spec_builders::{
         integer_spec_builder::IntegerSpecBuilder, set_spec_builder::SetSpecBuilder,
     },
     primitive_specs::{
         integer_spec::{IntegerEncoding, IntegerStorage},
-        set_spec::SetStorage,
+        set_spec::SetElementOrdering,
     },
     set_equal_to::{SetEqualTo, SetEqualToError},
     spec_compatibility::SpecError,
@@ -15,10 +14,10 @@ use crate::{
 };
 
 #[test]
-fn test_set_insert() {
+fn set_insert() {
     let mut var = Variable::new(
         &SetSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Unsigned)
                     .set_storage(IntegerStorage::B64)
@@ -33,13 +32,13 @@ fn test_set_insert() {
     let elem1_in = 132u64;
     let elem2_in = 99u64;
 
-    // add elements
+    // add values
     set.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
     set.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
     set.insert(Variable::try_from(elem2_in).unwrap()).unwrap();
     // check size
     assert_eq!(set.len(), 3);
-    // check elements
+    // check values
     assert!(
         set.contains(&Variable::try_from(elem0_in).unwrap())
             .unwrap()
@@ -55,10 +54,10 @@ fn test_set_insert() {
 }
 
 #[test]
-fn test_set_insert_duplicate() {
+fn set_insert_duplicate() {
     let mut var = Variable::new(
         &SetSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Unsigned)
                     .set_storage(IntegerStorage::B64)
@@ -87,10 +86,10 @@ fn test_set_insert_duplicate() {
 }
 
 #[test]
-fn test_set_remove() {
+fn set_remove() {
     let mut var = Variable::new(
         &SetSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Unsigned)
                     .set_storage(IntegerStorage::B64)
@@ -105,13 +104,13 @@ fn test_set_remove() {
     let elem1_in = 132u64;
     let elem2_in = 99u64;
 
-    // add elements
+    // add values
     set.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
     set.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
     set.insert(Variable::try_from(elem2_in).unwrap()).unwrap();
     // check size
     assert_eq!(set.len(), 3);
-    // check elements
+    // check values
     assert!(
         set.contains(&Variable::try_from(elem0_in).unwrap())
             .unwrap()
@@ -130,7 +129,7 @@ fn test_set_remove() {
     assert!(res);
     // check size
     assert_eq!(set.len(), 2);
-    // check elements
+    // check values
     assert!(
         set.contains(&Variable::try_from(elem0_in).unwrap())
             .unwrap()
@@ -148,7 +147,7 @@ fn test_set_remove() {
     assert!(!res);
     // check size
     assert_eq!(set.len(), 2);
-    // check elements
+    // check values
     assert!(
         set.contains(&Variable::try_from(elem0_in).unwrap())
             .unwrap()
@@ -164,10 +163,10 @@ fn test_set_remove() {
 }
 
 #[test]
-fn test_set_clear() {
+fn set_clear() {
     let mut var = Variable::new(
         &SetSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Unsigned)
                     .set_storage(IntegerStorage::B64)
@@ -182,13 +181,13 @@ fn test_set_clear() {
     let elem1_in = 132u64;
     let elem2_in = 99u64;
 
-    // add elements
+    // add values
     set.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
     set.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
     set.insert(Variable::try_from(elem2_in).unwrap()).unwrap();
     // check size
     assert_eq!(set.len(), 3);
-    // check elements
+    // check values
     assert!(
         set.contains(&Variable::try_from(elem0_in).unwrap())
             .unwrap()
@@ -209,9 +208,32 @@ fn test_set_clear() {
 }
 
 #[test]
-fn test_set_equal_to_compatible_specs() {
+fn ordered_set() {
     let spec = SetSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
+            IntegerSpecBuilder::new()
+                .set_encoding(IntegerEncoding::Unsigned)
+                .set_storage(IntegerStorage::B64)
+                .build(),
+        )
+        .set_storage(SetElementOrdering::Ordered)
+        .build();
+    let mut var = Variable::new(&spec);
+    let set = var.set_mut();
+
+    // add values
+    set.insert(Variable::try_from(55u64).unwrap()).unwrap();
+    set.insert(Variable::try_from(132u64).unwrap()).unwrap();
+    set.insert(Variable::try_from(99u64).unwrap()).unwrap();
+
+    // check ordering
+    assert_eq!(set.to_string(), "{55, 99, 132}");
+}
+
+#[test]
+fn set_equal_to_compatible_specs() {
+    let spec = SetSpecBuilder::new()
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Unsigned)
                 .set_storage(IntegerStorage::B64)
@@ -225,7 +247,7 @@ fn test_set_equal_to_compatible_specs() {
     let elem1_in = 132u64;
     let elem2_in = 99u64;
 
-    // add elements to set1
+    // add values to set1
     set1.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
     set1.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
     set1.insert(Variable::try_from(elem2_in).unwrap()).unwrap();
@@ -237,7 +259,7 @@ fn test_set_equal_to_compatible_specs() {
     // set set2 equal to set1
     assert!(set2.set_equal_to(&set1).is_ok());
 
-    // check that set2 has the same elements as set1
+    // check that set2 has the same values as set1
     assert_eq!(set2.len(), 3);
     assert!(
         set2.contains(&Variable::try_from(elem0_in).unwrap())
@@ -254,9 +276,9 @@ fn test_set_equal_to_compatible_specs() {
 }
 
 #[test]
-fn test_set_equal_to_incompatible_specs() {
+fn set_equal_to_incompatible_specs() {
     let spec1 = SetSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Unsigned)
                 .set_storage(IntegerStorage::B64)
@@ -273,7 +295,7 @@ fn test_set_equal_to_incompatible_specs() {
 
     // create another variable with an incompatible spec
     let spec2 = SetSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Signed) // different encoding
                 .set_storage(IntegerStorage::B64)
@@ -287,22 +309,24 @@ fn test_set_equal_to_incompatible_specs() {
     assert_eq!(
         set2.set_equal_to(&set1).unwrap_err(),
         SetEqualToError::SpecError(SpecError::IncompatibleSpec(
-            "Set { element_spec: Integer { encoding: Signed, storage: B64 }, storage: None }".to_string(),
-            "Set { element_spec: Integer { encoding: Unsigned, storage: B64 }, storage: None }".to_string()
+            "Set { value_spec: Integer { encoding: Signed, storage: B64 }, element_ordering: None }"
+                .to_string(),
+            "Set { value_spec: Integer { encoding: Unsigned, storage: B64 }, element_ordering: None }"
+                .to_string()
         ))
     );
 }
 
 #[test]
-fn test_partial_eq_and_hash() {
+fn set_partial_eq_and_hash() {
     let spec = SetSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Unsigned)
                 .set_storage(IntegerStorage::B64)
                 .build(),
         )
-        .set_storage(SetStorage::Ordered)
+        .set_storage(SetElementOrdering::Ordered)
         .build();
     let mut var1 = Variable::new(&spec);
     let mut var2 = Variable::new(&spec);
@@ -312,14 +336,14 @@ fn test_partial_eq_and_hash() {
         let elem0_in = 55u64;
         let elem1_in = 132u64;
 
-        // add elements to set1
+        // add values to set1
         set1.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
         set1.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
 
         // create another variable with the same spec
         let set2 = var2.set_mut();
 
-        // add the same elements to set2
+        // add the same values to set2
         set2.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
         set2.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
 

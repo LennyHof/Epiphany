@@ -18,7 +18,7 @@ use std::hash::{DefaultHasher, Hash, Hasher};
 fn variable_list() {
     let mut var = Variable::new(
         &ListSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Signed)
                     .set_storage(IntegerStorage::B64)
@@ -72,7 +72,7 @@ fn variable_list() {
 #[test]
 fn variable_size_list_violations() {
     let spec = ListSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Signed)
                 .set_storage(IntegerStorage::B64)
@@ -147,7 +147,7 @@ fn variable_size_list_violations() {
 #[test]
 fn fixed_size_list() {
     let spec = ListSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Signed)
                 .set_storage(IntegerStorage::B64)
@@ -159,7 +159,7 @@ fn fixed_size_list() {
     let mut var = Variable::new(&spec);
     let list = var.list_mut();
 
-    // verify that the list is the right length and it elements have the right initial value.
+    // verify that the list is the right length and it values have the right initial value.
     assert_eq!(list.len(), 2);
     assert_eq!(list.get(0).unwrap().integer().i64().unwrap(), 0);
     assert_eq!(list.get(1).unwrap().integer().i64().unwrap(), 0);
@@ -186,7 +186,7 @@ fn fixed_size_list() {
 #[test]
 fn fixed_size_list_violations() {
     let spec = ListSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Signed)
                 .set_storage(IntegerStorage::B64)
@@ -236,7 +236,7 @@ fn fixed_size_list_violations() {
 #[test]
 fn fixed_capacity_list() {
     let spec = ListSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Signed)
                 .set_storage(IntegerStorage::B64)
@@ -278,7 +278,7 @@ fn fixed_capacity_list() {
 fn fixed_capacity_list_violations() {
     let mut var = Variable::new(
         &ListSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Signed)
                     .set_storage(IntegerStorage::B64)
@@ -326,7 +326,7 @@ fn fixed_capacity_list_violations() {
 fn initial_capacity_list() {
     let mut var = Variable::new(
         &ListSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Signed)
                     .set_storage(IntegerStorage::B64)
@@ -368,7 +368,7 @@ fn initial_capacity_list() {
 fn initial_capacity_list_violations() {
     let mut var = Variable::new(
         &ListSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Signed)
                     .set_storage(IntegerStorage::B64)
@@ -400,13 +400,13 @@ fn initial_capacity_list_violations() {
 
 #[test]
 fn list_element_sequence() {
-    let element_spec = IntegerSpecBuilder::new()
+    let value_spec = IntegerSpecBuilder::new()
         .set_encoding(IntegerEncoding::Signed)
         .set_storage(IntegerStorage::B64)
         .build();
     let mut var = Variable::new(
         &ListSpecBuilder::new()
-            .set_element_spec(element_spec.clone())
+            .set_value_spec(value_spec.clone())
             .build(),
     );
     let list = var.list_mut();
@@ -420,15 +420,15 @@ fn list_element_sequence() {
     assert_eq!(list.get(0).unwrap().integer().i64().unwrap(), elem0_in);
     assert_eq!(list.get(1).unwrap().integer().i64().unwrap(), elem1_in);
 
-    let elements = &list.elements();
+    let values = &list.values();
 
     // check the sequence spec's element spec
     assert_eq!(
-        elements.spec().element_spec().as_ref().unwrap().as_ref(),
-        element_spec.as_ref()
+        values.spec().value_spec().as_ref().unwrap().as_ref(),
+        value_spec.as_ref()
     );
     // iterate over the list
-    let mut iter = list.elements().iter();
+    let mut iter = list.values().iter();
     assert_eq!(
         iter.next().unwrap().unwrap().integer().i64().unwrap(),
         elem0_in
@@ -440,7 +440,7 @@ fn list_element_sequence() {
     assert_eq!(iter.next(), None);
     assert_eq!(list.len(), 2);
     let mut count = 0;
-    for element in elements.iter() {
+    for element in values.iter() {
         if count == 0 {
             assert_eq!(element.unwrap().integer().i64().unwrap(), elem0_in);
         } else if count == 1 {
@@ -453,10 +453,10 @@ fn list_element_sequence() {
 
 #[test]
 fn test_partial_eq_and_hash() {
-    // Test that two lists with the same spec and elements are equal
+    // Test that two lists with the same spec and values are equal
     // and that they are not equal when one of them has a different element.
     let spec = ListSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Signed)
                 .set_storage(IntegerStorage::B64)
@@ -526,9 +526,9 @@ fn test_partial_eq_and_hash() {
 
 #[test]
 fn set_equal_to() {
-    // Test that two lists with the same spec and elements can be set equal to each other.
+    // Test that two lists with the same spec and values can be set equal to each other.
     let spec = ListSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Signed)
                 .set_storage(IntegerStorage::B64)
@@ -554,7 +554,7 @@ fn set_equal_to() {
 fn set_equal_to_different_specs() {
     // Test that setting a list equal to another list with a different spec fails.
     let spec1 = ListSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Signed)
                 .set_storage(IntegerStorage::B64)
@@ -562,7 +562,7 @@ fn set_equal_to_different_specs() {
         )
         .build();
     let spec2 = ListSpecBuilder::new()
-        .set_element_spec(
+        .set_value_spec(
             IntegerSpecBuilder::new()
                 .set_encoding(IntegerEncoding::Unsigned)
                 .set_storage(IntegerStorage::B64)
@@ -584,9 +584,9 @@ fn set_equal_to_different_specs() {
     assert_eq!(
         list2.set_equal_to(&list1).unwrap_err(),
         SetEqualToError::SpecError(SpecError::IncompatibleSpec(
-            "List { element_spec: Integer { encoding: Unsigned, storage: B64 }, storage: None }"
+            "List { value_spec: Integer { encoding: Unsigned, storage: B64 }, storage: None }"
                 .to_string(),
-            "List { element_spec: Integer { encoding: Signed, storage: B64 }, storage: None }"
+            "List { value_spec: Integer { encoding: Signed, storage: B64 }, storage: None }"
                 .to_string()
         ))
     );
@@ -596,7 +596,7 @@ fn set_equal_to_different_specs() {
 fn list_display() {
     let mut var = Variable::new(
         &ListSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Signed)
                     .set_storage(IntegerStorage::B64)
@@ -617,7 +617,7 @@ fn list_display() {
 fn list_debug() {
     let mut var = Variable::new(
         &ListSpecBuilder::new()
-            .set_element_spec(
+            .set_value_spec(
                 IntegerSpecBuilder::new()
                     .set_encoding(IntegerEncoding::Signed)
                     .set_storage(IntegerStorage::B64)
@@ -631,5 +631,8 @@ fn list_debug() {
 
     // Check the debug output of the list and variable
     assert_eq!(format!("{:?}", list), "List (length: 2, value: [55, 132])");
-    assert_eq!(format!("{:?}", var), "spec: List { element_spec: Integer { encoding: Signed, storage: B64 }, storage: None }, value: [55, 132])");
+    assert_eq!(
+        format!("{:?}", var),
+        "spec: List { value_spec: Integer { encoding: Signed, storage: B64 }, storage: None }, value: [55, 132]"
+    );
 }

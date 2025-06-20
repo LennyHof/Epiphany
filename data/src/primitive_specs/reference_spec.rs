@@ -32,7 +32,7 @@ impl SpecCompatibility for ReferenceSpec {
 
 impl IsOrdered for ReferenceSpec {
     fn is_ordered(&self) -> bool {
-        true // References are hashable.
+        true // References are ordered.
     }
 }
 

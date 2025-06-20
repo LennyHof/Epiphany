@@ -6,16 +6,16 @@ use crate::{
     spec_compatibility::SpecCompatibility,
 };
 
-/// The storage type of a set.
+/// The ordering of values in a set.
 #[derive(Clone, Copy, PartialEq, Debug)]
-pub enum SetStorage {
-    /// An ordered set, where the order of elements matters.
+pub enum SetElementOrdering {
+    /// Elements in the set are ordered, meaning the order of values matters.
     Ordered,
-    /// An unordered set, where the order of elements does not matter.
+    /// Elements in the set are unordered, meaning the order of values does not matter.
     Unordered,
 }
 
-impl Display for SetStorage {
+impl Display for SetElementOrdering {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
@@ -31,50 +31,53 @@ impl Display for SetStorage {
 /// A primitive spec for sets.
 #[derive(Debug, PartialEq)]
 pub struct SetSpec {
-    element_spec: Option<Rc<DataSpec>>,
-    storage: Option<SetStorage>,
+    value_spec: Option<Rc<DataSpec>>,
+    element_ordering: Option<SetElementOrdering>,
 }
 
 impl SetSpec {
     /// Returns an initialized set spec.
     /// Prefer to use the [`SetSpecBuilder`](crate::data_spec_builders::set_spec_builder::SetSpecBuilder) to create a set spec.
-    pub fn new(element_spec: &Option<Rc<DataSpec>>, storage: Option<SetStorage>) -> SetSpec {
+    pub fn new(
+        value_spec: &Option<Rc<DataSpec>>,
+        element_ordering: Option<SetElementOrdering>,
+    ) -> SetSpec {
         SetSpec {
-            element_spec: (element_spec.clone()),
-            storage: (storage),
+            value_spec: (value_spec.clone()),
+            element_ordering: (element_ordering),
         }
     }
 
-    /// Returns the set's element specification.
-    /// If the set does not have an element specification, this will return None.
-    /// If the set has an element specification, this will return Some(spec), where spec is the element specification.
-    pub fn element_spec(&self) -> &Option<Rc<DataSpec>> {
-        &self.element_spec
+    /// Returns the set's value specification.
+    /// If the set does not have an value specification, this will return None.
+    /// If the set has an value specification, this will return Some(spec), where spec is the value specification.
+    pub fn value_spec(&self) -> &Option<Rc<DataSpec>> {
+        &self.value_spec
     }
-    /// Returns the set's storage type.
-    /// If the set does not have a storage type, this will return None.
-    pub fn storage(&self) -> &Option<SetStorage> {
-        &self.storage
+    /// Returns the set's element_ordering.
+    /// If the set does not have a element_ordering specified, this will return None.
+    pub fn element_ordering(&self) -> &Option<SetElementOrdering> {
+        &self.element_ordering
     }
 }
 
 impl SpecCompatibility for SetSpec {
     fn is_compatible_with(&self, required: &Self) -> bool {
-        if self.element_spec.is_some() && required.element_spec.is_some() {
-            if let Some(element_spec) = self.element_spec.as_ref() {
-                if let Some(required_element_spec) = required.element_spec.as_ref() {
-                    if !element_spec.is_compatible_with(required_element_spec) {
+        if self.value_spec.is_some() && required.value_spec.is_some() {
+            if let Some(value_spec) = self.value_spec.as_ref() {
+                if let Some(required_value_spec) = required.value_spec.as_ref() {
+                    if !value_spec.is_compatible_with(required_value_spec) {
                         return false;
                     }
                 }
             }
-        } else if self.element_spec.is_none() && required.element_spec.is_some() {
+        } else if self.value_spec.is_none() && required.value_spec.is_some() {
             return false;
         }
-        match (self.storage, required.storage) {
+        match (self.element_ordering, required.element_ordering) {
             (Some(s), Some(r)) => s == r,
             (None, None) => true,
-            (Some(_), None) => true, // required does not specify storage, so we assume compatibility
+            (Some(_), None) => true, // required does not specify element_ordering, so we assume compatibility
             (None, Some(_)) => false,
         }
     }
@@ -83,12 +86,12 @@ impl SpecCompatibility for SetSpec {
 impl IsOrdered for SetSpec {
     fn is_ordered(&self) -> bool {
         // A set is ordered if it is ordered and its element spec is ordered.
-        // If storage or element spec is None, we assume it is not ordered.
-        self.storage.as_ref() == Some(&SetStorage::Ordered)
+        // If element ordering or element spec is None, we assume it is not ordered.
+        self.element_ordering.as_ref() == Some(&SetElementOrdering::Ordered)
             && self
-                .element_spec
+                .value_spec
                 .as_ref()
-                .map_or(false, |spec| spec.is_ordered())
+                .is_some_and(|spec| spec.is_ordered())
     }
 }
 
@@ -104,12 +107,12 @@ impl std::fmt::Display for SetSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Set {{ element_spec: {}, storage: {} }}",
-            self.element_spec
+            "Set {{ value_spec: {}, element_ordering: {} }}",
+            self.value_spec
                 .as_ref()
                 .map(|s| s.to_string())
                 .unwrap_or_else(|| "None".to_string()),
-            self.storage
+            self.element_ordering
                 .map(|s| s.to_string())
                 .unwrap_or_else(|| "None".to_string())
         )

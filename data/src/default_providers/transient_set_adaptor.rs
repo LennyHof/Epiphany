@@ -1,12 +1,9 @@
 use crate::{
-    accessors::{
-        collections::set::{Set, SetError},
-        sequence::SequenceIter,
-    },
+    accessors::{collections::set::SetError, sequence::SequenceIter},
     adaptors::{collection_adaptors::set_adaptor::SetAdaptor, sequence_adaptor::SequenceAdaptor},
     primitive_specs::{
         sequence_spec::SequenceSpec,
-        set_spec::{SetSpec, SetStorage},
+        set_spec::{SetElementOrdering, SetSpec},
     },
     variable::Variable,
 };
@@ -26,10 +23,10 @@ impl TransientSetAdaptor {
     pub fn new(spec: Rc<SetSpec>) -> Self {
         Self {
             spec: spec.clone(),
-            items: match spec.storage().as_ref() {
-                Some(SetStorage::Unordered) => SetCollection::HashSet(HashSet::new()),
-                Some(SetStorage::Ordered) => SetCollection::BTreeSet(BTreeSet::new()),
-                None => SetCollection::HashSet(HashSet::new()), // Default to HashSet if no storage type is specified
+            items: match spec.element_ordering().as_ref() {
+                Some(SetElementOrdering::Unordered) => SetCollection::HashSet(HashSet::new()),
+                Some(SetElementOrdering::Ordered) => SetCollection::BTreeSet(BTreeSet::new()),
+                None => SetCollection::HashSet(HashSet::new()), // Default to HashSet if no element_ordering type is specified
             },
         }
     }
@@ -75,8 +72,9 @@ impl SetAdaptor for TransientSetAdaptor {
         };
         Ok(())
     }
-    fn elements(&self) -> Box<dyn SequenceAdaptor> {
-        let spec = Rc::new(SequenceSpec::new(&self.spec.element_spec()));
+
+    fn values(&self) -> Box<dyn SequenceAdaptor> {
+        let spec = Rc::new(SequenceSpec::new(self.spec.value_spec()));
         match &self.items {
             SetCollection::HashSet(set) => Box::new(ElementSequence::new(
                 spec,
@@ -130,11 +128,7 @@ impl std::iter::Iterator for ElementSequenceIter {
     type Item = Result<Variable, crate::accessors::sequence::SequenceError>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if let Some(item) = self.iterator.next() {
-            Some(Ok(item))
-        } else {
-            None
-        }
+        self.iterator.next().map(Ok)
     }
 }
 

@@ -98,15 +98,7 @@ impl Eq for Integer {}
 
 impl PartialOrd for Integer {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        match (self.spec().encoding(), other.spec().encoding()) {
-            (Some(IntegerEncoding::Unsigned), Some(IntegerEncoding::Unsigned)) => {
-                self.u64().ok()?.partial_cmp(&other.u64().ok()?)
-            }
-            (Some(IntegerEncoding::Signed), Some(IntegerEncoding::Signed)) => {
-                self.i64().ok()?.partial_cmp(&other.i64().ok()?)
-            }
-            _ => None,
-        }
+        Some(self.cmp(other))
     }
 }
 
@@ -136,7 +128,7 @@ impl Display for Integer {
 
 impl Debug for Integer {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.to_string())
+        write!(f, "{}", self)
     }
 }
 

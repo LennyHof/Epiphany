@@ -64,7 +64,7 @@ impl SpecCompatibility for FloatSpec {
 
 impl IsOrdered for FloatSpec {
     fn is_ordered(&self) -> bool {
-        // Floats are hashable.
+        // Floats are ordered.
         true
     }
 }

@@ -24,7 +24,7 @@ impl SpecCompatibility for DateSpec {
 
 impl IsOrdered for DateSpec {
     fn is_ordered(&self) -> bool {
-        true // Dates are hashable.
+        true // Dates are ordered.
     }
 }
 

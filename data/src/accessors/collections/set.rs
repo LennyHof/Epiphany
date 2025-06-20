@@ -4,7 +4,7 @@ use crate::{
     accessors::sequence::Sequence,
     adaptors::collection_adaptors::set_adaptor::SetAdaptor,
     primitive_def::Accessor,
-    primitive_specs::set_spec::{SetSpec, SetStorage},
+    primitive_specs::set_spec::{SetElementOrdering, SetSpec},
     provider_error::ProviderError,
     set_equal_to::{SetEqualTo, SetEqualToError},
     spec_compatibility::{SpecCompatibility, SpecError},
@@ -12,7 +12,7 @@ use crate::{
 };
 
 /// The Set accessor provides access to sets, which are ordered or unordered collections of
-/// unique elements.
+/// unique values.
 pub struct Set {
     // The adaptor for the set.
     adaptor: Box<dyn SetAdaptor>,
@@ -59,10 +59,9 @@ impl Set {
         self.adaptor.clear()
     }
 
-    /// Returns the set's elements as a sequence of referenced elements.
-    /// This is useful for iterating over the elements in the list.
-    pub fn elements(&self) -> Sequence {
-        Sequence::new(self.adaptor.elements())
+    /// Returns the set's values as a sequence of values.
+    pub fn values(&self) -> Sequence {
+        Sequence::new(self.adaptor.values())
     }
 }
 
@@ -70,7 +69,7 @@ impl SetEqualTo for Set {
     fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
         self.spec().as_ref().check_compatible_with(other.spec())?;
         self.clear()?;
-        for element_result in other.elements().iter() {
+        for element_result in other.values().iter() {
             match element_result {
                 Ok(element) => {
                     let cloned_element = element.try_clone()?;
@@ -90,7 +89,7 @@ impl PartialEq for Set {
         if self.len() != other.len() {
             return false;
         }
-        for element_result in self.elements().iter() {
+        for element_result in self.values().iter() {
             match element_result {
                 Ok(ref element) => {
                     if !other.contains(element).unwrap_or(false) {
@@ -116,20 +115,17 @@ impl PartialOrd for Set {
 
 impl Ord for Set {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        match self.spec().as_ref().storage() {
-            Some(SetStorage::Ordered) => {
+        match *self.spec().as_ref().element_ordering() {
+            Some(SetElementOrdering::Ordered) => {
                 if self.len() != other.len() {
                     return self.len().cmp(&other.len());
                 }
-                for (a, b) in self.elements().iter().zip(other.elements().iter()) {
+                for (a, b) in self.values().iter().zip(other.values().iter()) {
                     match (a, b) {
-                        (Ok(a), Ok(b)) => {
-                            if a < b {
-                                return std::cmp::Ordering::Less;
-                            } else if a > b {
-                                return std::cmp::Ordering::Greater;
-                            }
-                        }
+                        (Ok(a), Ok(b)) => match a.cmp(&b) {
+                            std::cmp::Ordering::Equal => continue,
+                            ord => return ord,
+                        },
                         (Err(_), Ok(_)) => return std::cmp::Ordering::Greater,
                         (Ok(_), Err(_)) => return std::cmp::Ordering::Less,
                         (Err(_), Err(_)) => continue, // Both are errors, continue to next
@@ -148,14 +144,12 @@ impl Ord for Set {
 
 impl Hash for Set {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        match self.spec().as_ref().storage() {
-            Some(SetStorage::Ordered) => {
-                // If the set is ordered, we can hash the elements in order.
+        match self.spec().as_ref().element_ordering() {
+            Some(SetElementOrdering::Ordered) => {
+                // If the set is ordered, we can hash the values in order.
                 self.len().hash(state);
-                for element in self.elements().iter() {
-                    if let Ok(ref value) = element {
-                        value.hash(state);
-                    }
+                for element in self.values().iter().flatten() {
+                    element.hash(state);
                 }
             }
             _ => {
@@ -172,7 +166,7 @@ impl Display for Set {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{{")?;
         let mut first = true;
-        for element_result in self.elements().iter() {
+        for element_result in self.values().iter() {
             if let Ok(element) = element_result {
                 if !first {
                     write!(f, ", ")?;
@@ -200,7 +194,7 @@ impl Debug for Set {
 pub enum SetError {
     /// A provider error.
     ProviderError(ProviderError),
-    /// An error indicating that the element specification is not compatible with the list's element specification.
+    /// An error indicating that the value specification is not compatible with the list's value specification.
     ElementSpecError(SpecError),
 }
 

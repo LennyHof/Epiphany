@@ -41,7 +41,7 @@ fn list_spec_builder_default() {
 }
 
 #[test]
-fn list_no_element_spec() {
+fn list_no_value_spec() {
     let spec = ListSpecBuilder::new().build();
     match spec.specification_type() {
         DataSpecType::Primitive(primitive) => match primitive {
@@ -59,17 +59,17 @@ fn list_no_element_spec() {
 }
 
 #[test]
-fn list_with_element_spec() {
-    let element_spec = BooleanSpecBuilder::new().build();
+fn list_with_value_spec() {
+    let value_spec = BooleanSpecBuilder::new().build();
     let spec = ListSpecBuilder::new()
-        .set_element_spec(element_spec)
+        .set_value_spec(value_spec)
         .build();
     match spec.specification_type() {
         DataSpecType::Primitive(primitive) => match primitive {
             Primitive::List(def) => {
                 let spec = def.as_ref().unwrap().spec();
                 assert!(spec.storage().is_none());
-                match spec.element_spec().as_ref().unwrap().specification_type() {
+                match spec.value_spec().as_ref().unwrap().specification_type() {
                     DataSpecType::Primitive(primitive) => match primitive {
                         Primitive::Boolean(def) => {
                             assert!(def.is_some());
@@ -91,9 +91,9 @@ fn list_with_element_spec() {
 
 #[test]
 fn list_with_fixed_size() {
-    let element_spec = BooleanSpecBuilder::new().build();
+    let value_spec = BooleanSpecBuilder::new().build();
     let spec = ListSpecBuilder::new()
-        .set_element_spec(element_spec)
+        .set_value_spec(value_spec)
         .set_storage(ListStorage::FixedSize(10))
         .build();
     match spec.specification_type() {
@@ -114,9 +114,9 @@ fn list_with_fixed_size() {
 
 #[test]
 fn list_with_fixed_capacity() {
-    let element_spec = BooleanSpecBuilder::new().build();
+    let value_spec = BooleanSpecBuilder::new().build();
     let spec = ListSpecBuilder::new()
-        .set_element_spec(element_spec)
+        .set_value_spec(value_spec)
         .set_storage(ListStorage::FixedCapacity(10))
         .build();
     match spec.specification_type() {
@@ -137,9 +137,9 @@ fn list_with_fixed_capacity() {
 
 #[test]
 fn list_with_initial_capacity() {
-    let element_spec = BooleanSpecBuilder::new().build();
+    let value_spec = BooleanSpecBuilder::new().build();
     let spec = ListSpecBuilder::new()
-        .set_element_spec(element_spec)
+        .set_value_spec(value_spec)
         .set_storage(ListStorage::InitialCapacity(10))
         .build();
     match spec.specification_type() {
@@ -160,9 +160,9 @@ fn list_with_initial_capacity() {
 
 #[test]
 fn list_with_variable_size() {
-    let element_spec = BooleanSpecBuilder::new().build();
+    let value_spec = BooleanSpecBuilder::new().build();
     let spec = ListSpecBuilder::new()
-        .set_element_spec(element_spec)
+        .set_value_spec(value_spec)
         .set_storage(ListStorage::VariableSize)
         .build();
     match spec.specification_type() {
@@ -182,17 +182,17 @@ fn list_with_variable_size() {
 }
 
 #[test]
-fn list_with_compare_element_spec() {
-    let element_spec = IntegerSpecBuilder::new().build();
+fn list_with_compare_value_spec() {
+    let value_spec = IntegerSpecBuilder::new().build();
     let spec = ListSpecBuilder::new()
-        .set_element_spec(element_spec)
+        .set_value_spec(value_spec)
         .build();
     match spec.specification_type() {
         DataSpecType::Primitive(primitive) => match primitive {
             Primitive::List(def) => {
                 let spec = def.as_ref().unwrap().spec();
                 assert!(spec.storage().is_none());
-                match spec.element_spec().as_ref().unwrap().specification_type() {
+                match spec.value_spec().as_ref().unwrap().specification_type() {
                     DataSpecType::Primitive(primitive) => match primitive {
                         Primitive::Integer(_) => {}
                         _ => assert!(false),
@@ -212,7 +212,7 @@ fn list_with_compare_element_spec() {
 
 #[test]
 #[should_panic(expected = "ListSpecBuilder: storage is set but no element spec is set.")]
-fn list_with_storage_but_no_element_spec() {
+fn list_with_storage_but_no_value_spec() {
     ListSpecBuilder::new()
         .set_storage(ListStorage::FixedSize(10))
         .build();

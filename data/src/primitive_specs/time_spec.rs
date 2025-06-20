@@ -24,7 +24,7 @@ impl SpecCompatibility for TimeSpec {
 
 impl IsOrdered for TimeSpec {
     fn is_ordered(&self) -> bool {
-        true // Times are hashable.
+        true // Times are ordered.
     }
 }
 

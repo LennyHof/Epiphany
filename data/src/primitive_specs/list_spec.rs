@@ -38,25 +38,25 @@ impl Display for ListStorage {
 /// A primitive spec for lists.
 #[derive(Debug, PartialEq)]
 pub struct ListSpec {
-    element_spec: Option<Rc<DataSpec>>,
+    value_spec: Option<Rc<DataSpec>>,
     storage: Option<ListStorage>,
 }
 
 impl ListSpec {
     /// Returns an initialized list spec.
     /// Prefer to use the [`ListSpecBuilder`](crate::data_spec_builders::list_spec_builder::ListSpecBuilder) to create a list spec.
-    pub fn new(element_spec: &Option<Rc<DataSpec>>, storage: &Option<ListStorage>) -> ListSpec {
+    pub fn new(value_spec: &Option<Rc<DataSpec>>, storage: &Option<ListStorage>) -> ListSpec {
         ListSpec {
-            element_spec: element_spec.clone(),
+            value_spec: value_spec.clone(),
             storage: *storage,
         }
     }
 
-    /// Returns the list' element specification.
-    /// If the list does not have an element specification, this will return None.
-    /// If the list has an element specification, this will return Some(spec), where spec is the element specification.
-    pub fn element_spec(&self) -> &Option<Rc<DataSpec>> {
-        &self.element_spec
+    /// Returns the list' value specification.
+    /// If the list does not have an value specification, this will return None.
+    /// If the list has an value specification, this will return Some(spec), where spec is the value specification.
+    pub fn value_spec(&self) -> &Option<Rc<DataSpec>> {
+        &self.value_spec
     }
 
     /// Returns the list's storage type.
@@ -69,15 +69,15 @@ impl ListSpec {
 
 impl SpecCompatibility for ListSpec {
     fn is_compatible_with(&self, required: &Self) -> bool {
-        if self.element_spec.is_some() && required.element_spec.is_some() {
-            if let Some(element_spec) = self.element_spec.as_ref() {
-                if let Some(required_element_spec) = required.element_spec.as_ref() {
-                    if !element_spec.is_compatible_with(required_element_spec) {
+        if self.value_spec.is_some() && required.value_spec.is_some() {
+            if let Some(value_spec) = self.value_spec.as_ref() {
+                if let Some(required_value_spec) = required.value_spec.as_ref() {
+                    if !value_spec.is_compatible_with(required_value_spec) {
                         return false;
                     }
                 }
             }
-        } else if self.element_spec.is_none() && required.element_spec.is_some() {
+        } else if self.value_spec.is_none() && required.value_spec.is_some() {
             return false;
         }
 
@@ -92,10 +92,10 @@ impl SpecCompatibility for ListSpec {
 
 impl IsOrdered for ListSpec {
     fn is_ordered(&self) -> bool {
-        // Lists are hashable if their element spec is hashable.
-        self.element_spec
+        // A list spec is ordered if its element spec is ordered.
+        self.value_spec
             .as_ref()
-            .map_or(true, |spec| spec.is_ordered())
+            .is_none_or(|spec| spec.is_ordered())
     }
 }
 
@@ -105,8 +105,8 @@ impl Display for ListSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "List {{ element_spec: {}, storage: {} }}",
-            self.element_spec
+            "List {{ value_spec: {}, storage: {} }}",
+            self.value_spec
                 .as_ref()
                 .map(|s| s.to_string())
                 .unwrap_or_else(|| "None".to_string()),

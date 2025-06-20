@@ -25,7 +25,7 @@ impl SpecCompatibility for BooleanSpec {
 
 impl IsOrdered for BooleanSpec {
     fn is_ordered(&self) -> bool {
-        true // Booleans are hashable.
+        true // Booleans are ordered.
     }
 }
 

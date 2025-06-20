@@ -16,7 +16,7 @@ use crate::{
 };
 
 /// The List accessor provides access to lists, which are ordered collections of potentially
-/// non-unique elements.
+/// non-unique values.
 pub struct List {
     adaptor: Box<dyn ListAdaptor>,
 }
@@ -87,10 +87,9 @@ impl List {
         self.len() == 0
     }
 
-    /// Returns the list's elements as a sequence of referenced elements.
-    /// This is useful for iterating over the elements in the list.
-    pub fn elements(&self) -> Sequence {
-        Sequence::new(self.adaptor.elements())
+    /// Returns the list's values as a sequence of values.
+    pub fn values(&self) -> Sequence {
+        Sequence::new(self.adaptor.values())
     }
 }
 
@@ -135,13 +134,10 @@ impl Ord for List {
         if self.len() == other.len() {
             for i in 0..self.len() {
                 match (self.get(i), other.get(i)) {
-                    (Ok(a), Ok(b)) => {
-                        if a < b {
-                            return std::cmp::Ordering::Less;
-                        } else if a > b {
-                            return std::cmp::Ordering::Greater;
-                        }
-                    }
+                    (Ok(a), Ok(b)) => match a.cmp(b) {
+                        std::cmp::Ordering::Equal => continue,
+                        ord => return ord,
+                    },
                     (Err(_), Ok(_)) => return std::cmp::Ordering::Greater,
                     (Ok(_), Err(_)) => return std::cmp::Ordering::Less,
                     (Err(_), Err(_)) => continue, // Both errors, treat as equal
@@ -211,7 +207,7 @@ pub enum ListError {
     FixedSizeViolation,
     /// An error that an operation would result in the list's fixed capacity being exceeded.
     FixedCapacityViolation(usize),
-    /// An error indicating that the element specification is not compatible with the list's element specification.
+    /// An error indicating that the value specification is not compatible with the list's value specification.
     ElementSpecError(SpecError),
 }
 

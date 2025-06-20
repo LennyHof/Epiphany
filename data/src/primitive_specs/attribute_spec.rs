@@ -31,7 +31,7 @@ impl SpecCompatibility for AttributeSpec {
 
 impl IsOrdered for AttributeSpec {
     fn is_ordered(&self) -> bool {
-        true // Attributes are hashable.
+        true // Attributes are ordered.
     }
 }
 
