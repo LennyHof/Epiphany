@@ -24,7 +24,7 @@ impl SpecCompatibility for EdgeSpec {
 
 impl IsOrdered for EdgeSpec {
     fn is_ordered(&self) -> bool {
-        false // Edges are not hashable.
+        false // Edges are not ordered.
     }
 }
 

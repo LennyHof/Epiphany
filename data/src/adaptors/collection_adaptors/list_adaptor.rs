@@ -51,7 +51,7 @@ pub trait ListAdaptor {
     fn set(&mut self, index: usize, value: Variable) -> Result<(), ListError> {
         value
             .data_spec()
-            .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
+            .check_compatible_with(self.spec().value_spec().as_ref().unwrap().as_ref())?;
         if index < self.len() {
             self.do_set(index, value)
         } else {
@@ -66,7 +66,7 @@ pub trait ListAdaptor {
     fn push(&mut self, value: Variable) -> Result<(), ListError> {
         value
             .data_spec()
-            .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
+            .check_compatible_with(self.spec().value_spec().as_ref().unwrap().as_ref())?;
         if self.is_fixed_size() {
             Err(ListError::FixedSizeViolation)
         } else {
@@ -102,7 +102,7 @@ pub trait ListAdaptor {
     fn insert(&mut self, index: usize, value: Variable) -> Result<(), ListError> {
         value
             .data_spec()
-            .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
+            .check_compatible_with(self.spec().value_spec().as_ref().unwrap().as_ref())?;
         if self.is_fixed_size() {
             return Err(ListError::FixedSizeViolation);
         }
@@ -150,11 +150,11 @@ pub trait ListAdaptor {
     fn do_clear(&mut self) -> Result<(), ListError>;
 
     /// Returns the lists' capacity.
-    /// Note: This is not the same as the length, as it may be larger than the current number of elements.
+    /// Note: This is not the same as the length, as it may be larger than the current number of values.
     fn capacity(&self) -> usize;
 
-    /// Returns the lists' elements as a sequence.
-    fn elements(&self) -> Box<dyn SequenceAdaptor>;
+    /// Returns the lists' values as a sequence.
+    fn values(&self) -> Box<dyn SequenceAdaptor>;
 
     /// Returns a boxed clone of the list adaptor.
     fn box_clone(&self) -> Box<dyn ListAdaptor> {

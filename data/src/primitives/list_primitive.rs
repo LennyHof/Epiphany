@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 use crate::{accessors::collections::list::List, primitive_specs::list_spec::ListSpec};
 
-/// An ordered collection of potentially non-unique elements.
+/// An ordered collection of potentially non-unique values.
 pub struct ListPrimitive {
     /// The list's specification.
     pub spec: Rc<ListSpec>,

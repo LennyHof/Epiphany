@@ -24,7 +24,7 @@ impl SpecCompatibility for PropertySpec {
 
 impl IsOrdered for PropertySpec {
     fn is_ordered(&self) -> bool {
-        // Properties are hashable.
+        // Properties are ordered.
         true
     }
 }

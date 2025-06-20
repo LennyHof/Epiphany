@@ -64,16 +64,16 @@ impl Eq for Float {}
 
 impl PartialOrd for Float {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.f64()
-            .ok()
-            .and_then(|a| other.f64().ok().and_then(|b| a.partial_cmp(&b)))
-            .or(Some(std::cmp::Ordering::Equal))
+        Some(self.cmp(other))
     }
 }
 
 impl Ord for Float {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.partial_cmp(other).unwrap_or(std::cmp::Ordering::Equal)
+        self.f64()
+            .unwrap_or(0.0)
+            .partial_cmp(&other.f64().unwrap_or(0.0))
+            .unwrap_or(std::cmp::Ordering::Equal)
     }
 }
 
@@ -85,7 +85,7 @@ impl Display for Float {
 
 impl Debug for Float {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.to_string())
+        write!(f, "{}", self)
     }
 }
 

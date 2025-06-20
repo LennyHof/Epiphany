@@ -24,7 +24,7 @@ impl SpecCompatibility for IdentifierSpec {
 
 impl IsOrdered for IdentifierSpec {
     fn is_ordered(&self) -> bool {
-        true // Identifiers are hashable.
+        true // Identifiers are ordered.
     }
 }
 

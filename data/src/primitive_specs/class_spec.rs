@@ -24,7 +24,7 @@ impl SpecCompatibility for ClassSpec {
 
 impl IsOrdered for ClassSpec {
     fn is_ordered(&self) -> bool {
-        // Classes are hashable.
+        // Classes are ordered.
         true
     }
 }

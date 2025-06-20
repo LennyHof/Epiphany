@@ -24,7 +24,7 @@ impl SpecCompatibility for WalkSpec {
 
 impl IsOrdered for WalkSpec {
     fn is_ordered(&self) -> bool {
-        false // Walks are not hashable.
+        false // Walks are not ordered.
     }
 }
 

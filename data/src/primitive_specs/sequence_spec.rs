@@ -9,34 +9,34 @@ use crate::{
 /// A primitive spec for sequences.
 #[derive(Debug, PartialEq)]
 pub struct SequenceSpec {
-    element_spec: Option<Rc<DataSpec>>,
+    value_spec: Option<Rc<DataSpec>>,
 }
 
 impl SequenceSpec {
     /// Creates a new sequence spec.
-    pub fn new(element_spec: &Option<Rc<DataSpec>>) -> Self {
+    pub fn new(value_spec: &Option<Rc<DataSpec>>) -> Self {
         Self {
-            element_spec: element_spec.clone(),
+            value_spec: value_spec.clone(),
         }
     }
 
-    /// Returns the element specification of the sequence.
-    pub fn element_spec(&self) -> &Option<Rc<DataSpec>> {
-        &self.element_spec
+    /// Returns the value specification of the sequence.
+    pub fn value_spec(&self) -> &Option<Rc<DataSpec>> {
+        &self.value_spec
     }
 }
 
 impl SpecCompatibility for SequenceSpec {
     fn is_compatible_with(&self, required: &Self) -> bool {
-        if self.element_spec.is_some() && required.element_spec.is_some() {
-            if let Some(element_spec) = self.element_spec.as_ref() {
-                if let Some(required_element_spec) = required.element_spec.as_ref() {
-                    if !element_spec.is_compatible_with(required_element_spec) {
+        if self.value_spec.is_some() && required.value_spec.is_some() {
+            if let Some(value_spec) = self.value_spec.as_ref() {
+                if let Some(required_value_spec) = required.value_spec.as_ref() {
+                    if !value_spec.is_compatible_with(required_value_spec) {
                         return false;
                     }
                 }
             }
-        } else if self.element_spec.is_none() && required.element_spec.is_some() {
+        } else if self.value_spec.is_none() && required.value_spec.is_some() {
             return false;
         }
         true
@@ -45,7 +45,7 @@ impl SpecCompatibility for SequenceSpec {
 
 impl IsOrdered for SequenceSpec {
     fn is_ordered(&self) -> bool {
-        false // Sequences are not hashable, as they cannot be a collection element.
+        false // Sequences are not ordered, as they cannot be a collection element.
     }
 }
 
@@ -55,8 +55,8 @@ impl std::fmt::Display for SequenceSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Sequence {{ element_spec: {} }}",
-            self.element_spec
+            "Sequence {{ value_spec: {} }}",
+            self.value_spec
                 .as_ref()
                 .map(|s| s.to_string())
                 .unwrap_or_else(|| "None".to_string())

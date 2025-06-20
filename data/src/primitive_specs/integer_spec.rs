@@ -122,7 +122,7 @@ impl SpecCompatibility for IntegerSpec {
 
 impl IsOrdered for IntegerSpec {
     fn is_ordered(&self) -> bool {
-        // Integers are hashable.
+        // Integers are ordered.
         true
     }
 }

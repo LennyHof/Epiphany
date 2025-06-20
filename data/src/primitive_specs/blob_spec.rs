@@ -24,7 +24,7 @@ impl SpecCompatibility for BlobSpec {
 
 impl IsOrdered for BlobSpec {
     fn is_ordered(&self) -> bool {
-        // BLOBs are not hashable by default.
+        // BLOBs are not ordered by default.
         false
     }
 }

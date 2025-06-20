@@ -24,7 +24,7 @@ impl SpecCompatibility for DataSpecSpec {
 
 impl IsOrdered for DataSpecSpec {
     fn is_ordered(&self) -> bool {
-        true // Data specs are hashable.
+        true // Data specs are ordered.
     }
 }
 

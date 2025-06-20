@@ -24,7 +24,7 @@ impl SpecCompatibility for IntervalSpec {
 
 impl IsOrdered for IntervalSpec {
     fn is_ordered(&self) -> bool {
-        true // Intervals are hashable.
+        true // Intervals are ordered.
     }
 }
 

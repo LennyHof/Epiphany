@@ -282,7 +282,12 @@ impl Eq for Variable {}
 
 impl PartialOrd for Variable {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        // Compare the data specifications first
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Variable {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         match (
             self.data_spec.specification_type(),
             other.data_spec.specification_type(),
@@ -291,76 +296,72 @@ impl PartialOrd for Variable {
                 (Primitive::Integer(i1), Primitive::Integer(i2)) => {
                     let a1 = i1.as_ref().unwrap().borrow_access();
                     let a2 = i2.as_ref().unwrap().borrow_access();
-                    Some(a1.cmp(a2))
+                    a1.cmp(a2)
                 }
                 (Primitive::Float(f1), Primitive::Float(f2)) => {
                     let a1 = f1.as_ref().unwrap().borrow_access();
                     let a2 = f2.as_ref().unwrap().borrow_access();
-                    Some(a1.cmp(a2))
+                    a1.cmp(a2)
                 }
                 (Primitive::Boolean(b1), Primitive::Boolean(b2)) => {
                     let a1 = b1.as_ref().unwrap().borrow_access();
                     let a2 = b2.as_ref().unwrap().borrow_access();
-                    Some(a1.cmp(a2))
+                    a1.cmp(a2)
                 }
                 (Primitive::List(l1), Primitive::List(l2)) => {
                     let a1 = l1.as_ref().unwrap().borrow_access();
                     let a2 = l2.as_ref().unwrap().borrow_access();
-                    Some(a1.cmp(a2))
+                    a1.cmp(a2)
                 }
                 (Primitive::Set(s1), Primitive::Set(s2)) => {
                     let a1 = s1.as_ref().unwrap().borrow_access();
                     let a2 = s2.as_ref().unwrap().borrow_access();
-                    Some(a1.cmp(a2))
+                    a1.cmp(a2)
                 }
-                _ => None,
+                _ => std::cmp::Ordering::Equal,
             },
-            _ => None,
+            _ => std::cmp::Ordering::Equal,
         }
-    }
-}
-
-impl Ord for Variable {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        // Use the PartialOrd implementation to compare
-        self.partial_cmp(other).unwrap_or(std::cmp::Ordering::Equal)
     }
 }
 
 impl Hash for Variable {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         // Hash the value based on its type
-        match self.data_spec.specification_type() {
-            DataSpecType::Primitive(primitive) => match primitive {
+        if let DataSpecType::Primitive(primitive) = self.data_spec.specification_type() {
+            match primitive {
                 Primitive::Integer(integer_def) => {
-                    let def = integer_def.as_ref().unwrap();
-                    def.borrow_access().hash(state);
+                    if let Some(def) = integer_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
                 }
                 Primitive::Float(float_def) => {
-                    let def = float_def.as_ref().unwrap();
-                    def.borrow_access().hash(state);
+                    if let Some(def) = float_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
                 }
                 Primitive::Boolean(boolean_def) => {
-                    let def = boolean_def.as_ref().unwrap();
-                    def.borrow_access().hash(state);
+                    if let Some(def) = boolean_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
                 }
                 Primitive::List(list_def) => {
-                    let def = list_def.as_ref().unwrap();
-                    def.borrow_access().hash(state);
+                    if let Some(def) = list_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
                 }
                 Primitive::Set(set_def) => {
-                    let def = set_def.as_ref().unwrap();
-                    def.borrow_access().hash(state);
+                    if let Some(def) = set_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
                 }
                 // Primitive::Map(map_def) => {
-                //     let def = map_def.as_ref().unwrap();
-                //     def.borrow_access().hash(state);
+                //     if let Some(def) = map_def.as_ref() {
+                //         def.borrow_access().hash(state);
+                //     }
                 // }
-                _ => {
-                    todo!("Implement hash to for other primitive types");
-                }
-            },
-            _ => {}
+                _ => {}
+            }
         }
     }
 }
@@ -438,12 +439,7 @@ impl Display for Variable {
 
 impl std::fmt::Debug for Variable {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "spec: {}, value: {})",
-            self.data_spec(),
-            self.to_string()
-        )
+        write!(f, "spec: {}, value: {}", self.data_spec(), self)
     }
 }
 

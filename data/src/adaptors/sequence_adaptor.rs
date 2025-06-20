@@ -8,6 +8,6 @@ pub trait SequenceAdaptor {
     fn spec(&self) -> &Rc<SequenceSpec>;
 
     /// Returns a sequence iterator.
-    /// This method should return an iterator that yields references to the elements in the sequence.
+    /// This method should return an iterator that yields references to the values in the sequence.
     fn iter(&self) -> Box<dyn SequenceIter>;
 }

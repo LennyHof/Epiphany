@@ -54,7 +54,7 @@ impl SpecCompatibility for DateTimeSpec {
 
 impl IsOrdered for DateTimeSpec {
     fn is_ordered(&self) -> bool {
-        // DateTime values are hashable.
+        // DateTime values are ordered.
         true
     }
 }

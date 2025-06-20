@@ -24,7 +24,7 @@ impl SpecCompatibility for CharacterSpec {
 
 impl IsOrdered for CharacterSpec {
     fn is_ordered(&self) -> bool {
-        true // Characters are hashable.
+        true // Characters are ordered.
     }
 }
 

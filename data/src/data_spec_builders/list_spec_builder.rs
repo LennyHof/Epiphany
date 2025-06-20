@@ -19,7 +19,7 @@ use std::rc::Rc;
 /// use data::primitive_specs::list_spec::ListStorage;
 ///
 /// let list_of_integers_data_spec = ListSpecBuilder::new()
-///     .set_element_spec(IntegerSpecBuilder::new()
+///     .set_value_spec(IntegerSpecBuilder::new()
 ///       .set_encoding(IntegerEncoding::Signed)
 ///       .set_storage(IntegerStorage::B64)
 ///       .build())
@@ -28,7 +28,7 @@ use std::rc::Rc;
 /// ```
 ///
 pub struct ListSpecBuilder {
-    element_spec: Option<Rc<DataSpec>>,
+    value_spec: Option<Rc<DataSpec>>,
     storage: Option<ListStorage>,
 }
 
@@ -36,18 +36,18 @@ impl ListSpecBuilder {
     /// Returns an initialized list spec builder.
     pub fn new() -> ListSpecBuilder {
         ListSpecBuilder {
-            element_spec: None,
+            value_spec: None,
             storage: None,
         }
     }
 
-    /// Sets the list's element specification.
+    /// Sets the list's value specification.
     /// <p>
-    /// Not setting an element specification will result in a list spec with no element specification and thus
+    /// Not setting an value specification will result in a list spec with no value specification and thus
     /// can only be used for comparison, not access.
     /// </p>
-    pub fn set_element_spec(&mut self, element_spec: Rc<DataSpec>) -> &mut ListSpecBuilder {
-        self.element_spec = Some(element_spec.clone());
+    pub fn set_value_spec(&mut self, value_spec: Rc<DataSpec>) -> &mut ListSpecBuilder {
+        self.value_spec = Some(value_spec.clone());
         self
     }
 
@@ -56,7 +56,7 @@ impl ListSpecBuilder {
     /// Not setting a storage type will result in a list spec with no storage type.
     /// </p>    
     /// <p>
-    /// Setting a storage type but not setting an element specification will result in build panicing.
+    /// Setting a storage type but not setting an value specification will result in build panicing.
     /// </p>
     pub fn set_storage(&mut self, storage: ListStorage) -> &mut ListSpecBuilder {
         match storage {
@@ -85,14 +85,14 @@ impl ListSpecBuilder {
     ///
     /// # Panics
     ///
-    /// If the list spec has storage specified but no element specification.
+    /// If the list spec has storage specified but no value specification.
     pub fn build(&self) -> Rc<DataSpec> {
         let mut primitive_def: Option<PrimitiveDef<ListSpec, List>> = None;
         let mut specification_level = DataSpecLevel::Compare;
-        if self.element_spec.is_some() {
-            let primitive_spec = Rc::new(ListSpec::new(&self.element_spec, &self.storage));
+        if self.value_spec.is_some() {
+            let primitive_spec = Rc::new(ListSpec::new(&self.value_spec, &self.storage));
             primitive_def = Some(PrimitiveDef::new(primitive_spec, None));
-            specification_level = self.element_spec.as_ref().unwrap().specification_level();
+            specification_level = self.value_spec.as_ref().unwrap().specification_level();
         } else if self.storage.is_some() {
             panic!("ListSpecBuilder: storage is set but no element spec is set.");
         }

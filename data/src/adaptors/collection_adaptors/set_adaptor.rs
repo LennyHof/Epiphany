@@ -19,13 +19,13 @@ pub trait SetAdaptor {
 
     /// Adds a value to the set. Returns `true` if the value was added, `false` if it was already present.
     ///
-    /// This method checks if the value's data specification is compatible with the set's element specification.
+    /// This method checks if the value's data specification is compatible with the set's value specification.
     /// If the value's data specification is not compatible, it returns a `SetError::SpecError`.
     fn insert(&mut self, value: Variable) -> Result<bool, SetError> {
-        // Check if the value's data specification is compatible with the set's element specification.
+        // Check if the value's data specification is compatible with the set's value specification.
         value
             .data_spec()
-            .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
+            .check_compatible_with(self.spec().value_spec().as_ref().unwrap().as_ref())?;
 
         self.do_insert(value)
     }
@@ -34,13 +34,13 @@ pub trait SetAdaptor {
     fn do_insert(&mut self, value: Variable) -> Result<bool, SetError>;
 
     /// Removes a value from the set.
-    /// This method checks if the value's data specification is compatible with the set's element specification.
+    /// This method checks if the value's data specification is compatible with the set's value specification.
     /// If the value's data specification is not compatible, it returns a `SetError::SpecError`.
     fn remove(&mut self, value: &Variable) -> Result<bool, SetError> {
-        // Check if the value's data specification is compatible with the set's element specification.
+        // Check if the value's data specification is compatible with the set's value specification.
         value
             .data_spec()
-            .check_compatible_with(self.spec().element_spec().as_ref().unwrap().as_ref())?;
+            .check_compatible_with(self.spec().value_spec().as_ref().unwrap().as_ref())?;
 
         self.do_remove(value)
     }
@@ -51,6 +51,6 @@ pub trait SetAdaptor {
     /// Clears the set.
     fn clear(&mut self) -> Result<(), SetError>;
 
-    /// Returns the lists' elements as a sequence.
-    fn elements(&self) -> Box<dyn SequenceAdaptor>;
+    /// Returns the lists' values as a sequence.
+    fn values(&self) -> Box<dyn SequenceAdaptor>;
 }

@@ -138,7 +138,7 @@ impl SpecCompatibility for StringSpec {
 
 impl IsOrdered for StringSpec {
     fn is_ordered(&self) -> bool {
-        true // Strings are hashable.
+        true // Strings are ordered.
     }
 }
 
