@@ -1,8 +1,12 @@
 use std::rc::Rc;
 
 use crate::{
-    accessors::collections::map::MapError, adaptors::sequence_adaptor::SequenceAdaptor,
-    primitive_specs::map_spec::MapSpec, spec_compatibility::SpecCompatibility, variable::Variable,
+    accessors::collections::map::{
+        MapError, MapIter, MapIterMut, MapKeysIter, MapValuesIter, MapValuesIterMut,
+    },
+    primitive_specs::map_spec::MapSpec,
+    spec_compatibility::SpecCompatibility,
+    variable::Variable,
 };
 
 /// An adaptor for maps.
@@ -68,12 +72,18 @@ pub trait MapAdaptor {
     /// Clears the map.
     fn clear(&mut self) -> Result<(), MapError>;
 
-    /// Returns the map's values as a sequence of key/value tuples.
-    fn elements(&self) -> Box<dyn SequenceAdaptor>;
+    /// Returns an iterator for the map's key/value pairs.
+    fn iter<'a>(&'a self) -> Box<dyn MapIter<'a> + 'a>;
 
-    /// Returns the map's keys as a sequence of keys.
-    fn keys(&self) -> Box<dyn SequenceAdaptor>;
+    /// Returns an iterator for the map's key/value pairs where the value is mutable.
+    fn iter_mut<'a>(&'a mut self) -> Box<dyn MapIterMut<'a> + 'a>;
 
-    /// Returns the map's values as a sequence of values.
-    fn values(&self) -> Box<dyn SequenceAdaptor>;
+    /// Returns an iterator for the map's keys.
+    fn keys<'a>(&'a self) -> Box<dyn MapKeysIter<'a> + 'a>;
+
+    /// Returns an iterator for the map's values.
+    fn values<'a>(&'a self) -> Box<dyn MapValuesIter<'a> + 'a>;
+
+    /// Returns an iterator for the map's values as mutable.
+    fn values_mut<'a>(&'a mut self) -> Box<dyn MapValuesIterMut<'a> + 'a>;
 }

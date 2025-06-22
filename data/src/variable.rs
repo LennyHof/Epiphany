@@ -224,14 +224,6 @@ impl Variable {
     }
 }
 
-impl Default for Variable {
-    fn default() -> Self {
-        Variable {
-            data_spec: DataSpec::default(),
-        }
-    }
-}
-
 impl PartialEq for Variable {
     fn eq(&self, other: &Self) -> bool {
         // Check if the specification types are equal
@@ -239,7 +231,6 @@ impl PartialEq for Variable {
             &self.data_spec().specification_type(),
             &other.data_spec().specification_type(),
         ) {
-            (DataSpecType::None, DataSpecType::None) => true,
             (DataSpecType::Primitive(p1), DataSpecType::Primitive(p2)) => match (p1, p2) {
                 (Primitive::Integer(i1), Primitive::Integer(i2)) => {
                     let a1 = i1.as_ref().unwrap().borrow_access();
@@ -266,11 +257,11 @@ impl PartialEq for Variable {
                     let a2 = s2.as_ref().unwrap().borrow_access();
                     a1 == a2
                 }
-                // (Primitive::Map(m1), Primitive::Map(m2)) => {
-                //     let a1 = m1.as_ref().unwrap().borrow_access();
-                //     let a2 = m2.as_ref().unwrap().borrow_access();
-                //     a1 == a2
-                // }
+                (Primitive::Map(m1), Primitive::Map(m2)) => {
+                    let a1 = m1.as_ref().unwrap().borrow_access();
+                    let a2 = m2.as_ref().unwrap().borrow_access();
+                    a1 == a2
+                }
                 _ => false,
             },
             _ => false,
@@ -318,6 +309,11 @@ impl Ord for Variable {
                     let a2 = s2.as_ref().unwrap().borrow_access();
                     a1.cmp(a2)
                 }
+                (Primitive::Map(m1), Primitive::Map(m2)) => {
+                    let a1 = m1.as_ref().unwrap().borrow_access();
+                    let a2 = m2.as_ref().unwrap().borrow_access();
+                    a1.cmp(a2)
+                }
                 _ => std::cmp::Ordering::Equal,
             },
             _ => std::cmp::Ordering::Equal,
@@ -355,11 +351,11 @@ impl Hash for Variable {
                         def.borrow_access().hash(state);
                     }
                 }
-                // Primitive::Map(map_def) => {
-                //     if let Some(def) = map_def.as_ref() {
-                //         def.borrow_access().hash(state);
-                //     }
-                // }
+                Primitive::Map(map_def) => {
+                    if let Some(def) = map_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
+                }
                 _ => {}
             }
         }
@@ -428,7 +424,7 @@ impl Display for Variable {
                     Primitive::Boolean(_) => self.boolean().to_string(),
                     Primitive::List(_) => self.list().to_string(),
                     Primitive::Set(_) => self.set().to_string(),
-                    //Primitive::Map(_) => self.map().to_string(),
+                    Primitive::Map(_) => self.map().to_string(),
                     _ => "Unsupported primitive".to_string(),
                 },
                 _ => "Unsupported data spec type".to_string(),

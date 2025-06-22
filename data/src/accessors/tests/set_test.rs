@@ -208,6 +208,60 @@ fn set_clear() {
 }
 
 #[test]
+fn set_iterators() {
+    let spec = SetSpecBuilder::new()
+        .set_value_spec(
+            IntegerSpecBuilder::new()
+                .set_encoding(IntegerEncoding::Unsigned)
+                .set_storage(IntegerStorage::B64)
+                .build(),
+        )
+        .set_storage(SetElementOrdering::Ordered)
+        .build();
+    let mut var = Variable::new(&spec);
+    {
+        let set = var.set_mut();
+        assert!(set.is_empty());
+
+        // test element values
+        let elem0_in = Variable::try_from(55u64).unwrap();
+        let elem1_in = Variable::try_from(132u64).unwrap();
+        let elem2_in = Variable::try_from(1u64).unwrap();
+
+        // add values
+        set.insert(elem0_in.clone()).unwrap();
+        set.insert(elem1_in.clone()).unwrap();
+        set.insert(elem2_in.clone()).unwrap();
+
+        // check size
+        assert_eq!(set.len(), 3);
+
+        // iterate over values
+        let mut values_iter = set.iter();
+        assert_eq!(values_iter.next().unwrap().unwrap(), &elem2_in);
+        assert_eq!(values_iter.next().unwrap().unwrap(), &elem0_in);
+        assert_eq!(values_iter.next().unwrap().unwrap(), &elem1_in);
+        assert_eq!(values_iter.next(), None);
+    }
+
+    // check values using into iter on a reference to the set
+    let mut count = 0;
+    for value in var.set() {
+        assert!(value.is_ok());
+        count += 1;
+    }
+    assert_eq!(count, 3);
+
+    // check values using into iter on a mut reference to the set
+    let mut count = 0;
+    for value in var.set_mut() {
+        assert!(value.is_ok());
+        count += 1;
+    }
+    assert_eq!(count, 3);
+}
+
+#[test]
 fn ordered_set() {
     let spec = SetSpecBuilder::new()
         .set_value_spec(
@@ -227,7 +281,7 @@ fn ordered_set() {
     set.insert(Variable::try_from(99u64).unwrap()).unwrap();
 
     // check ordering
-    assert_eq!(set.to_string(), "{55, 99, 132}");
+    assert_eq!(set.to_string(), "Set {55, 99, 132}");
 }
 
 #[test]
@@ -332,9 +386,10 @@ fn set_partial_eq_and_hash() {
     let mut var2 = Variable::new(&spec);
     {
         let set1 = var1.set_mut();
+
         // test element values
-        let elem0_in = 55u64;
-        let elem1_in = 132u64;
+        let elem0_in = 132u64;
+        let elem1_in = 55u64;
 
         // add values to set1
         set1.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
@@ -395,4 +450,31 @@ fn set_partial_eq_and_hash() {
         var2.hash(&mut hasher2);
         assert_ne!(hasher1.finish(), hasher2.finish());
     }
+}
+
+#[test]
+fn set_display_and_debug() {
+    let spec = SetSpecBuilder::new()
+        .set_value_spec(
+            IntegerSpecBuilder::new()
+                .set_encoding(IntegerEncoding::Unsigned)
+                .set_storage(IntegerStorage::B64)
+                .build(),
+        )
+        .set_storage(SetElementOrdering::Ordered)
+        .build();
+    let mut var = Variable::new(&spec);
+    assert_eq!(var.set().to_string(), "Set {}");
+    assert_eq!(format!("{:?}", var.set()), "Set {}");
+
+    // add values
+    let set_mut = var.set_mut();
+    set_mut.insert(Variable::try_from(55u64).unwrap()).unwrap();
+    set_mut.insert(Variable::try_from(132u64).unwrap()).unwrap();
+    set_mut.insert(Variable::try_from(99u64).unwrap()).unwrap();
+
+    // check display
+    assert_eq!(var.set().to_string(), "Set {55, 99, 132}");
+    // check debug output
+    assert_eq!(format!("{:?}", var.set()), "Set {55, 99, 132}");
 }

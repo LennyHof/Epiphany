@@ -1,7 +1,6 @@
-use std::{fmt::Display, rc::Rc};
+use std::{fmt::Debug, fmt::Display, hash::Hash, rc::Rc};
 
 use crate::{
-    accessors::sequence::Sequence,
     adaptors::collection_adaptors::map_adaptor::MapAdaptor,
     primitive_def::Accessor,
     primitive_specs::map_spec::{MapKeyOrdering, MapSpec},
@@ -73,19 +72,65 @@ impl Map {
         self.adaptor.clear()
     }
 
-    /// Returns the map's values as a sequence of key/value tuples.
-    pub fn elements(&self) -> Sequence {
-        Sequence::new(self.adaptor.values())
+    /// Returns an iterator for the map's key/value pairs.
+    pub fn iter<'a>(&'a self) -> Box<dyn MapIter<'a> + 'a> {
+        self.adaptor.iter()
     }
 
-    /// Returns the map's keys as a sequence of keys.
-    pub fn keys(&self) -> Sequence {
-        Sequence::new(self.adaptor.keys())
+    /// Returns an iterator for the map's key/value pairs where the value is mutable.
+    pub fn iter_mut<'a>(&'a mut self) -> Box<dyn MapIterMut<'a> + 'a> {
+        self.adaptor.iter_mut()
     }
 
-    /// Returns the map's values as a sequence of values.
-    pub fn values(&self) -> Sequence {
-        Sequence::new(self.adaptor.values())
+    /// Returns an iterator for the map's keys.
+    pub fn keys<'a>(&'a self) -> Box<dyn MapKeysIter<'a> + 'a> {
+        self.adaptor.keys()
+    }
+
+    /// Returns an iterator for the map's values.
+    pub fn values<'a>(&'a self) -> Box<dyn MapValuesIter<'a> + 'a> {
+        self.adaptor.values()
+    }
+
+    /// Returns an iterator for mutable map values.
+    pub fn values_mut<'a>(&'a mut self) -> Box<dyn MapValuesIterMut<'a> + 'a> {
+        self.adaptor.values_mut()
+    }
+}
+
+/// An iterator for map key/value pairs.
+pub trait MapIter<'a>: Iterator<Item = Result<(&'a Variable, &'a Variable), MapError>> {}
+
+/// An iterator for map key/value pairs where the value is mutable.
+pub trait MapIterMut<'a>:
+    Iterator<Item = Result<(&'a Variable, &'a mut Variable), MapError>>
+{
+}
+
+/// An iterator for map keys.
+pub trait MapKeysIter<'a>: Iterator<Item = Result<&'a Variable, MapError>> {}
+
+/// An iterator for map values.
+pub trait MapValuesIter<'a>: Iterator<Item = Result<&'a Variable, MapError>> {}
+
+/// An iterator for mutable map values.
+pub trait MapValuesIterMut<'a>: Iterator<Item = Result<&'a mut Variable, MapError>> {}
+
+impl<'a> IntoIterator for &'a Map {
+    type Item = Result<(&'a Variable, &'a Variable), MapError>;
+    type IntoIter = Box<dyn MapIter<'a> + 'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut Map {
+    type Item = Result<(&'a Variable, &'a mut Variable), MapError>;
+    type IntoIter = Box<dyn MapIterMut<'a> + 'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter_mut()
     }
 }
 
@@ -98,11 +143,11 @@ impl SetEqualTo for Map {
         self.clear()?;
 
         // Iterate over the keys of the other map and insert cloned key-values into this map.
-        for key_result in other.keys().iter() {
+        for key_result in other.keys() {
             match key_result {
                 Ok(key) => {
                     let cloned_key = key.try_clone()?;
-                    let value = other.get(&key)?;
+                    let value = other.get(key)?;
                     // Clone the value to ensure it can be inserted into this map.
                     let cloned_value = value.unwrap().try_clone()?;
                     self.insert(cloned_key, cloned_value)?;
@@ -118,27 +163,7 @@ impl Accessor for Map {}
 
 impl PartialOrd for Map {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        match *self.spec().as_ref().key_ordering() {
-            Some(MapKeyOrdering::Ordered) => {
-                // Ordered maps can be compared based on their keys.
-                for key_result in self.keys().iter() {
-                    match key_result {
-                        Ok(key) => {
-                            let other_value = other.get(&key).ok().flatten();
-                            if other_value != self.get(&key).ok().flatten() {
-                                return Some(std::cmp::Ordering::Less);
-                            }
-                        }
-                        Err(_) => return Some(std::cmp::Ordering::Less),
-                    }
-                }
-                Some(std::cmp::Ordering::Equal)
-            }
-            _ => {
-                // If no key ordering is specified, we treat it as unordered.
-                None
-            }
-        }
+        Some(self.cmp(other))
     }
 }
 
@@ -147,11 +172,11 @@ impl Ord for Map {
         match *self.spec().as_ref().key_ordering() {
             Some(MapKeyOrdering::Ordered) => {
                 // Ordered maps can be compared based on their keys.
-                for key_result in self.keys().iter() {
+                for key_result in self.keys() {
                     match key_result {
                         Ok(key) => {
-                            let other_value = other.get(&key).ok().flatten();
-                            if other_value != self.get(&key).ok().flatten() {
+                            let other_value = other.get(key).ok().flatten();
+                            if other_value != self.get(key).ok().flatten() {
                                 return std::cmp::Ordering::Less;
                             }
                         }
@@ -173,11 +198,11 @@ impl PartialEq for Map {
         if self.len() != other.len() {
             return false;
         }
-        for key_result in self.keys().iter() {
+        for key_result in self.keys() {
             match key_result {
                 Ok(key) => {
-                    let other_value = other.get(&key).ok().flatten();
-                    if other_value != self.get(&key).ok().flatten() {
+                    let other_value = other.get(key).ok().flatten();
+                    if other_value != self.get(key).ok().flatten() {
                         return false;
                     }
                 }
@@ -189,6 +214,58 @@ impl PartialEq for Map {
 }
 
 impl Eq for Map {}
+
+impl Hash for Map {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        match self.spec().as_ref().key_ordering() {
+            Some(MapKeyOrdering::Ordered) => {
+                // Hash the map's keys and values.
+                for key_result in self.keys() {
+                    match key_result {
+                        Ok(key) => {
+                            key.hash(state);
+                            if let Some(value) = self.get(key).ok().flatten() {
+                                value.hash(state);
+                            }
+                        }
+                        Err(_) => continue, // Ignore errors in hashing
+                    }
+                }
+            }
+            _ => {
+                // If no key ordering is specified, we treat it as unordered.
+                // This is not a valid operation for unordered maps, so we panic.
+                panic!("Hashing of unordered maps is not supported.");
+            }
+        }
+    }
+}
+
+impl Display for Map {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Map {{")?;
+        let mut first = true;
+        for result in self.iter() {
+            match result {
+                Ok((key, value)) => {
+                    if !first {
+                        write!(f, ", ")?;
+                    }
+                    write!(f, "{}: {}", key, value)?;
+                    first = false;
+                }
+                Err(e) => write!(f, "<error: {}>", e)?,
+            }
+        }
+        write!(f, "}}")
+    }
+}
+
+impl Debug for Map {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Display::fmt(self, f)
+    }
+}
 
 /// Errors that can occur when working with maps.
 #[derive(Debug, PartialEq)]

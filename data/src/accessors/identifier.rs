@@ -17,7 +17,7 @@ impl Identifier {
 }
 
 impl SetEqualTo for Identifier {
-    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+    fn set_equal_to(&mut self, _other: &Self) -> Result<(), SetEqualToError> {
         todo!("Implement set_equal_to for Identifier");
     }
 }

@@ -5,7 +5,6 @@ use std::{
 };
 
 use crate::{
-    accessors::sequence::Sequence,
     adaptors::collection_adaptors::list_adaptor::ListAdaptor,
     primitive_def::Accessor,
     primitive_specs::list_spec::ListSpec,
@@ -88,8 +87,37 @@ impl List {
     }
 
     /// Returns the list's values as a sequence of values.
-    pub fn values(&self) -> Sequence {
-        Sequence::new(self.adaptor.values())
+    pub fn iter<'a>(&'a self) -> Box<dyn ListIter<'a> + 'a> {
+        self.adaptor.iter()
+    }
+
+    /// Returns a mutable iterator over the list's values.
+    pub fn iter_mut<'a>(&'a mut self) -> Box<dyn ListIterMut<'a> + 'a> {
+        self.adaptor.iter_mut()
+    }
+}
+
+/// An iterator for list values.
+pub trait ListIter<'a>: Iterator<Item = Result<&'a Variable, ListError>> {}
+
+/// A mutable iterator for list values.
+pub trait ListIterMut<'a>: Iterator<Item = Result<&'a mut Variable, ListError>> {}
+
+impl<'a> IntoIterator for &'a List {
+    type Item = Result<&'a Variable, ListError>;
+    type IntoIter = Box<dyn ListIter<'a> + 'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut List {
+    type Item = Result<&'a mut Variable, ListError>;
+    type IntoIter = Box<dyn ListIterMut<'a> + 'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter_mut()
     }
 }
 

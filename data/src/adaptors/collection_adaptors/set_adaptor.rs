@@ -1,8 +1,10 @@
 use std::rc::Rc;
 
 use crate::{
-    accessors::collections::set::SetError, adaptors::sequence_adaptor::SequenceAdaptor,
-    primitive_specs::set_spec::SetSpec, spec_compatibility::SpecCompatibility, variable::Variable,
+    accessors::collections::set::{SetError, SetIter},
+    primitive_specs::set_spec::SetSpec,
+    spec_compatibility::SpecCompatibility,
+    variable::Variable,
 };
 
 /// An adaptor for sets.
@@ -52,5 +54,5 @@ pub trait SetAdaptor {
     fn clear(&mut self) -> Result<(), SetError>;
 
     /// Returns the lists' values as a sequence.
-    fn values(&self) -> Box<dyn SequenceAdaptor>;
+    fn values<'a>(&'a self) -> Box<dyn SetIter<'a> + 'a>;
 }

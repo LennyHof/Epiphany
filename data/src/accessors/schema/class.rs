@@ -27,7 +27,7 @@ impl Class {
 }
 
 impl SetEqualTo for Class {
-    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+    fn set_equal_to(&mut self, _other: &Self) -> Result<(), SetEqualToError> {
         todo!("Implement set_equal_to for Class");
     }
 }

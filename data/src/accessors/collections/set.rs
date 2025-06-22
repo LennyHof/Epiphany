@@ -1,7 +1,7 @@
+use std::fmt::{Debug, Display};
 use std::{hash::Hash, rc::Rc};
 
 use crate::{
-    accessors::sequence::Sequence,
     adaptors::collection_adaptors::set_adaptor::SetAdaptor,
     primitive_def::Accessor,
     primitive_specs::set_spec::{SetElementOrdering, SetSpec},
@@ -59,9 +59,31 @@ impl Set {
         self.adaptor.clear()
     }
 
-    /// Returns the set's values as a sequence of values.
-    pub fn values(&self) -> Sequence {
-        Sequence::new(self.adaptor.values())
+    /// Returns an iterator for the set's values.
+    pub fn iter<'a>(&'a self) -> Box<dyn SetIter<'a> + 'a> {
+        self.adaptor.values()
+    }
+}
+
+/// An iterator for set values.
+pub trait SetIter<'a>: Iterator<Item = Result<&'a Variable, SetError>> {}
+
+impl<'a> IntoIterator for &'a Set {
+    type Item = Result<&'a Variable, SetError>;
+    type IntoIter = Box<dyn SetIter<'a> + 'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut Set {
+    type Item = Result<&'a Variable, SetError>;
+    type IntoIter = Box<dyn SetIter<'a> + 'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        // We can use the same iterator for mutable access, as it does not change the set's structure.
+        self.iter()
     }
 }
 
@@ -69,7 +91,7 @@ impl SetEqualTo for Set {
     fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
         self.spec().as_ref().check_compatible_with(other.spec())?;
         self.clear()?;
-        for element_result in other.values().iter() {
+        for element_result in other {
             match element_result {
                 Ok(element) => {
                     let cloned_element = element.try_clone()?;
@@ -89,9 +111,9 @@ impl PartialEq for Set {
         if self.len() != other.len() {
             return false;
         }
-        for element_result in self.values().iter() {
+        for element_result in self {
             match element_result {
-                Ok(ref element) => {
+                Ok(element) => {
                     if !other.contains(element).unwrap_or(false) {
                         return false;
                     }
@@ -120,9 +142,9 @@ impl Ord for Set {
                 if self.len() != other.len() {
                     return self.len().cmp(&other.len());
                 }
-                for (a, b) in self.values().iter().zip(other.values().iter()) {
+                for (a, b) in self.iter().zip(other.iter()) {
                     match (a, b) {
-                        (Ok(a), Ok(b)) => match a.cmp(&b) {
+                        (Ok(a), Ok(b)) => match a.cmp(b) {
                             std::cmp::Ordering::Equal => continue,
                             ord => return ord,
                         },
@@ -148,7 +170,7 @@ impl Hash for Set {
             Some(SetElementOrdering::Ordered) => {
                 // If the set is ordered, we can hash the values in order.
                 self.len().hash(state);
-                for element in self.values().iter().flatten() {
+                for element in self.iter().flatten() {
                     element.hash(state);
                 }
             }
@@ -160,13 +182,12 @@ impl Hash for Set {
         }
     }
 }
-use std::fmt::{Debug, Display};
 
 impl Display for Set {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{{")?;
+        write!(f, "Set {{")?;
         let mut first = true;
-        for element_result in self.values().iter() {
+        for element_result in self {
             if let Ok(element) = element_result {
                 if !first {
                     write!(f, ", ")?;
@@ -183,8 +204,6 @@ impl Display for Set {
 
 impl Debug for Set {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Set (length: {})", self.len())?;
-        write!(f, ", value: ")?;
         Display::fmt(self, f)
     }
 }

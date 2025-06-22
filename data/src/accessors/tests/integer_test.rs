@@ -392,3 +392,121 @@ fn set_equal_to_u64() {
     assert_eq!(var1.integer(), var2.integer());
     assert_eq!(var1, var2);
 }
+
+#[test]
+fn signed_integer_cmp() {
+    let spec = IntegerSpecBuilder::new()
+        .set_encoding(IntegerEncoding::Signed)
+        .set_storage(IntegerStorage::B64)
+        .build();
+    let mut var1 = Variable::new(&spec);
+    let mut var2 = Variable::new(&spec);
+
+    var1.integer_mut().set_i64(-50).unwrap();
+    var2.integer_mut().set_i64(100).unwrap();
+
+    use std::cmp::Ordering;
+
+    // Compare the integers directly
+    assert!(var1.integer().cmp(&var2.integer()) == Ordering::Less);
+    assert!(var2.integer().cmp(&var1.integer()) == Ordering::Greater);
+    assert!(var1.integer().cmp(&var1.integer()) == Ordering::Equal);
+
+    // Compare the variables
+    assert!(var1.cmp(&var2) == Ordering::Less);
+    assert!(var2.cmp(&var1) == Ordering::Greater);
+    assert!(var1.cmp(&var1) == Ordering::Equal);
+}
+
+#[test]
+fn unsigned_integer_cmp() {
+    let spec = IntegerSpecBuilder::new()
+        .set_encoding(IntegerEncoding::Unsigned)
+        .set_storage(IntegerStorage::B64)
+        .build();
+    let mut var1 = Variable::new(&spec);
+    let mut var2 = Variable::new(&spec);
+
+    var1.integer_mut().set_u64(50).unwrap();
+    var2.integer_mut().set_u64(100).unwrap();
+
+    use std::cmp::Ordering;
+    
+    // Compare the integers directly
+    assert!(var1.integer().cmp(&var2.integer()) == Ordering::Less);
+    assert!(var2.integer().cmp(&var1.integer()) == Ordering::Greater);
+    assert!(var1.integer().cmp(&var1.integer()) == Ordering::Equal);
+
+    // Compare the variables
+    assert!(var1.cmp(&var2) == Ordering::Less);
+    assert!(var2.cmp(&var1) == Ordering::Greater);
+    assert!(var1.cmp(&var1) == Ordering::Equal);
+}
+
+#[test]
+fn signed_integer_partial_cmp() {
+    let spec = IntegerSpecBuilder::new()
+        .set_encoding(IntegerEncoding::Signed)
+        .set_storage(IntegerStorage::B64)
+        .build();
+    let mut var1 = Variable::new(&spec);
+    let mut var2 = Variable::new(&spec);
+
+    var1.integer_mut().set_i64(-50).unwrap();
+    var2.integer_mut().set_i64(100).unwrap();
+
+    use std::cmp::Ordering;
+
+    // Compare the integers directly
+    assert_eq!(
+        var1.integer().partial_cmp(&var2.integer()),
+        Some(Ordering::Less)
+    );
+    assert_eq!(
+        var2.integer().partial_cmp(&var1.integer()),
+        Some(Ordering::Greater)
+    );
+    assert_eq!(
+        var1.integer().partial_cmp(&var1.integer()),
+        Some(Ordering::Equal)
+    );
+
+    // Compare the variables
+    assert_eq!(var1.partial_cmp(&var2), Some(Ordering::Less));
+    assert_eq!(var2.partial_cmp(&var1), Some(Ordering::Greater));
+    assert_eq!(var1.partial_cmp(&var1), Some(Ordering::Equal));
+}
+
+#[test]
+fn unsigned_integer_partial_cmp() {
+    let spec = IntegerSpecBuilder::new()
+        .set_encoding(IntegerEncoding::Unsigned)
+        .set_storage(IntegerStorage::B64)
+        .build();
+    let mut var1 = Variable::new(&spec);
+    let mut var2 = Variable::new(&spec);
+
+    var1.integer_mut().set_u64(50).unwrap();
+    var2.integer_mut().set_u64(100).unwrap();
+
+    use std::cmp::Ordering;
+
+    // Compare the integers directly
+    assert_eq!(
+        var1.integer().partial_cmp(&var2.integer()),
+        Some(Ordering::Less)
+    );
+    assert_eq!(
+        var2.integer().partial_cmp(&var1.integer()),
+        Some(Ordering::Greater)
+    );
+    assert_eq!(
+        var1.integer().partial_cmp(&var1.integer()),
+        Some(Ordering::Equal)
+    );
+
+    // Compare the variables
+    assert_eq!(var1.partial_cmp(&var2), Some(Ordering::Less));
+    assert_eq!(var2.partial_cmp(&var1), Some(Ordering::Greater));
+    assert_eq!(var1.partial_cmp(&var1), Some(Ordering::Equal));
+}
