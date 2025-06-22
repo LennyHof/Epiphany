@@ -6,6 +6,7 @@ use crate::{
         collections::{list::List, map::Map, set::Set},
         float::Float,
         integer::Integer,
+        sequence::Sequence,
     },
     data_provider::{DataProvider, default_data_provider},
     data_spec::{DataSpec, DataSpecLevel, DataSpecType},
@@ -215,6 +216,21 @@ impl Variable {
         }
     }
 
+    /// Extracts and returns the Sequence accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn sequence(&self) -> &Sequence {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Sequence(sequence_def) => {
+                    let def = &sequence_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a sequence."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
     /// Attempts to clone the variable, returning a new Variable with the same data specification and value.
     pub fn try_clone(&self) -> Result<Variable, SetEqualToError> {
         // Attempt to clone the variable
@@ -393,6 +409,10 @@ impl SetEqualTo for Variable {
                 Primitive::Map(map_def) => {
                     let def = map_def.as_mut().unwrap();
                     def.mut_access().set_equal_to(other.map())?;
+                }
+                Primitive::Sequence(sequence_def) => {
+                    let def = sequence_def.as_mut().unwrap();
+                    def.mut_access().set_equal_to(other.sequence())?;
                 }
                 _ => {
                     todo!("Implement setting equal to for other primitive types");

@@ -46,5 +46,6 @@ mod tests {
     mod integer_test;
     mod list_test;
     mod map_test;
+    mod sequence_test;
     mod set_test;
 }

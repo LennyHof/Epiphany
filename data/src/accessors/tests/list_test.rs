@@ -120,7 +120,7 @@ fn variable_size_list_violations() {
     // set an element with a different data spec
     assert_eq!(
         list.set(0, Variable::try_from(55u64).unwrap()).unwrap_err(),
-        ListError::ElementSpecError(SpecError::IncompatibleSpec(
+        ListError::ValueSpecError(SpecError::IncompatibleSpec(
             "Integer { encoding: Unsigned, storage: B64 }".to_string(),
             "Integer { encoding: Signed, storage: B64 }".to_string()
         ))
@@ -129,7 +129,7 @@ fn variable_size_list_violations() {
     assert_eq!(
         list.insert(0, Variable::try_from(55u64).unwrap())
             .unwrap_err(),
-        ListError::ElementSpecError(SpecError::IncompatibleSpec(
+        ListError::ValueSpecError(SpecError::IncompatibleSpec(
             "Integer { encoding: Unsigned, storage: B64 }".to_string(),
             "Integer { encoding: Signed, storage: B64 }".to_string()
         ))
@@ -137,7 +137,7 @@ fn variable_size_list_violations() {
     // push an element with a different data spec
     assert_eq!(
         list.push(Variable::try_from(55u64).unwrap()).unwrap_err(),
-        ListError::ElementSpecError(SpecError::IncompatibleSpec(
+        ListError::ValueSpecError(SpecError::IncompatibleSpec(
             "Integer { encoding: Unsigned, storage: B64 }".to_string(),
             "Integer { encoding: Signed, storage: B64 }".to_string()
         ))

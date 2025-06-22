@@ -21,6 +21,11 @@ pub trait ListAdaptor {
     /// Returns the length of the list.
     fn len(&self) -> usize;
 
+    /// Returns whether the list is empty.
+    fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// Returns the value at the specified index.
     fn get(&self, index: usize) -> Result<&Variable, ListError> {
         if index < self.len() {

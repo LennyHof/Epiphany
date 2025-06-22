@@ -31,7 +31,7 @@ impl Set {
 
     /// Checks if the set is empty.
     pub fn is_empty(&self) -> bool {
-        self.len() == 0
+        self.adaptor.is_empty()
     }
 
     /// Returns the length of the set.
@@ -214,7 +214,7 @@ pub enum SetError {
     /// A provider error.
     ProviderError(ProviderError),
     /// An error indicating that the value specification is not compatible with the list's value specification.
-    ElementSpecError(SpecError),
+    ValueSpecError(SpecError),
 }
 
 impl From<ProviderError> for SetError {
@@ -227,7 +227,7 @@ impl std::fmt::Display for SetError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             SetError::ProviderError(e) => write!(f, "Provider error: {}", e),
-            SetError::ElementSpecError(e) => write!(f, "{}", e),
+            SetError::ValueSpecError(e) => write!(f, "{}", e),
         }
     }
 }
@@ -236,7 +236,7 @@ impl std::error::Error for SetError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             SetError::ProviderError(e) => Some(e),
-            SetError::ElementSpecError(e) => Some(e),
+            SetError::ValueSpecError(e) => Some(e),
         }
     }
 }
@@ -249,6 +249,6 @@ impl From<SetError> for SetEqualToError {
 
 impl From<SpecError> for SetError {
     fn from(error: SpecError) -> Self {
-        SetError::ElementSpecError(error)
+        SetError::ValueSpecError(error)
     }
 }

@@ -103,3 +103,9 @@ impl ListSpecBuilder {
         ))
     }
 }
+
+impl Default for ListSpecBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}

@@ -17,6 +17,11 @@ pub trait MapAdaptor {
     /// Returns the length of the set.
     fn len(&self) -> usize;
 
+    /// Returns whether the set is empty.
+    fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// Checks if the map contains a key.
     /// Returns `true` if the key is in the map, `false` otherwise.
     fn contains(&self, key: &Variable) -> Result<bool, MapError>;

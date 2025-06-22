@@ -15,6 +15,11 @@ pub trait SetAdaptor {
     /// Returns the length of the set.
     fn len(&self) -> usize;
 
+    /// Returns whether the set is empty.
+    fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// Checks if the set contains a value.
     /// Returns `true` if the value is in the set, `false` otherwise.
     fn contains(&self, value: &Variable) -> Result<bool, SetError>;

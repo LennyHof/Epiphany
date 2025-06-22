@@ -30,7 +30,7 @@ impl Map {
 
     /// Checks if the map is empty.
     pub fn is_empty(&self) -> bool {
-        self.len() == 0
+        self.adaptor.is_empty()
     }
 
     /// Returns the length of the map.

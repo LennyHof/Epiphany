@@ -14,6 +14,7 @@ pub struct SequenceSpec {
 
 impl SequenceSpec {
     /// Creates a new sequence spec.
+    /// Prefer to use the [`SequenceSpecBuilder`](crate::data_spec_builders::sequence_spec_builder::SequenceSpecBuilder) to create a sequence spec.
     pub fn new(value_spec: &Option<Rc<DataSpec>>) -> Self {
         Self {
             value_spec: value_spec.clone(),

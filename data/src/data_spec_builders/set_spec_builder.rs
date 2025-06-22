@@ -87,3 +87,9 @@ impl SetSpecBuilder {
         ))
     }
 }
+
+impl Default for SetSpecBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
