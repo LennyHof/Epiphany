@@ -18,7 +18,7 @@ impl Blob {
 }
 
 impl SetEqualTo for Blob {
-    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+    fn set_equal_to(&mut self, _other: &Self) -> Result<(), SetEqualToError> {
         todo!("Implement set_equal_to for Blob");
     }
 }

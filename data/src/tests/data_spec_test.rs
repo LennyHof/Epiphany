@@ -18,12 +18,6 @@ fn data_spec_level_to_string() {
     assert_eq!(DataSpecLevel::Compare.to_string(), "Compare");
     assert_eq!(DataSpecLevel::Access.to_string(), "Access");
 }
-#[test]
-fn data_spec_default() {
-    let spec = DataSpec::default();
-    assert_eq!(spec.specification_level(), DataSpecLevel::Compare);
-    assert_eq!(*spec.specification_type(), DataSpecType::None);
-}
 
 #[test]
 fn data_spec_new_primitive() {
@@ -86,9 +80,6 @@ fn data_spec_is_compatible_with() {
 }
 #[test]
 fn data_spec_to_string() {
-    let spec = DataSpec::default();
-    assert_eq!(spec.to_string(), "None");
-
     let primitive_spec = Rc::new(BooleanSpec::new());
     let primitive_def = Some(PrimitiveDef::new(primitive_spec.clone(), None));
     let spec = Rc::new(DataSpec::new_primitive(

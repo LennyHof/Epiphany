@@ -31,8 +31,6 @@ impl Display for DataSpecLevel {
 /// Specifies the data specification's type.
 #[derive(Debug, PartialEq)]
 pub enum DataSpecType {
-    /// No type.
-    None,
     /// Logical type.
     Primitive(Primitive),
     /// Logical-type category
@@ -101,19 +99,9 @@ impl DataSpec {
     }
 }
 
-impl Default for DataSpec {
-    fn default() -> Self {
-        DataSpec {
-            specification_level: DataSpecLevel::Compare,
-            specification_type: DataSpecType::None,
-        }
-    }
-}
-
 impl IsOrdered for DataSpec {
     fn is_ordered(&self) -> bool {
         match &self.specification_type {
-            DataSpecType::None => true,
             DataSpecType::Primitive(p) => p.is_ordered(),
             DataSpecType::PrimitiveCategory(..) => true,
         }
@@ -126,7 +114,6 @@ impl Display for DataSpec {
             f,
             "{}",
             match &self.specification_type {
-                DataSpecType::None => "None".to_string(),
                 DataSpecType::Primitive(p) => p.to_string(),
                 DataSpecType::PrimitiveCategory(c) => c.to_string(),
             }
@@ -146,7 +133,6 @@ impl SpecCompatibility for DataSpec {
 
         // Check if the specification types are compatible
         match (&self.specification_type, &required.specification_type) {
-            (DataSpecType::None, DataSpecType::None) => true,
             (DataSpecType::Primitive(p1), DataSpecType::Primitive(p2)) => p1.is_compatible_with(p2),
             (DataSpecType::PrimitiveCategory(c1), DataSpecType::PrimitiveCategory(c2)) => {
                 c1.is_compatible_with(c2)

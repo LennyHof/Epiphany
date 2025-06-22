@@ -1,10 +1,7 @@
 use crate::{
-    accessors::{collections::set::SetError, sequence::SequenceIter},
-    adaptors::{collection_adaptors::set_adaptor::SetAdaptor, sequence_adaptor::SequenceAdaptor},
-    primitive_specs::{
-        sequence_spec::SequenceSpec,
-        set_spec::{SetElementOrdering, SetSpec},
-    },
+    accessors::collections::set::{SetError, SetIter},
+    adaptors::collection_adaptors::set_adaptor::SetAdaptor,
+    primitive_specs::set_spec::{SetElementOrdering, SetSpec},
     variable::Variable,
 };
 use std::{collections::BTreeSet, collections::HashSet, rc::Rc};
@@ -73,63 +70,40 @@ impl SetAdaptor for TransientSetAdaptor {
         Ok(())
     }
 
-    fn values(&self) -> Box<dyn SequenceAdaptor> {
-        let spec = Rc::new(SequenceSpec::new(self.spec.value_spec()));
-        match &self.items {
-            SetCollection::HashSet(set) => Box::new(ElementSequence::new(
-                spec,
-                SetCollection::HashSet(set.clone()),
-            )),
-            SetCollection::BTreeSet(set) => Box::new(ElementSequence::new(
-                spec,
-                SetCollection::BTreeSet(set.clone()),
-            )),
-        }
+    fn values<'a>(&'a self) -> Box<dyn SetIter<'a> + 'a> {
+        Box::new(ValueIter::new(&self.items))
     }
 }
 
-struct ElementSequence {
-    spec: Rc<SequenceSpec>,
-    items: SetCollection,
+enum SetValueIter<'a> {
+    HashSet(std::collections::hash_set::Iter<'a, Variable>),
+    BTreeSet(std::collections::btree_set::Iter<'a, Variable>),
 }
 
-impl ElementSequence {
-    fn new(spec: Rc<SequenceSpec>, items: SetCollection) -> Self {
+struct ValueIter<'a> {
+    iter: SetValueIter<'a>,
+}
+
+impl<'a> ValueIter<'a> {
+    fn new(items: &'a SetCollection) -> Self {
         Self {
-            spec: spec.clone(),
-            items: items,
+            iter: match items {
+                SetCollection::HashSet(set) => SetValueIter::HashSet(set.iter()),
+                SetCollection::BTreeSet(set) => SetValueIter::BTreeSet(set.iter()),
+            },
         }
     }
 }
 
-impl SequenceAdaptor for ElementSequence {
-    fn spec(&self) -> &Rc<SequenceSpec> {
-        &self.spec
-    }
-
-    fn iter(&self) -> Box<dyn SequenceIter> {
-        // Create an iterator based on the type of set collection
-        match &self.items {
-            SetCollection::HashSet(set) => Box::new(ElementSequenceIter {
-                iterator: Box::new(set.clone().into_iter()),
-            }),
-            SetCollection::BTreeSet(set) => Box::new(ElementSequenceIter {
-                iterator: Box::new(set.clone().into_iter()),
-            }),
-        }
-    }
-}
-
-struct ElementSequenceIter {
-    iterator: Box<dyn Iterator<Item = Variable>>,
-}
-
-impl std::iter::Iterator for ElementSequenceIter {
-    type Item = Result<Variable, crate::accessors::sequence::SequenceError>;
+impl<'a> std::iter::Iterator for ValueIter<'a> {
+    type Item = Result<&'a Variable, SetError>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.iterator.next().map(Ok)
+        match &mut self.iter {
+            SetValueIter::HashSet(iter) => iter.next().map(Ok),
+            SetValueIter::BTreeSet(iter) => iter.next().map(Ok),
+        }
     }
 }
 
-impl SequenceIter for ElementSequenceIter {}
+impl<'a> SetIter<'a> for ValueIter<'a> {}

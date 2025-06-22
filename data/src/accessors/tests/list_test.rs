@@ -399,56 +399,112 @@ fn initial_capacity_list_violations() {
 }
 
 #[test]
-fn list_element_sequence() {
-    let value_spec = IntegerSpecBuilder::new()
-        .set_encoding(IntegerEncoding::Signed)
-        .set_storage(IntegerStorage::B64)
-        .build();
+fn list_iterators() {
     let mut var = Variable::new(
         &ListSpecBuilder::new()
-            .set_value_spec(value_spec.clone())
+            .set_value_spec(
+                IntegerSpecBuilder::new()
+                    .set_encoding(IntegerEncoding::Signed)
+                    .set_storage(IntegerStorage::B64)
+                    .build(),
+            )
             .build(),
     );
-    let list = var.list_mut();
     // test element values
     let elem0_in = 55i64;
     let elem1_in = 132i64;
-    // populate using push
-    list.push(Variable::try_from(elem0_in).unwrap()).unwrap();
-    list.push(Variable::try_from(elem1_in).unwrap()).unwrap();
-    assert_eq!(list.len(), 2);
-    assert_eq!(list.get(0).unwrap().integer().i64().unwrap(), elem0_in);
-    assert_eq!(list.get(1).unwrap().integer().i64().unwrap(), elem1_in);
-
-    let values = &list.values();
-
-    // check the sequence spec's element spec
-    assert_eq!(
-        values.spec().value_spec().as_ref().unwrap().as_ref(),
-        value_spec.as_ref()
-    );
-    // iterate over the list
-    let mut iter = list.values().iter();
-    assert_eq!(
-        iter.next().unwrap().unwrap().integer().i64().unwrap(),
-        elem0_in
-    );
-    assert_eq!(
-        iter.next().unwrap().unwrap().integer().i64().unwrap(),
-        elem1_in
-    );
-    assert_eq!(iter.next(), None);
-    assert_eq!(list.len(), 2);
-    let mut count = 0;
-    for element in values.iter() {
-        if count == 0 {
-            assert_eq!(element.unwrap().integer().i64().unwrap(), elem0_in);
-        } else if count == 1 {
-            assert_eq!(element.unwrap().integer().i64().unwrap(), elem1_in);
-        }
-        count += 1;
+    {
+        // populate using push and check the values
+        let list = var.list_mut();
+        list.push(Variable::try_from(elem0_in).unwrap()).unwrap();
+        list.push(Variable::try_from(elem1_in).unwrap()).unwrap();
+        assert_eq!(list.len(), 2);
+        assert_eq!(list.get(0).unwrap().integer().i64().unwrap(), elem0_in);
+        assert_eq!(list.get(1).unwrap().integer().i64().unwrap(), elem1_in);
     }
-    assert_eq!(count, 2);
+    {
+        // iterate over an immutable list and check the values
+        let mut iter = var.list().iter();
+        assert_eq!(
+            iter.next().unwrap().unwrap().integer().i64().unwrap(),
+            elem0_in
+        );
+        assert_eq!(
+            iter.next().unwrap().unwrap().integer().i64().unwrap(),
+            elem1_in
+        );
+        assert_eq!(iter.next(), None);
+    }
+    {
+        // iterate over a mutable list and check the values
+        let mut iter = var.list_mut().iter_mut();
+        assert_eq!(
+            iter.next().unwrap().unwrap().integer().i64().unwrap(),
+            elem0_in
+        );
+        assert_eq!(
+            iter.next().unwrap().unwrap().integer().i64().unwrap(),
+            elem1_in
+        );
+        assert_eq!(iter.next(), None);
+    }
+    {
+        // for loop over an immutable list using for loop and check the values
+        let mut count = 0;
+        for element in var.list() {
+            if count == 0 {
+                assert_eq!(element.unwrap().integer().i64().unwrap(), elem0_in);
+            } else if count == 1 {
+                assert_eq!(element.unwrap().integer().i64().unwrap(), elem1_in);
+            }
+            count += 1;
+        }
+        assert_eq!(count, 2);
+    }
+    {
+        // for loop over a mutable list using for loop and check the values
+        let mut count = 0;
+        for element in var.list_mut() {
+            if count == 0 {
+                assert_eq!(element.unwrap().integer().i64().unwrap(), elem0_in);
+            } else if count == 1 {
+                assert_eq!(element.unwrap().integer().i64().unwrap(), elem1_in);
+            }
+            count += 1;
+        }
+        assert_eq!(count, 2);
+    }
+
+    // update test element values
+    let elem0_update = 100i64;
+    let elem1_update = 200i64;
+    {
+        // mutate the list while iterating over it
+        let list = var.list_mut();
+        let mut iter = list.iter_mut();
+        iter.next()
+            .unwrap()
+            .unwrap()
+            .integer_mut()
+            .set_i64(elem0_update)
+            .unwrap();
+        iter.next()
+            .unwrap()
+            .unwrap()
+            .integer_mut()
+            .set_i64(elem1_update)
+            .unwrap();
+        assert_eq!(iter.next(), None);
+    }
+    // check that the values have been changed during iteration
+    assert_eq!(
+        var.list().get(0).unwrap().integer().i64().unwrap(),
+        elem0_update
+    );
+    assert_eq!(
+        var.list().get(1).unwrap().integer().i64().unwrap(),
+        elem1_update
+    );
 }
 
 #[test]

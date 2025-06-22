@@ -18,7 +18,7 @@ impl Utf16String {
 }
 
 impl SetEqualTo for Utf16String {
-    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+    fn set_equal_to(&mut self, _other: &Self) -> Result<(), SetEqualToError> {
         todo!("Implement set_equal_to for Utf16String");
     }
 }

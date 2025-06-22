@@ -1,9 +1,7 @@
 use std::rc::Rc;
 
 use crate::{
-    accessors::collections::list::ListError,
-    adaptors::sequence_adaptor::SequenceAdaptor,
-    data_provider::{DataProvider, default_data_provider},
+    accessors::collections::list::{ListError, ListIter, ListIterMut},
     primitive_specs::list_spec::ListSpec,
     spec_compatibility::SpecCompatibility,
     variable::Variable,
@@ -154,17 +152,8 @@ pub trait ListAdaptor {
     fn capacity(&self) -> usize;
 
     /// Returns the lists' values as a sequence.
-    fn values(&self) -> Box<dyn SequenceAdaptor>;
+    fn iter<'a>(&'a self) -> Box<dyn ListIter<'a> + 'a>;
 
-    /// Returns a boxed clone of the list adaptor.
-    fn box_clone(&self) -> Box<dyn ListAdaptor> {
-        let mut new_adaptor = default_data_provider().list_adaptor(self.spec());
-        let mut i = 0;
-        while i < self.len() {
-            let elem = self.get(i).unwrap().clone();
-            new_adaptor.push(elem).unwrap();
-            i += 1;
-        }
-        new_adaptor
-    }
+    /// Returns a mutable iterator for the lists' values.
+    fn iter_mut<'a>(&'a mut self) -> Box<dyn ListIterMut<'a> + 'a>;
 }
