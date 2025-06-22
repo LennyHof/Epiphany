@@ -7,6 +7,7 @@ use crate::{
         collections::{list::List, map::Map, set::Set},
         float::Float,
         integer::Integer,
+        sequence::Sequence,
         strings::{
             byte_string::ByteString, utf8_string::Utf8String, utf16_string::Utf16String,
             utf32_string::Utf32String,
@@ -20,6 +21,7 @@ use crate::{
         },
         float_adaptor::FloatAdaptor,
         integer_adaptor::IntegerAdaptor,
+        sequence_adaptor::SequenceAdaptor,
         string_adaptors::{
             byte_string_adaptor::ByteStringAdaptor, utf8_string_adaptor::Utf8StringAdaptor,
             utf16_string_adaptor::Utf16StringAdaptor, utf32_string_adaptor::Utf32StringAdaptor,
@@ -30,8 +32,8 @@ use crate::{
     primitive_def::PrimitiveDef,
     primitive_specs::{
         blob_spec::BlobSpec, boolean_spec::BooleanSpec, float_spec::FloatSpec,
-        integer_spec::IntegerSpec, list_spec::ListSpec, map_spec::MapSpec, set_spec::SetSpec,
-        string_spec::StringSpec,
+        integer_spec::IntegerSpec, list_spec::ListSpec, map_spec::MapSpec,
+        sequence_spec::SequenceSpec, set_spec::SetSpec, string_spec::StringSpec,
     },
     variable::Variable,
 };
@@ -123,6 +125,12 @@ pub trait DataProvider {
                 let def = Some(PrimitiveDef::new(map_spec.clone(), Some(accessor)));
                 Variable::new_primitive(Primitive::Map(def))
             }
+            Primitive::Sequence(sequence_def) => {
+                let sequence_spec = sequence_def.as_ref().unwrap().spec();
+                let accessor = Sequence::new(self.sequence_adaptor(sequence_spec));
+                let def = Some(PrimitiveDef::new(sequence_spec.clone(), Some(accessor)));
+                Variable::new_primitive(Primitive::Sequence(def))
+            }
             _ => todo!(),
         }
     }
@@ -211,6 +219,14 @@ pub trait DataProvider {
     fn map_adaptor(&self, _spec: &Rc<MapSpec>) -> Box<dyn MapAdaptor> {
         panic!(
             "Maps are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns a sequence adaptor according to the given spec.
+    fn sequence_adaptor(&self, _spec: &Rc<SequenceSpec>) -> Box<dyn SequenceAdaptor> {
+        panic!(
+            "Sequences are not supported by the {} data provider",
             self.name()
         );
     }

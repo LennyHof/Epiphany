@@ -83,7 +83,7 @@ impl List {
 
     /// Returns whether the list is empty.
     pub fn is_empty(&self) -> bool {
-        self.len() == 0
+        self.adaptor.is_empty()
     }
 
     /// Returns the list's values as a sequence of values.
@@ -236,7 +236,7 @@ pub enum ListError {
     /// An error that an operation would result in the list's fixed capacity being exceeded.
     FixedCapacityViolation(usize),
     /// An error indicating that the value specification is not compatible with the list's value specification.
-    ElementSpecError(SpecError),
+    ValueSpecError(SpecError),
 }
 
 impl From<ProviderError> for ListError {
@@ -247,7 +247,7 @@ impl From<ProviderError> for ListError {
 
 impl From<SpecError> for ListError {
     fn from(err: SpecError) -> Self {
-        ListError::ElementSpecError(err)
+        ListError::ValueSpecError(err)
     }
 }
 
@@ -267,7 +267,7 @@ impl std::fmt::Display for ListError {
             ListError::FixedCapacityViolation(capacity) => {
                 write!(f, "Operation would exceed fixed capacity of {}", capacity)
             }
-            ListError::ElementSpecError(err) => write!(f, "{}", err),
+            ListError::ValueSpecError(err) => write!(f, "{}", err),
         }
     }
 }
@@ -280,7 +280,7 @@ impl std::error::Error for ListError {
             ListError::CannotPopOnEmpty => None,
             ListError::FixedSizeViolation => None,
             ListError::FixedCapacityViolation(..) => None,
-            ListError::ElementSpecError(err) => Some(err),
+            ListError::ValueSpecError(err) => Some(err),
         }
     }
 }

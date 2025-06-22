@@ -93,3 +93,9 @@ impl MapSpecBuilder {
         ))
     }
 }
+
+impl Default for MapSpecBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}

@@ -6,6 +6,7 @@ use crate::{
     primitive_specs::sequence_spec::SequenceSpec,
     provider_error::ProviderError,
     set_equal_to::{SetEqualTo, SetEqualToError},
+    spec_compatibility::SpecError,
     variable::Variable,
 };
 
@@ -26,26 +27,44 @@ impl Sequence {
     }
 
     /// Returns a sequence iterator.
-    pub fn iter(&self) -> Box<dyn SequenceIter> {
+    pub fn iter<'a>(&'a self) -> Box<dyn SequenceIter<'a> + 'a> {
         self.adaptor.iter()
+    }
+
+    /// Sets the sequence equal to another sequence.
+    ///
+    /// Returns an error if the sequence is read-only.
+    pub fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+        self.adaptor.set_equal_to(other)?;
+        Ok(())
     }
 }
 
 /// An iterator for sequences.
-pub trait SequenceIter: Iterator<Item = Result<Variable, SequenceError>> {}
+pub trait SequenceIter<'a>: Iterator<Item = Result<&'a Variable, SequenceError>> {}
 
-impl IntoIterator for Sequence {
-    type Item = Result<Variable, SequenceError>;
-    type IntoIter = Box<dyn SequenceIter>;
+impl<'a> IntoIterator for &'a Sequence {
+    type Item = Result<&'a Variable, SequenceError>;
+    type IntoIter = Box<dyn SequenceIter<'a> + 'a>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.adaptor.iter()
+        self.iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut Sequence {
+    type Item = Result<&'a Variable, SequenceError>;
+    type IntoIter = Box<dyn SequenceIter<'a> + 'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
     }
 }
 
 impl SetEqualTo for Sequence {
-    fn set_equal_to(&mut self, _other: &Self) -> Result<(), SetEqualToError> {
-        Err(SetEqualToError::SequenceError(SequenceError::ReadOnlyError))
+    fn set_equal_to(&mut self, other: &Self) -> Result<(), SetEqualToError> {
+        self.set_equal_to(other)?;
+        Ok(())
     }
 }
 
@@ -58,6 +77,8 @@ pub enum SequenceError {
     ProviderError(ProviderError),
     /// An error indicating that the sequence is read-only and cannot be modified.
     ReadOnlyError,
+    /// An error indicating that another sequence specification is not compatible with this sequence's specification.
+    SpecError(SpecError),
 }
 
 impl From<ProviderError> for SequenceError {
@@ -73,6 +94,7 @@ impl std::fmt::Display for SequenceError {
             SequenceError::ReadOnlyError => {
                 write!(f, "Sequences are read only and thus cannot be modified.")
             }
+            SequenceError::SpecError(err) => write!(f, "Specification error: {}", err),
         }
     }
 }
@@ -82,6 +104,7 @@ impl std::error::Error for SequenceError {
         match self {
             SequenceError::ProviderError(e) => Some(e),
             SequenceError::ReadOnlyError => None,
+            SequenceError::SpecError(e) => Some(e),
         }
     }
 }
