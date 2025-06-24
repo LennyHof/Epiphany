@@ -9,7 +9,7 @@ pub struct GuidSpec {}
 
 impl GuidSpec {
     /// Returns an initialized GUID spec.
-    pub fn new() -> GuidSpec {
+    pub(crate) fn new() -> GuidSpec {
         GuidSpec {}
     }
 }

@@ -9,7 +9,7 @@ pub struct CharacterSpec {}
 
 impl CharacterSpec {
     /// Returns an initialized Character spec.
-    pub fn new() -> CharacterSpec {
+    pub(crate) fn new() -> CharacterSpec {
         CharacterSpec {}
     }
 }

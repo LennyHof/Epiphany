@@ -76,8 +76,10 @@ pub struct IntegerSpec {
 
 impl IntegerSpec {
     /// Returns an initialized integer spec.
-    /// Prefer to use the [`IntegerSpecBuilder`](crate::data_spec_builders::integer_spec_builder::IntegerSpecBuilder) to create an interger spec.
-    pub fn new(encoding: Option<IntegerEncoding>, storage: Option<IntegerStorage>) -> IntegerSpec {
+    pub(crate) fn new(
+        encoding: Option<IntegerEncoding>,
+        storage: Option<IntegerStorage>,
+    ) -> IntegerSpec {
         IntegerSpec {
             encoding: (encoding),
             storage: (storage),

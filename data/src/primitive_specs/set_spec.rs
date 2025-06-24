@@ -37,8 +37,7 @@ pub struct SetSpec {
 
 impl SetSpec {
     /// Returns an initialized set spec.
-    /// Prefer to use the [`SetSpecBuilder`](crate::data_spec_builders::set_spec_builder::SetSpecBuilder) to create a set spec.
-    pub fn new(
+    pub(crate) fn new(
         value_spec: &Option<Rc<DataSpec>>,
         element_ordering: Option<SetElementOrdering>,
     ) -> SetSpec {

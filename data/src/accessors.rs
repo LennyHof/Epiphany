@@ -48,4 +48,5 @@ mod tests {
     mod map_test;
     mod sequence_test;
     mod set_test;
+    mod tuple_test;
 }

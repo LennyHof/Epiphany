@@ -9,7 +9,7 @@ pub struct EnumObjectSpec {}
 
 impl EnumObjectSpec {
     /// Returns an initialized EnumObject spec.
-    pub fn new() -> EnumObjectSpec {
+    pub(crate) fn new() -> EnumObjectSpec {
         EnumObjectSpec {}
     }
 }

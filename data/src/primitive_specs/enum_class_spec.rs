@@ -8,7 +8,7 @@ use crate::{
 pub struct EnumClassSpec {}
 impl EnumClassSpec {
     /// Creates a new `EnumClassSpec`.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

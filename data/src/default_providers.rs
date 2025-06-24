@@ -6,3 +6,4 @@ pub mod transient_list_adaptor;
 pub mod transient_map_adaptor;
 pub mod transient_sequence_adaptor;
 pub mod transient_set_adaptor;
+pub mod transient_tuple_adaptor;

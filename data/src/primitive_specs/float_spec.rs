@@ -39,9 +39,7 @@ pub struct FloatSpec {
 }
 
 impl FloatSpec {
-    /// Returns an initialized float spec.
-    /// Prefer to use the [`FloatSpecBuilder`](crate::data_spec_builders::float_spec_builder::FloatSpecBuilder) to create a float spec.
-    pub fn new(storage: Option<FloatStorage>) -> FloatSpec {
+    pub(crate) fn new(storage: Option<FloatStorage>) -> FloatSpec {
         FloatSpec { storage: (storage) }
     }
 

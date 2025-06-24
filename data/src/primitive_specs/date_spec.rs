@@ -9,7 +9,7 @@ pub struct DateSpec {}
 
 impl DateSpec {
     /// Returns an initialized Date spec.
-    pub fn new() -> DateSpec {
+    pub(crate) fn new() -> DateSpec {
         DateSpec {}
     }
 }

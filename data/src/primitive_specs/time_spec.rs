@@ -9,7 +9,7 @@ pub struct TimeSpec {}
 
 impl TimeSpec {
     /// Returns an initialized Time spec.
-    pub fn new() -> TimeSpec {
+    pub(crate) fn new() -> TimeSpec {
         TimeSpec {}
     }
 }

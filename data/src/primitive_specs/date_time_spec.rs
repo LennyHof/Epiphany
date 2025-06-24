@@ -36,7 +36,7 @@ pub struct DateTimeSpec {
 
 impl DateTimeSpec {
     /// Returns an initialized float spec.
-    pub fn new(storage: DateTimeStorage) -> DateTimeSpec {
+    pub(crate) fn new(storage: DateTimeStorage) -> DateTimeSpec {
         DateTimeSpec { storage: (storage) }
     }
 

@@ -12,7 +12,7 @@ pub struct ReferenceSpec {
 
 impl ReferenceSpec {
     /// Returns an initialized reference spec.
-    pub fn new(referenced_class: Class) -> ReferenceSpec {
+    pub(crate) fn new(referenced_class: Class) -> ReferenceSpec {
         ReferenceSpec {
             referenced_class: (referenced_class),
         }

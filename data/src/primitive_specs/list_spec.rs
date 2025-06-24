@@ -44,8 +44,10 @@ pub struct ListSpec {
 
 impl ListSpec {
     /// Returns an initialized list spec.
-    /// Prefer to use the [`ListSpecBuilder`](crate::data_spec_builders::list_spec_builder::ListSpecBuilder) to create a list spec.
-    pub fn new(value_spec: &Option<Rc<DataSpec>>, storage: &Option<ListStorage>) -> ListSpec {
+    pub(crate) fn new(
+        value_spec: &Option<Rc<DataSpec>>,
+        storage: &Option<ListStorage>,
+    ) -> ListSpec {
         ListSpec {
             value_spec: value_spec.clone(),
             storage: *storage,

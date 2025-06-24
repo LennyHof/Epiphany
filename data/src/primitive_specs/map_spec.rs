@@ -38,8 +38,7 @@ pub struct MapSpec {
 
 impl MapSpec {
     /// Returns an initialized map spec.
-    /// Prefer to use the [`MapSpecBuilder`](crate::data_spec_builders::map_spec_builder::MapSpecBuilder) to create a map spec.
-    pub fn new(
+    pub(crate) fn new(
         key_spec: &Option<Rc<DataSpec>>,
         value_spec: &Option<Rc<DataSpec>>,
         key_ordering: Option<MapKeyOrdering>,

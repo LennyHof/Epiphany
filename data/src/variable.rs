@@ -7,6 +7,7 @@ use crate::{
         float::Float,
         integer::Integer,
         sequence::Sequence,
+        tuple::Tuple,
     },
     data_provider::{DataProvider, default_data_provider},
     data_spec::{DataSpec, DataSpecLevel, DataSpecType},
@@ -231,6 +232,36 @@ impl Variable {
         }
     }
 
+    /// Extracts and returns the Tuple accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn tuple(&self) -> &Tuple {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Tuple(tuple_def) => {
+                    let def = &tuple_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a tuple."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the Tuple accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn tuple_mut(&mut self) -> &mut Tuple {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Tuple(tuple_def) => {
+                    let def = tuple_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a tuple."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
     /// Attempts to clone the variable, returning a new Variable with the same data specification and value.
     pub fn try_clone(&self) -> Result<Variable, SetEqualToError> {
         // Attempt to clone the variable
@@ -276,6 +307,11 @@ impl PartialEq for Variable {
                 (Primitive::Map(m1), Primitive::Map(m2)) => {
                     let a1 = m1.as_ref().unwrap().borrow_access();
                     let a2 = m2.as_ref().unwrap().borrow_access();
+                    a1 == a2
+                }
+                (Primitive::Tuple(t1), Primitive::Tuple(t2)) => {
+                    let a1 = t1.as_ref().unwrap().borrow_access();
+                    let a2 = t2.as_ref().unwrap().borrow_access();
                     a1 == a2
                 }
                 _ => false,
@@ -330,6 +366,11 @@ impl Ord for Variable {
                     let a2 = m2.as_ref().unwrap().borrow_access();
                     a1.cmp(a2)
                 }
+                (Primitive::Tuple(t1), Primitive::Tuple(t2)) => {
+                    let a1 = t1.as_ref().unwrap().borrow_access();
+                    let a2 = t2.as_ref().unwrap().borrow_access();
+                    a1.cmp(a2)
+                }
                 _ => std::cmp::Ordering::Equal,
             },
             _ => std::cmp::Ordering::Equal,
@@ -369,6 +410,11 @@ impl Hash for Variable {
                 }
                 Primitive::Map(map_def) => {
                     if let Some(def) = map_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
+                }
+                Primitive::Tuple(tuple_def) => {
+                    if let Some(def) = tuple_def.as_ref() {
                         def.borrow_access().hash(state);
                     }
                 }
@@ -414,6 +460,10 @@ impl SetEqualTo for Variable {
                     let def = sequence_def.as_mut().unwrap();
                     def.mut_access().set_equal_to(other.sequence())?;
                 }
+                Primitive::Tuple(tuple_def) => {
+                    let def = tuple_def.as_mut().unwrap();
+                    def.mut_access().set_equal_to(other.tuple())?;
+                }
                 _ => {
                     todo!("Implement setting equal to for other primitive types");
                 }
@@ -445,6 +495,8 @@ impl Display for Variable {
                     Primitive::List(_) => self.list().to_string(),
                     Primitive::Set(_) => self.set().to_string(),
                     Primitive::Map(_) => self.map().to_string(),
+                    Primitive::Sequence(_) => "Sequence does not support display.".to_string(),
+                    Primitive::Tuple(_) => self.tuple().to_string(),
                     _ => "Unsupported primitive".to_string(),
                 },
                 _ => "Unsupported data spec type".to_string(),
