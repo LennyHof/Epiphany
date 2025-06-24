@@ -50,8 +50,8 @@ pub mod data_provider;
 /// The `SchemaProvider` trait.
 pub mod schema_provider;
 
-/// Default data provider implementations.
-mod default_providers;
+/// Default providers.
+pub(crate) mod default_providers;
 
 #[cfg(test)]
 mod tests {

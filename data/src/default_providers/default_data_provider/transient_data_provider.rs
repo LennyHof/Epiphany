@@ -6,8 +6,11 @@ use crate::{
         integer_adaptor::IntegerAdaptor,
     },
     data_provider::DataProvider,
-    default_providers::{
-        transient_map_adaptor::TransientMapAdaptor,
+    default_providers::default_data_provider::default_adaptors::{
+        transient_boolean_adaptor::TransientBooleanAdaptor,
+        transient_float_adaptor::TransientFloatAdaptor,
+        transient_integer_adaptor::TransientIntegerAdaptor,
+        transient_list_adaptor::TransientListAdaptor, transient_map_adaptor::TransientMapAdaptor,
         transient_sequence_adaptor::TransientSequenceAdaptor,
         transient_set_adaptor::TransientSetAdaptor, transient_tuple_adaptor::TransientTupleAdaptor,
     },
@@ -15,13 +18,6 @@ use crate::{
         blob_spec::BlobSpec, boolean_spec::BooleanSpec, float_spec::FloatSpec,
         integer_spec::IntegerSpec,
     },
-};
-
-use super::{
-    transient_boolean_adaptor::TransientBooleanAdaptor,
-    transient_float_adaptor::TransientFloatAdaptor,
-    transient_integer_adaptor::TransientIntegerAdaptor,
-    transient_list_adaptor::TransientListAdaptor,
 };
 
 pub struct TransientDataProvider {}

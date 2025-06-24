@@ -30,6 +30,7 @@ use crate::{
         tuple_adaptor::TupleAdaptor,
     },
     data_spec::{DataSpec, DataSpecType},
+    default_providers::default_data_provider::transient_data_provider::TransientDataProvider,
     primitive::Primitive,
     primitive_def::PrimitiveDef,
     primitive_specs::{
@@ -40,8 +41,6 @@ use crate::{
     },
     variable::Variable,
 };
-
-use super::default_providers::transient_data_provider::TransientDataProvider;
 
 /// DataProvider is a trait for all data providers.
 pub trait DataProvider {
