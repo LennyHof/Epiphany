@@ -9,7 +9,7 @@ pub struct PropertySpec {}
 
 impl PropertySpec {
     /// Creates a new property spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

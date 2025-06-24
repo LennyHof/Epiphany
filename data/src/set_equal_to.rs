@@ -4,6 +4,7 @@ use crate::{
         float::FloatError,
         integer::IntegerError,
         sequence::SequenceError,
+        tuple::TupleError,
     },
     provider_error::ProviderError,
     spec_compatibility::SpecError,
@@ -33,6 +34,8 @@ pub enum SetEqualToError {
     ProviderError(ProviderError),
     /// A sequence error.
     SequenceError(SequenceError),
+    /// A tuple error.
+    TupleError(TupleError),
 }
 
 impl From<SpecError> for SetEqualToError {

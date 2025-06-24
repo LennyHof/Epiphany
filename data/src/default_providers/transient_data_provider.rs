@@ -9,7 +9,7 @@ use crate::{
     default_providers::{
         transient_map_adaptor::TransientMapAdaptor,
         transient_sequence_adaptor::TransientSequenceAdaptor,
-        transient_set_adaptor::TransientSetAdaptor,
+        transient_set_adaptor::TransientSetAdaptor, transient_tuple_adaptor::TransientTupleAdaptor,
     },
     primitive_specs::{
         blob_spec::BlobSpec, boolean_spec::BooleanSpec, float_spec::FloatSpec,
@@ -92,5 +92,11 @@ impl DataProvider for TransientDataProvider {
         _spec: &Rc<crate::primitive_specs::string_spec::StringSpec>,
     ) -> Box<dyn crate::adaptors::string_adaptors::utf32_string_adaptor::Utf32StringAdaptor> {
         todo!()
+    }
+    fn tuple_adaptor(
+        &self,
+        spec: &Rc<crate::primitive_specs::tuple_spec::TupleSpec>,
+    ) -> Box<dyn crate::adaptors::tuple_adaptor::TupleAdaptor> {
+        Box::new(TransientTupleAdaptor::new(spec.clone()))
     }
 }

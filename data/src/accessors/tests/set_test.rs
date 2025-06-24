@@ -453,6 +453,61 @@ fn set_partial_eq_and_hash() {
 }
 
 #[test]
+fn set_partial_ord() {
+    let spec = SetSpecBuilder::new()
+        .set_value_spec(
+            IntegerSpecBuilder::new()
+                .set_encoding(IntegerEncoding::Unsigned)
+                .set_storage(IntegerStorage::B64)
+                .build(),
+        )
+        .set_storage(SetElementOrdering::Ordered)
+        .build();
+    let mut var1 = Variable::new(&spec);
+    let mut var2 = Variable::new(&spec);
+    let mut var3 = Variable::new(&spec);
+    {
+        let set1 = var1.set_mut();
+
+        // test element values
+        let elem0_in = 132u64;
+        let elem1_in = 55u64;
+
+        // add values to set1
+        set1.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+        set1.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+
+        // new smaller test element value one
+        let elem0_in = 100u64;
+        let elem1_in = 55u64;
+
+        // add the new values to set2
+        let set2 = var2.set_mut();
+        set2.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+        set2.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+
+        // check that the sets compare correctly
+        assert!(set2 < set1);
+        assert!(set1 > set2);
+
+        // new smaller test element value two
+        let elem0_in = 132u64;
+        let elem1_in = 1u64;
+
+        // add the new values to set3
+        let set3 = var3.set_mut();
+        set3.insert(Variable::try_from(elem0_in).unwrap()).unwrap();
+        set3.insert(Variable::try_from(elem1_in).unwrap()).unwrap();
+
+        // check that the sets compare correctly
+        assert!(set3 < set1);
+        assert!(set1 > set3);
+        assert!(set2 > set3);
+        assert!(set3 < set2);
+    }
+}
+
+#[test]
 fn set_display_and_debug() {
     let spec = SetSpecBuilder::new()
         .set_value_spec(

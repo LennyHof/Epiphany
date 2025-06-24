@@ -9,7 +9,7 @@ pub struct WalkSpec {}
 
 impl WalkSpec {
     /// Creates a new walk spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

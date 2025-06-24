@@ -11,8 +11,7 @@ pub struct BooleanSpec {}
 
 impl BooleanSpec {
     /// Returns an initialized Boolean spec.
-    /// Prefer to use the [`BooleanSpecBuilder`](crate::data_spec_builders::boolean_spec_builder::BooleanSpecBuilder) to create a Boolean spec.
-    pub fn new() -> BooleanSpec {
+    pub(crate) fn new() -> BooleanSpec {
         BooleanSpec {}
     }
 }

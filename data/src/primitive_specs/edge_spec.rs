@@ -9,7 +9,7 @@ pub struct EdgeSpec {}
 
 impl EdgeSpec {
     /// Creates a new edge spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

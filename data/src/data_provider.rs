@@ -12,6 +12,7 @@ use crate::{
             byte_string::ByteString, utf8_string::Utf8String, utf16_string::Utf16String,
             utf32_string::Utf32String,
         },
+        tuple::Tuple,
     },
     adaptors::{
         blob_adaptor::BlobAdaptor,
@@ -26,6 +27,7 @@ use crate::{
             byte_string_adaptor::ByteStringAdaptor, utf8_string_adaptor::Utf8StringAdaptor,
             utf16_string_adaptor::Utf16StringAdaptor, utf32_string_adaptor::Utf32StringAdaptor,
         },
+        tuple_adaptor::TupleAdaptor,
     },
     data_spec::{DataSpec, DataSpecType},
     primitive::Primitive,
@@ -34,6 +36,7 @@ use crate::{
         blob_spec::BlobSpec, boolean_spec::BooleanSpec, float_spec::FloatSpec,
         integer_spec::IntegerSpec, list_spec::ListSpec, map_spec::MapSpec,
         sequence_spec::SequenceSpec, set_spec::SetSpec, string_spec::StringSpec,
+        tuple_spec::TupleSpec,
     },
     variable::Variable,
 };
@@ -131,6 +134,12 @@ pub trait DataProvider {
                 let def = Some(PrimitiveDef::new(sequence_spec.clone(), Some(accessor)));
                 Variable::new_primitive(Primitive::Sequence(def))
             }
+            Primitive::Tuple(tuple_def) => {
+                let tuple_spec = tuple_def.as_ref().unwrap().spec();
+                let accessor = Tuple::new(self.tuple_adaptor(tuple_spec));
+                let def = Some(PrimitiveDef::new(tuple_spec.clone(), Some(accessor)));
+                Variable::new_primitive(Primitive::Tuple(def))
+            }
             _ => todo!(),
         }
     }
@@ -227,6 +236,14 @@ pub trait DataProvider {
     fn sequence_adaptor(&self, _spec: &Rc<SequenceSpec>) -> Box<dyn SequenceAdaptor> {
         panic!(
             "Sequences are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns a tuple adaptor according to the given spec.
+    fn tuple_adaptor(&self, _spec: &Rc<TupleSpec>) -> Box<dyn TupleAdaptor> {
+        panic!(
+            "Tuples are not supported by the {} data provider",
             self.name()
         );
     }

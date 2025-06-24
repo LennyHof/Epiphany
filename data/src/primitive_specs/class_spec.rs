@@ -9,7 +9,7 @@ pub struct ClassSpec {}
 
 impl ClassSpec {
     /// Creates a new class spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

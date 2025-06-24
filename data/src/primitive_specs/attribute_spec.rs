@@ -9,7 +9,7 @@ pub struct AttributeSpec {}
 
 impl AttributeSpec {
     /// Creates a new attribute spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

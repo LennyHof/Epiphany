@@ -9,7 +9,7 @@ pub struct IdentifierSpec {}
 
 impl IdentifierSpec {
     /// Creates a new identifier spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

@@ -25,6 +25,9 @@ pub mod map_spec_builder;
 /// Data spec builder for sequences.
 pub mod sequence_spec_builder;
 
+/// Data spec builder for tuples.
+pub mod tuple_spec_builder;
+
 #[cfg(test)]
 mod tests {
     mod boolean_spec_builder_test;
@@ -35,4 +38,5 @@ mod tests {
     mod sequence_spec_builder_test;
     mod set_spec_builder_test;
     mod string_spec_builder_test;
+    mod tuple_spec_builder_test;
 }

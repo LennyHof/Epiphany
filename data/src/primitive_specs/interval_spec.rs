@@ -9,7 +9,7 @@ pub struct IntervalSpec {}
 
 impl IntervalSpec {
     /// Creates a new interval spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

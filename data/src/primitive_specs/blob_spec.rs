@@ -9,7 +9,7 @@ pub struct BlobSpec {}
 
 impl BlobSpec {
     /// Creates a new BLOB spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }

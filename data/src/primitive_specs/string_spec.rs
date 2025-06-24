@@ -101,8 +101,7 @@ pub struct StringSpec {
 
 impl StringSpec {
     /// Returns an initialized string spec.
-    /// Prefer to use the [`StringSpecBuilder`](crate::data_spec_builders::string_spec_builder::StringSpecBuilder) to create a string spec.
-    pub fn new(encoding: StringEncoding, storage: Option<StringStorage>) -> StringSpec {
+    pub(crate) fn new(encoding: StringEncoding, storage: Option<StringStorage>) -> StringSpec {
         StringSpec {
             encoding: (encoding),
             storage: (storage),

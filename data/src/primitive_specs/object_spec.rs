@@ -12,7 +12,7 @@ pub struct ObjectSpec {
 
 impl ObjectSpec {
     /// Returns an initialized object spec.
-    pub fn new(object_class: Class) -> ObjectSpec {
+    pub(crate) fn new(object_class: Class) -> ObjectSpec {
         ObjectSpec {
             object_class: (object_class),
         }

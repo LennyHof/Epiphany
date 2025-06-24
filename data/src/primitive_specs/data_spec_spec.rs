@@ -9,7 +9,7 @@ pub struct DataSpecSpec {}
 
 impl DataSpecSpec {
     /// Creates a new data spec spec.
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {}
     }
 }
