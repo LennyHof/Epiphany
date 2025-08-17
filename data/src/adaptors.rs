@@ -7,7 +7,7 @@ pub mod collection_adaptors;
 /// The `DataSpecAdaptor` trait.
 pub mod data_spec_adaptor;
 /// Date-time adaptors.
-pub mod date_time_adaptors;
+pub mod temporal_adaptors;
 /// The `EnumObjectAdaptor` trait.
 pub mod enum_object_adaptor;
 /// The `FloatAdaptor` trait.

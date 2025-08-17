@@ -8,9 +8,13 @@ fn is_numberic() {
     assert!(Primitive::Float(None).is_numberic());
     assert!(!Primitive::EnumObject(None).is_numberic());
     assert!(!Primitive::Date(None).is_numberic());
-    assert!(!Primitive::DateTime(None).is_numberic());
+    assert!(!Primitive::LocalDateTime(None).is_numberic());
+    assert!(!Primitive::ZonedDateTime(None).is_numberic());
+    assert!(!Primitive::LocalTime(None).is_numberic());
+    assert!(!Primitive::ZonedTime(None).is_numberic());
     assert!(!Primitive::DataSpec(None).is_numberic());
-    assert!(!Primitive::Interval(None).is_numberic());
+    assert!(!Primitive::YearMonthInterval(None).is_numberic());
+    assert!(!Primitive::DaySecondInterval(None).is_numberic());
     assert!(!Primitive::Guid(None).is_numberic());
     assert!(!Primitive::Reference(None).is_numberic());
     assert!(!Primitive::Object(None).is_numberic());
@@ -37,9 +41,13 @@ fn is_basic() {
     assert!(Primitive::Float(None).is_basic());
     assert!(Primitive::EnumObject(None).is_basic());
     assert!(Primitive::Date(None).is_basic());
-    assert!(Primitive::DateTime(None).is_basic());
+    assert!(Primitive::LocalDateTime(None).is_basic());
+    assert!(Primitive::ZonedDateTime(None).is_basic());
+    assert!(Primitive::LocalTime(None).is_basic());
+    assert!(Primitive::ZonedTime(None).is_basic());
     assert!(!Primitive::DataSpec(None).is_basic());
-    assert!(Primitive::Interval(None).is_basic());
+    assert!(Primitive::YearMonthInterval(None).is_basic());
+    assert!(Primitive::DaySecondInterval(None).is_basic());
     assert!(!Primitive::Reference(None).is_basic());
     assert!(!Primitive::Object(None).is_basic());
     assert!(!Primitive::List(None).is_basic());
@@ -65,9 +73,13 @@ fn is_collection() {
     assert!(!Primitive::Float(None).is_collection());
     assert!(!Primitive::EnumObject(None).is_collection());
     assert!(!Primitive::Date(None).is_collection());
-    assert!(!Primitive::DateTime(None).is_collection());
+    assert!(!Primitive::LocalDateTime(None).is_collection());
+    assert!(!Primitive::ZonedDateTime(None).is_collection());
+    assert!(!Primitive::LocalTime(None).is_collection());
+    assert!(!Primitive::ZonedTime(None).is_collection());
     assert!(!Primitive::DataSpec(None).is_collection());
-    assert!(!Primitive::Interval(None).is_collection());
+    assert!(!Primitive::YearMonthInterval(None).is_collection());
+    assert!(!Primitive::DaySecondInterval(None).is_collection());
     assert!(!Primitive::Reference(None).is_collection());
     assert!(!Primitive::Object(None).is_collection());
     assert!(Primitive::List(None).is_collection());
@@ -93,9 +105,13 @@ fn is_object_or_reference() {
     assert!(!Primitive::Float(None).is_object_or_reference());
     assert!(!Primitive::EnumObject(None).is_object_or_reference());
     assert!(!Primitive::Date(None).is_object_or_reference());
-    assert!(!Primitive::DateTime(None).is_object_or_reference());
+    assert!(!Primitive::LocalDateTime(None).is_object_or_reference());
+    assert!(!Primitive::ZonedDateTime(None).is_object_or_reference());
+    assert!(!Primitive::LocalTime(None).is_object_or_reference());
+    assert!(!Primitive::ZonedTime(None).is_object_or_reference());
     assert!(!Primitive::DataSpec(None).is_object_or_reference());
-    assert!(!Primitive::Interval(None).is_object_or_reference());
+    assert!(!Primitive::YearMonthInterval(None).is_object_or_reference());
+    assert!(!Primitive::DaySecondInterval(None).is_object_or_reference());
     assert!(Primitive::Reference(None).is_object_or_reference());
     assert!(Primitive::Object(None).is_object_or_reference());
     assert!(!Primitive::List(None).is_object_or_reference());
@@ -121,9 +137,15 @@ fn is_sequenceable() {
     assert!(!Primitive::Float(None).is_sequenceable());
     assert!(!Primitive::EnumObject(None).is_sequenceable());
     assert!(!Primitive::Date(None).is_sequenceable());
-    assert!(!Primitive::DateTime(None).is_sequenceable());
+    assert!(!Primitive::LocalDateTime(None).is_sequenceable());
+    assert!(!Primitive::ZonedDateTime(None).is_sequenceable());
+    assert!(!Primitive::LocalTime(None).is_sequenceable());
+    assert!(!Primitive::ZonedTime(None).is_sequenceable());
+    assert!(!Primitive::LocalTime(None).is_sequenceable());
+    assert!(!Primitive::ZonedTime(None).is_sequenceable());
     assert!(!Primitive::DataSpec(None).is_sequenceable());
-    assert!(!Primitive::Interval(None).is_sequenceable());
+    assert!(!Primitive::YearMonthInterval(None).is_sequenceable());
+    assert!(!Primitive::DaySecondInterval(None).is_sequenceable());
     assert!(!Primitive::Reference(None).is_sequenceable());
     assert!(!Primitive::Object(None).is_sequenceable());
     assert!(Primitive::List(None).is_sequenceable());
@@ -149,9 +171,13 @@ fn is_schema() {
     assert!(!Primitive::Float(None).is_schema());
     assert!(!Primitive::EnumObject(None).is_schema());
     assert!(!Primitive::Date(None).is_schema());
-    assert!(!Primitive::DateTime(None).is_schema());
+    assert!(!Primitive::LocalDateTime(None).is_schema());
+    assert!(!Primitive::ZonedDateTime(None).is_schema());
+    assert!(!Primitive::LocalTime(None).is_schema());
+    assert!(!Primitive::ZonedTime(None).is_schema());
     assert!(!Primitive::DataSpec(None).is_schema());
-    assert!(!Primitive::Interval(None).is_schema());
+    assert!(!Primitive::YearMonthInterval(None).is_schema());
+    assert!(!Primitive::DaySecondInterval(None).is_schema());
     assert!(!Primitive::Reference(None).is_schema());
     assert!(!Primitive::Object(None).is_schema());
     assert!(!Primitive::List(None).is_schema());
@@ -177,13 +203,20 @@ fn is_compatible_with_none_none() {
     assert!(Primitive::Float(None).is_compatible_with(&Primitive::Float(None)));
     assert!(Primitive::EnumObject(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(Primitive::Date(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(Primitive::Time(None).is_compatible_with(&Primitive::Time(None)));
-    assert!(Primitive::DateTime(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(Primitive::LocalTime(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(Primitive::ZonedTime(None).is_compatible_with(&Primitive::ZonedTime(None)));
+    assert!(Primitive::LocalDateTime(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(Primitive::ByteString(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(Primitive::Utf8String(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(Primitive::Utf32String(None).is_compatible_with(&Primitive::Utf32String(None)));
     assert!(Primitive::DataSpec(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(Primitive::Interval(None).is_compatible_with(&Primitive::Interval(None)));
+    assert!(
+        Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::YearMonthInterval(None))
+    );
+    assert!(
+        Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::DaySecondInterval(None))
+    );
     assert!(Primitive::Guid(None).is_compatible_with(&Primitive::Guid(None)));
     assert!(Primitive::Reference(None).is_compatible_with(&Primitive::Reference(None)));
     assert!(Primitive::Object(None).is_compatible_with(&Primitive::Object(None)));
@@ -209,10 +242,13 @@ fn boolean_is_not_compatible_with() {
     assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Boolean(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -240,10 +276,13 @@ fn character_is_not_compatible_with() {
     assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Character(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Character(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Character(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Character(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Character(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -271,10 +310,13 @@ fn integer_is_not_compatible_with() {
     assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Integer(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -302,10 +344,13 @@ fn float_is_not_compatible_with() {
     assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Integer(None)));
     assert!(!Primitive::Float(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Float(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Float(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Float(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Float(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -333,10 +378,13 @@ fn enum_object_is_not_compatible_with() {
     assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Integer(None)));
     assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::EnumObject(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -363,10 +411,13 @@ fn date_is_not_compatible_with() {
     assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Integer(None)));
     assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Date(None).is_compatible_with(&Primitive::EnumObject(None)));
-    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Date(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Date(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Date(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -388,35 +439,79 @@ fn date_is_not_compatible_with() {
     assert!(!Primitive::Date(None).is_compatible_with(&Primitive::Identifier(None)));
 }
 #[test]
-fn date_time_is_not_compatible_with() {
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Boolean(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Character(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Integer(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Float(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::EnumObject(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Time(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::ByteString(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Utf8String(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Utf32String(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Guid(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Reference(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Object(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::List(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Set(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Map(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Sequence(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Edge(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Walk(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::EnumClass(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Property(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Attribute(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Class(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Tuple(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Blob(None)));
-    assert!(!Primitive::DateTime(None).is_compatible_with(&Primitive::Identifier(None)));
+fn local_date_time_is_not_compatible_with() {
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(
+        !Primitive::LocalDateTime(None).is_compatible_with(&Primitive::YearMonthInterval(None))
+    );
+    assert!(
+        !Primitive::LocalDateTime(None).is_compatible_with(&Primitive::DaySecondInterval(None))
+    );
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::ZonedTime(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::LocalDateTime(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn zoned_date_time_is_not_compatible_with() {
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(
+        !Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::YearMonthInterval(None))
+    );
+    assert!(
+        !Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::DaySecondInterval(None))
+    );
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::ZonedTime(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::ZonedDateTime(None).is_compatible_with(&Primitive::Identifier(None)));
 }
 #[test]
 fn data_spec_is_not_compatible_with() {
@@ -426,9 +521,12 @@ fn data_spec_is_not_compatible_with() {
     assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::DateTime(None)));
-    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -450,35 +548,84 @@ fn data_spec_is_not_compatible_with() {
     assert!(!Primitive::DataSpec(None).is_compatible_with(&Primitive::Identifier(None)));
 }
 #[test]
-fn interval_is_not_compatible_with() {
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Boolean(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Character(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Integer(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Float(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::EnumObject(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::DateTime(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Time(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::ByteString(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Utf8String(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Utf32String(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Guid(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Reference(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Object(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::List(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Set(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Map(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Sequence(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Edge(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Walk(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::EnumClass(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Property(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Attribute(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Class(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Tuple(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Blob(None)));
-    assert!(!Primitive::Interval(None).is_compatible_with(&Primitive::Identifier(None)));
+fn year_month_interval_is_not_compatible_with() {
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(
+        !Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::LocalDateTime(None))
+    );
+    assert!(
+        !Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::ZonedDateTime(None))
+    );
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(
+        !Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::DaySecondInterval(None))
+    );
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::ZonedTime(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::YearMonthInterval(None).is_compatible_with(&Primitive::Identifier(None)));
+}
+#[test]
+fn day_second_interval_is_not_compatible_with() {
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Boolean(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Character(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Integer(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Float(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::EnumObject(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Date(None)));
+    assert!(
+        !Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::LocalDateTime(None))
+    );
+    assert!(
+        !Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::ZonedDateTime(None))
+    );
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::DataSpec(None)));
+    assert!(
+        !Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::YearMonthInterval(None))
+    );
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::ZonedTime(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::ByteString(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Utf8String(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Utf32String(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Guid(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Reference(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Object(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::List(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Set(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Map(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Sequence(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Edge(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Walk(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::EnumClass(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Property(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Attribute(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Class(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Tuple(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Blob(None)));
+    assert!(!Primitive::DaySecondInterval(None).is_compatible_with(&Primitive::Identifier(None)));
 }
 #[test]
 fn reference_is_not_compatible_with() {
@@ -488,10 +635,13 @@ fn reference_is_not_compatible_with() {
     assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Reference(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -519,10 +669,13 @@ fn object_is_not_compatible_with() {
     assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Object(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Object(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Object(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Object(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Object(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -550,10 +703,13 @@ fn list_is_not_compatible_with() {
     assert!(!Primitive::List(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::List(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::List(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::List(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::List(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::List(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::List(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::List(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::List(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::List(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -581,10 +737,13 @@ fn set_is_not_compatible_with() {
     assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Set(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Set(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Set(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Set(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Set(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -613,10 +772,13 @@ fn map_is_not_compatible_with() {
     assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Map(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Map(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Map(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Map(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Map(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -645,10 +807,13 @@ fn sequence_is_not_compatible_with() {
     assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Sequence(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -676,10 +841,13 @@ fn edge_is_not_compatible_with() {
     assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Edge(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -707,10 +875,13 @@ fn walk_is_not_compatible_with() {
     assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Walk(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -738,10 +909,13 @@ fn enum_class_is_not_compatible_with() {
     assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::EnumClass(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -769,10 +943,13 @@ fn property_is_not_compatible_with() {
     assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Property(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Property(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Property(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Property(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Property(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -800,10 +977,13 @@ fn attribute_is_not_compatible_with() {
     assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Attribute(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -831,10 +1011,13 @@ fn class_is_not_compatible_with() {
     assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Class(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Class(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Class(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Class(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Class(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -862,10 +1045,13 @@ fn tuple_is_not_compatible_with() {
     assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Tuple(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -893,10 +1079,13 @@ fn blob_is_not_compatible_with() {
     assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Blob(None).is_compatible_with(&Primitive::Utf32String(None)));
@@ -924,10 +1113,13 @@ fn identifier_is_not_compatible_with() {
     assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Float(None)));
     assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::EnumObject(None)));
     assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Date(None)));
-    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::DateTime(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::LocalDateTime(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::ZonedDateTime(None)));
     assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::DataSpec(None)));
-    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Interval(None)));
-    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Time(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::YearMonthInterval(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::DaySecondInterval(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::LocalTime(None)));
+    assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::ZonedTime(None)));
     assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::ByteString(None)));
     assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Utf8String(None)));
     assert!(!Primitive::Identifier(None).is_compatible_with(&Primitive::Utf32String(None)));

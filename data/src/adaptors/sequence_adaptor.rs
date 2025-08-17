@@ -31,7 +31,7 @@ pub trait SequenceAdaptor {
     }
 
     /// Internal method to set the sequence equal to another sequence.
-    /// This method should be implemented by the adaptor if it supports setting.
+    /// This method should be implemented by the adaptor if it supports setting equal to.
     fn do_set_equal_to(&mut self, _other: &Sequence) -> Result<(), SetEqualToError> {
         Err(SetEqualToError::SequenceError(SequenceError::ReadOnlyError))
     }

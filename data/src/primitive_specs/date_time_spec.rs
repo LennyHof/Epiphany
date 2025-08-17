@@ -5,24 +5,23 @@ use crate::{
     spec_compatibility::SpecCompatibility,
 };
 
-/// DateTimeStorage defines an enumeration that captures the supported storage
-/// characteristics for DateTime values.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum DateTimeStorage {
-    /// DateTime storage (8 bytes).
-    DateTime,
-    /// DateTimeOffset storage (16 bytes).
-    DateTimeOffset,
+/// DateTimeType defines an enumeration that captures the supported date time types.
+#[derive(Clone, Copy, PartialEq, Debug)]
+pub enum DateTimeType {
+    /// Local date time type.
+    Local,
+    /// Zoned date time type.
+    Zoned,
 }
 
-impl Display for DateTimeStorage {
+impl Display for DateTimeType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
             "{}",
             match *self {
-                Self::DateTime => "DateTime".to_string(),
-                Self::DateTimeOffset => "DateTimeOffset".to_string(),
+                Self::Local => "Local".to_string(),
+                Self::Zoned => "Zoned".to_string(),
             }
         )
     }
@@ -31,24 +30,29 @@ impl Display for DateTimeStorage {
 /// A primitive spec for date-times.
 #[derive(Debug, PartialEq)]
 pub struct DateTimeSpec {
-    storage: DateTimeStorage,
+    date_time_type: Option<DateTimeType>,
 }
 
 impl DateTimeSpec {
-    /// Returns an initialized float spec.
-    pub(crate) fn new(storage: DateTimeStorage) -> DateTimeSpec {
-        DateTimeSpec { storage: (storage) }
+    /// Returns an initialized date-time spec.
+    pub(crate) fn new(date_time_type: Option<DateTimeType>) -> DateTimeSpec {
+        DateTimeSpec { date_time_type }
     }
 
-    /// Returns the float's storage.
-    pub fn storage(&self) -> &DateTimeStorage {
-        &self.storage
+    /// Returns the date-time's date_time_type.
+    pub fn date_time_type(&self) -> &Option<DateTimeType> {
+        &self.date_time_type
     }
 }
 
 impl SpecCompatibility for DateTimeSpec {
     fn is_compatible_with(&self, required: &Self) -> bool {
-        self.storage == required.storage
+        match (self.date_time_type, required.date_time_type) {
+            (Some(s), Some(r)) => s == r,
+            (None, None) => true,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+        }
     }
 }
 
@@ -63,6 +67,12 @@ impl PrimitiveSpec for DateTimeSpec {}
 
 impl Display for DateTimeSpec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "DateTime {{ storage: {} }}", self.storage)
+        write!(
+            f,
+            "DateTime {{ type: {} }}",
+            self.date_time_type
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| "None".to_string())
+        )
     }
 }

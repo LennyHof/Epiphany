@@ -106,7 +106,10 @@ impl IntegerSpec {
 impl SpecCompatibility for IntegerSpec {
     fn is_compatible_with(&self, required: &Self) -> bool {
         if !match (self.encoding, required.encoding) {
-            (Some(s), Some(r)) => s == r,
+            (Some(s), Some(r)) => {
+                // todo: consider unsigned as compatible with signed if storage is enough.
+                s == r
+            }
             (None, None) => true,
             (Some(_), None) => true,
             (None, Some(_)) => false,
@@ -114,7 +117,10 @@ impl SpecCompatibility for IntegerSpec {
             return false;
         }
         match (self.storage, required.storage) {
-            (Some(s), Some(r)) => s == r,
+            (Some(s), Some(r)) => {
+                // todo: consider compatible with if storage is enough.
+                s == r
+            }
             (None, None) => true,
             (Some(_), None) => true,
             (None, Some(_)) => false,

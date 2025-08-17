@@ -29,7 +29,8 @@ use crate::{
         },
         tuple_adaptor::TupleAdaptor,
     },
-    data_spec::{DataSpec, DataSpecType},
+    data_spec::{DataSpec, DataSpecLevel, DataSpecType},
+    default_providers::default_data_provider::transient_data_provider::TransientDataProvider,
     primitive::Primitive,
     primitive_def::PrimitiveDef,
     primitive_specs::{
@@ -41,18 +42,22 @@ use crate::{
     variable::Variable,
 };
 
-use super::default_providers::transient_data_provider::TransientDataProvider;
-
-/// DataProvider is a trait for all data providers.
+/// `DataProvider` is a trait for all data providers, which provide adaptors for various accessor types.
+///
+/// Its function `variable_for` is used to create variables embedding accessors that can access
+/// data according to the provided specifications and the specific adaptors provided by the trait's implementation.
 pub trait DataProvider {
     /// Returns the provider's name.
     fn name(&self) -> String;
 
-    // Returns true if the provided spec is supported by the provider; false otherwise.
-    //fn is_supported(&self, spec: &DataSpec) -> bool;
-
     /// Returns a variable that provides access according to the provided spec.
     fn variable_for(&self, spec: &DataSpec) -> Variable {
+        if spec.specification_level() != DataSpecLevel::Access {
+            panic!(
+                "Specification level must be Access, but was: {}",
+                spec.specification_level()
+            );
+        }
         match spec.specification_type() {
             DataSpecType::Primitive(primitive) => self.variable_for_primitive(primitive),
             _ => panic!("Not a specification for a primitive."),
@@ -60,7 +65,7 @@ pub trait DataProvider {
     }
 
     /// Returns a variable that provides access according to the provided primitive.
-    fn variable_for_primitive(&self, primitive: &Primitive) -> crate::variable::Variable {
+    fn variable_for_primitive(&self, primitive: &Primitive) -> Variable {
         match primitive {
             Primitive::Integer(integer_def) => {
                 let int_spec = integer_def.as_ref().unwrap().spec();
