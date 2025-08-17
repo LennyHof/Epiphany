@@ -1,0 +1,13 @@
+use crate::{primitive_def::Accessor, set_equal_to::SetEqualTo};
+
+/// Accessor for date-time values.
+pub struct ZonedDateTime {}
+
+impl SetEqualTo for ZonedDateTime {
+    fn set_equal_to(&mut self, _other: &Self) -> Result<(), crate::set_equal_to::SetEqualToError> {
+        // Implement the logic to set this ZonedDateTime equal to another ZonedDateTime.
+        todo!("Implement set_equal_to for ZonedDateTime");
+    }
+}
+
+impl Accessor for ZonedDateTime {}

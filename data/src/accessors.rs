@@ -10,8 +10,6 @@ pub mod collection;
 pub mod collections;
 /// The `DataSpec` accessor.
 pub mod data_spec;
-/// All concrete date-time accessors.
-pub mod date_times;
 /// The `EnumObject` accessor.
 pub mod enum_object;
 /// The `Float` accessor.
@@ -36,6 +34,8 @@ pub mod sequence;
 pub mod string;
 /// All concrete string accessors.
 pub mod strings;
+/// All concrete temporal accessors.
+pub mod temporal;
 /// The `Tuple` accessor.
 pub mod tuple;
 

@@ -1,9 +1,9 @@
 use std::rc::Rc;
 
 use crate::{
-    accessors::sequence::{Sequence, SequenceError, SequenceIter},
+    accessors::sequence::{SequenceError, SequenceIter},
     adaptors::sequence_adaptor::SequenceAdaptor,
-    data_provider::{self, DataProvider},
+    data_provider::DataProvider,
     data_spec_builders::{
         integer_spec_builder::IntegerSpecBuilder, sequence_spec_builder::SequenceSpecBuilder,
     },

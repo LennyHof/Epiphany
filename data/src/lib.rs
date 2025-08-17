@@ -50,6 +50,16 @@ pub mod data_provider;
 /// The `SchemaProvider` trait.
 pub mod schema_provider;
 
+/// The `SchemaProviderRegistry` struct.
+/// This is a registry for schema providers, allowing for the association of data providers with their respective   
+/// schema providers. It provides a way to manage and retrieve schema providers based on the data providers they are associated with.
+/// It is used to ensure that data providers can access the correct schema provider without needing to maintain
+/// state about their associated schema provider.
+/// This registry is essential for the operation of the data library, as it allows for the dynamic
+/// association of data providers with their schema providers, enabling
+/// the retrieval of schema information based on the data provider being used.
+pub mod schema_provider_registry;
+
 /// Default providers.
 pub(crate) mod default_providers;
 
