@@ -37,8 +37,8 @@ pub mod date_spec_builder;
 /// Data spec builder for times.
 pub mod time_spec_builder;
 
-/// Data spec builder for intervals.
-pub mod interval_spec_builder;
+/// Data spec builder for durations.
+pub mod duration_spec_builder;
 
 #[cfg(test)]
 mod tests {
@@ -47,7 +47,7 @@ mod tests {
     mod date_time_spec_builder_test;
     mod float_spec_builder_test;
     mod integer_spec_builder_test;
-    mod interval_spec_builder_test;
+    mod duration_spec_builder_test;
     mod list_spec_builder_test;
     mod map_spec_builder_test;
     mod sequence_spec_builder_test;

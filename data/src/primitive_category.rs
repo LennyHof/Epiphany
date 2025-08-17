@@ -9,8 +9,8 @@ pub enum PrimitiveCategory {
     Numeric,
     /// Category of primitives that are sequences of characters.
     String,
-    /// Category of primitives representing intervals.
-    Interval,
+    /// Category of primitives representing durations.
+    Duration,
     /// Category of primitives representing dates and times.
     DateTime,
     /// Category of primitives representing times.
@@ -38,7 +38,7 @@ impl PrimitiveCategory {
             (Self::All, _) | (_, Self::All) => true,
             (Self::Numeric, Self::Numeric) => true,
             (Self::String, Self::String) => true,
-            (Self::Interval, Self::Interval) => true,
+            (Self::Duration, Self::Duration) => true,
             (Self::DateTime, Self::DateTime) => true,
             (Self::Time, Self::Time) => true,
             (Self::Basic, Self::Basic) => true,
@@ -61,7 +61,7 @@ impl Display for PrimitiveCategory {
             match *self {
                 Self::Numeric => "Numeric".to_string(),
                 Self::String => "String".to_string(),
-                Self::Interval => "Interval".to_string(),
+                Self::Duration => "Duration".to_string(),
                 Self::DateTime => "DateTime".to_string(),
                 Self::Time => "Time".to_string(),
                 Self::Basic => "Basic".to_string(),

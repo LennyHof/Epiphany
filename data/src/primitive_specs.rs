@@ -14,6 +14,8 @@ pub mod data_spec_spec;
 pub mod date_spec;
 /// The `DateTimeSpec` struct.
 pub mod date_time_spec;
+/// The `DurationSpec` struct.
+pub mod duration_spec;
 /// The `EdgeSpec` struct.
 pub mod edge_spec;
 /// The `EnumClassSpec` struct.
@@ -28,8 +30,6 @@ pub mod guid_spec;
 pub mod identifier_spec;
 /// The `IntegerSpec` struct.
 pub mod integer_spec;
-/// The `IntervalSpec` struct.
-pub mod interval_spec;
 /// The `ListSpec` struct.
 pub mod list_spec;
 /// The `MapSpec` struct.
@@ -63,6 +63,7 @@ mod tests {
     mod data_spec_spec_test;
     mod date_spec_test;
     mod date_time_spec_test;
+    mod duration_spec_test;
     mod edge_spec_test;
     mod enum_class_spec_test;
     mod enum_object_spec_test;
@@ -70,7 +71,6 @@ mod tests {
     mod guid_spec_test;
     mod identifier_spec_test;
     mod integer_spec_test;
-    mod interval_spec_test;
     mod list_spec_test;
     mod map_spec_test;
     mod object_spec_test;

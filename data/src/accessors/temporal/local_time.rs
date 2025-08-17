@@ -3,7 +3,7 @@ use crate::{
     set_equal_to::{SetEqualTo, SetEqualToError},
 };
 
-/// An accessor for time values.
+/// An accessor for local time of day values.
 pub struct LocalTime {}
 
 impl SetEqualTo for LocalTime {
