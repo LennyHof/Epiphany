@@ -1,0 +1,589 @@
+use crate::{primitive_specs::time_spec::TimeSpec, spec_compatibility::SpecCompatibility};
+
+#[test]
+fn time_spec_new_with_none() {
+    let spec = TimeSpec::new(None, None);
+    assert!(spec.time_type().is_none());
+    assert!(spec.resolution().is_none());
+    assert!(spec.is_compatible_with(&TimeSpec::new(None, None)));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        None
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        None
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+}
+
+#[test]
+fn local_time_type_with_none_resolution() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        None,
+    );
+    assert_eq!(
+        *spec.time_type(),
+        Some(crate::primitive_specs::time_spec::TimeType::Local)
+    );
+    assert!(spec.resolution().is_none());
+
+    // is compatible tests
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        None
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        None
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+}
+
+#[test]
+fn local_time_type_with_second_resolution() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    );
+    assert_eq!(
+        *spec.time_type(),
+        Some(crate::primitive_specs::time_spec::TimeType::Local)
+    );
+    assert_eq!(
+        *spec.resolution(),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second)
+    );
+
+    // is compatible tests
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+}
+
+#[test]
+fn local_time_type_with_millisecond_resolution() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    );
+    assert_eq!(
+        *spec.time_type(),
+        Some(crate::primitive_specs::time_spec::TimeType::Local)
+    );
+    assert_eq!(
+        *spec.resolution(),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond)
+    );
+
+    // is compatible tests
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+}
+
+#[test]
+fn local_time_with_microsecond100_resolution() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    );
+    assert_eq!(
+        *spec.time_type(),
+        Some(crate::primitive_specs::time_spec::TimeType::Local)
+    );
+    assert_eq!(
+        *spec.resolution(),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100)
+    );
+
+    // is compatible tests
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+}
+
+#[test]
+fn local_time_with_microsecond_resolution() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    );
+    assert_eq!(
+        *spec.time_type(),
+        Some(crate::primitive_specs::time_spec::TimeType::Local)
+    );
+    assert_eq!(
+        *spec.resolution(),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond)
+    );
+
+    // is compatible tests
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+}
+
+#[test]
+fn local_time_with_nanosecond_resolution() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    );
+    assert_eq!(
+        *spec.time_type(),
+        Some(crate::primitive_specs::time_spec::TimeType::Local)
+    );
+    assert_eq!(
+        *spec.resolution(),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond)
+    );
+
+    // is compatible tests
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));    
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Second),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Millisecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond100),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        None,
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+    assert!(!spec.is_compatible_with(&TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Nanosecond),
+    )));
+}
+
+#[test]
+fn zoned_time_type() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        None,
+    );
+    assert_eq!(
+        *spec.time_type(),
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned)
+    );
+    assert!(spec.resolution().is_none());
+}
+
+#[test]
+fn zoned_time_type_with_resolution() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    );
+    assert_eq!(
+        *spec.time_type(),
+        Some(crate::primitive_specs::time_spec::TimeType::Zoned)
+    );
+    assert_eq!(
+        *spec.resolution(),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond)
+    );
+}
+
+#[test]
+fn time_spec_to_string() {
+    let spec = TimeSpec::new(
+        Some(crate::primitive_specs::time_spec::TimeType::Local),
+        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond),
+    );
+    let spec_str = spec.to_string();
+    assert_eq!(spec_str, "Time { type: Local, resolution: Microsecond }");
+}

@@ -15,7 +15,7 @@ use crate::accessors::schema::class::Class;
 use crate::accessors::schema::enum_class::EnumClass;
 use crate::accessors::schema::property::Property;
 use crate::accessors::sequence::Sequence;
-use crate::accessors::temporal::day_second_interval::DaySecondInterval;
+use crate::accessors::temporal::day_to_second_duration::DayToSecondDuration;
 use crate::accessors::tuple::Tuple;
 use crate::primitive_category::PrimitiveCategory;
 use crate::primitive_def::{IsOrdered, PrimitiveDef};
@@ -27,6 +27,7 @@ use crate::primitive_specs::class_spec::ClassSpec;
 use crate::primitive_specs::data_spec_spec::DataSpecSpec;
 use crate::primitive_specs::date_spec::DateSpec;
 use crate::primitive_specs::date_time_spec::DateTimeSpec;
+use crate::primitive_specs::duration_spec::DurationSpec;
 use crate::primitive_specs::edge_spec::EdgeSpec;
 use crate::primitive_specs::enum_class_spec::EnumClassSpec;
 use crate::primitive_specs::enum_object_spec::EnumObjectSpec;
@@ -34,7 +35,6 @@ use crate::primitive_specs::float_spec::FloatSpec;
 use crate::primitive_specs::guid_spec::GuidSpec;
 use crate::primitive_specs::identifier_spec::IdentifierSpec;
 use crate::primitive_specs::integer_spec::IntegerSpec;
-use crate::primitive_specs::interval_spec::IntervalSpec;
 use crate::primitive_specs::list_spec::ListSpec;
 use crate::primitive_specs::map_spec::MapSpec;
 use crate::primitive_specs::object_spec::ObjectSpec;
@@ -56,9 +56,9 @@ use crate::accessors::strings::utf8_string::Utf8String;
 use crate::accessors::strings::utf16_string::Utf16String;
 use crate::accessors::strings::utf32_string::Utf32String;
 use crate::accessors::temporal::date::Date;
-use crate::accessors::temporal::local_date_time::LocalDateTime;
-use crate::accessors::temporal::local_time::LocalTime;
-use crate::accessors::temporal::year_month_interval::YearMonthInterval;
+use crate::accessors::temporal::date_time::DateTime;
+use crate::accessors::temporal::time::Time;
+use crate::accessors::temporal::year_to_month_duration::YearToMonthDuration;
 use crate::accessors::temporal::zoned_date_time::ZonedDateTime;
 use crate::accessors::temporal::zoned_time::ZonedTime;
 use crate::primitive_specs::tuple_spec::TupleSpec;
@@ -88,17 +88,17 @@ pub enum Primitive {
     /// A date on a calendar.
     Date(Option<PrimitiveDef<DateSpec, Date>>),
     /// A local time of day.
-    LocalTime(Option<PrimitiveDef<TimeSpec, LocalTime>>),
+    Time(Option<PrimitiveDef<TimeSpec, Time>>),
     /// A zoned time of day.
     ZonedTime(Option<PrimitiveDef<TimeSpec, ZonedTime>>),
     /// A local date-and-time value.
-    LocalDateTime(Option<PrimitiveDef<DateTimeSpec, LocalDateTime>>),
+    DateTime(Option<PrimitiveDef<DateTimeSpec, DateTime>>),
     /// A zoned date-and-time value.
     ZonedDateTime(Option<PrimitiveDef<DateTimeSpec, ZonedDateTime>>),
-    /// A difference between two dates, times, or date-and-time values expressed as a year-month interval.
-    YearMonthInterval(Option<PrimitiveDef<IntervalSpec, YearMonthInterval>>),
-    /// A difference between two dates, times, or date-and-time values expressed as a day-second interval.
-    DaySecondInterval(Option<PrimitiveDef<IntervalSpec, DaySecondInterval>>),
+    /// A difference between two dates, times, or date-and-time values expressed as a year-month duration.
+    YearToMonthDuration(Option<PrimitiveDef<DurationSpec, YearToMonthDuration>>),
+    /// A difference between two dates, times, or date-and-time values expressed as a day-second duration.
+    DayToSecondDuration(Option<PrimitiveDef<DurationSpec, DayToSecondDuration>>),
     /// An enumeration value.
     EnumObject(Option<PrimitiveDef<EnumObjectSpec, EnumObject>>),
     /// A Data Specification value.
@@ -205,7 +205,7 @@ impl Primitive {
                     !(p.is_none() && r.is_some())
                 }
             }
-            (Self::LocalTime(p), Self::LocalTime(r)) => {
+            (Self::Time(p), Self::Time(r)) => {
                 if p.is_some() && r.is_some() {
                     p.as_ref()
                         .unwrap()
@@ -225,7 +225,7 @@ impl Primitive {
                     !(p.is_none() && r.is_some())
                 }
             }
-            (Self::LocalDateTime(p), Self::LocalDateTime(r)) => {
+            (Self::DateTime(p), Self::DateTime(r)) => {
                 if p.is_some() && r.is_some() {
                     p.as_ref()
                         .unwrap()
@@ -295,7 +295,7 @@ impl Primitive {
                     !(p.is_none() && r.is_some())
                 }
             }
-            (Self::YearMonthInterval(p), Self::YearMonthInterval(r)) => {
+            (Self::YearToMonthDuration(p), Self::YearToMonthDuration(r)) => {
                 if p.is_some() && r.is_some() {
                     p.as_ref()
                         .unwrap()
@@ -305,7 +305,7 @@ impl Primitive {
                     !(p.is_none() && r.is_some())
                 }
             }
-            (Self::DaySecondInterval(p), Self::DaySecondInterval(r)) => {
+            (Self::DayToSecondDuration(p), Self::DayToSecondDuration(r)) => {
                 if p.is_some() && r.is_some() {
                     p.as_ref()
                         .unwrap()
@@ -485,7 +485,7 @@ impl Primitive {
             PrimitiveCategory::Numeric => self.is_numberic(),
             PrimitiveCategory::String => self.is_string(),
             PrimitiveCategory::Basic => self.is_basic(),
-            PrimitiveCategory::Interval => self.is_interval(),
+            PrimitiveCategory::Duration => self.is_duration(),
             PrimitiveCategory::DateTime => self.is_date_time(),
             PrimitiveCategory::Time => self.is_time(),
             PrimitiveCategory::Simple => self.is_basic() || self.is_string(),
@@ -504,25 +504,25 @@ impl Primitive {
 
     /// Returns true if the primitive belongs to the date-time category; false otherwise.
     pub fn is_date_time(&self) -> bool {
-        matches!(*self, Self::LocalDateTime(..) | Self::ZonedDateTime(..))
+        matches!(*self, Self::DateTime(..) | Self::ZonedDateTime(..))
     }
 
     /// Returns true if the primitive belongs to the time category; false otherwise.
     pub fn is_time(&self) -> bool {
-        matches!(*self, Self::LocalTime(..) | Self::ZonedTime(..))
+        matches!(*self, Self::Time(..) | Self::ZonedTime(..))
     }
 
-    /// Returns true if the primitive belongs to the interval category; false otherwise.
-    pub fn is_interval(&self) -> bool {
+    /// Returns true if the primitive belongs to the duration category; false otherwise.
+    pub fn is_duration(&self) -> bool {
         matches!(
             *self,
-            Self::YearMonthInterval(..) | Self::DaySecondInterval(..)
+            Self::YearToMonthDuration(..) | Self::DayToSecondDuration(..)
         )
     }
 
     /// Returns true if the primitive belongs to the basic category; false otherwise.
     pub fn is_basic(&self) -> bool {
-        if self.is_numberic() || self.is_date_time() || self.is_time() || self.is_interval() {
+        if self.is_numberic() || self.is_date_time() || self.is_time() || self.is_duration() {
             return true;
         };
         matches!(
@@ -627,11 +627,11 @@ impl Display for Primitive {
                         "Date".to_string()
                     }
                 }
-                Self::LocalTime(def) => {
+                Self::Time(def) => {
                     if let Some(as_def) = def {
                         as_def.spec().to_string()
                     } else {
-                        "LocalTime".to_string()
+                        "Time".to_string()
                     }
                 }
                 Self::ZonedTime(def) => {
@@ -641,11 +641,11 @@ impl Display for Primitive {
                         "ZonedTime".to_string()
                     }
                 }
-                Self::LocalDateTime(def) => {
+                Self::DateTime(def) => {
                     if let Some(as_def) = def {
                         as_def.spec().to_string()
                     } else {
-                        "LocalDateTime".to_string()
+                        "DateTime".to_string()
                     }
                 }
                 Self::ZonedDateTime(def) => {
@@ -690,18 +690,18 @@ impl Display for Primitive {
                         "DataSpec".to_string()
                     }
                 }
-                Self::YearMonthInterval(def) => {
+                Self::YearToMonthDuration(def) => {
                     if let Some(as_def) = def {
                         as_def.spec().to_string()
                     } else {
-                        "YearMonthInterval".to_string()
+                        "YearToMonthDuration".to_string()
                     }
                 }
-                Self::DaySecondInterval(def) => {
+                Self::DayToSecondDuration(def) => {
                     if let Some(as_def) = def {
                         as_def.spec().to_string()
                     } else {
-                        "DaySecondInterval".to_string()
+                        "DayToSecondDuration".to_string()
                     }
                 }
                 Self::Guid(def) => {
@@ -872,7 +872,7 @@ impl PartialEq for Primitive {
                     p.is_none() && r.is_none()
                 }
             }
-            (Self::LocalTime(p), Self::LocalTime(r)) => {
+            (Self::Time(p), Self::Time(r)) => {
                 if let (Some(p), Some(r)) = (p, r) {
                     p.spec() == r.spec()
                 } else {
@@ -886,7 +886,7 @@ impl PartialEq for Primitive {
                     p.is_none() && r.is_none()
                 }
             }
-            (Self::LocalDateTime(p), Self::LocalDateTime(r)) => {
+            (Self::DateTime(p), Self::DateTime(r)) => {
                 if let (Some(p), Some(r)) = (p, r) {
                     p.spec() == r.spec()
                 } else {
@@ -935,7 +935,7 @@ impl PartialEq for Primitive {
                     p.is_none() && r.is_none()
                 }
             }
-            (Self::YearMonthInterval(p), Self::YearMonthInterval(r)) => {
+            (Self::YearToMonthDuration(p), Self::YearToMonthDuration(r)) => {
                 if let (Some(p), Some(r)) = (p, r) {
                     p.spec() == r.spec()
                 } else {
@@ -1069,17 +1069,17 @@ impl IsOrdered for Primitive {
             Self::Float(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::EnumObject(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::Date(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
-            Self::LocalTime(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
+            Self::Time(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::ZonedTime(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
-            Self::LocalDateTime(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
+            Self::DateTime(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::ZonedDateTime(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::ByteString(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::Utf8String(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::Utf16String(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::Utf32String(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::DataSpec(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
-            Self::YearMonthInterval(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
-            Self::DaySecondInterval(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
+            Self::YearToMonthDuration(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
+            Self::DayToSecondDuration(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::Guid(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::Reference(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),
             Self::Object(p) => p.as_ref().is_none_or(|p| p.spec().is_ordered()),

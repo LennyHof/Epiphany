@@ -21,7 +21,7 @@ fn local_date_time_type() {
         .build();
     match date_time_spec.specification_type() {
         DataSpecType::Primitive(primitive) => match primitive {
-            Primitive::LocalDateTime(def) => match def {
+            Primitive::DateTime(def) => match def {
                 Some(value) => match value.spec().date_time_type() {
                     Some(DateTimeType::Local) => {}
                     _ => assert!(false),

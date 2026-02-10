@@ -16,14 +16,16 @@ pub mod edge_primitive;
 pub mod enum_class_primitive;
 /// The EnumObjectPrimitive.
 pub mod enum_object_primitive;
+/// The FloatPrimitive.
+pub mod float_primitive;
 /// The GuidPrimitive.
 pub mod guid_primitive;
 /// The IdentifierPrimitive.
 pub mod identifier_primitive;
 /// The IntegerPrimitive.
 pub mod integer_primitive;
-/// The IntervalPrimitive.
-pub mod interval_primitive;
+/// The DurationPrimitive.
+pub mod duration_primitive;
 /// The ListPrimitive.
 pub mod list_primitive;
 /// The MapPrimitive.
@@ -32,8 +34,6 @@ pub mod map_primitive;
 pub mod object_primitive;
 /// The PropertyPrimitive.
 pub mod property_primitive;
-/// The FloatPrimitive.
-pub mod float_primitive;
 /// The ReferencePrimitive.
 pub mod reference_primitive;
 /// The SequencePrimitive.
