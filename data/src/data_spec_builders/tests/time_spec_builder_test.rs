@@ -21,7 +21,7 @@ fn local_time_type() {
         .build();
     match time_spec.specification_type() {
         DataSpecType::Primitive(primitive) => match primitive {
-            Primitive::LocalTime(def) => match def {
+            Primitive::Time(def) => match def {
                 Some(value) => match *value.spec().time_type() {
                     Some(TimeType::Local) => {}
                     _ => assert!(false),
@@ -46,6 +46,35 @@ fn zoned_time_type() {
                     Some(TimeType::Zoned) => {}
                     _ => assert!(false),
                 },
+                _ => assert!(false),
+            },
+            _ => assert!(false),
+        },
+        _ => assert!(false),
+    }
+    assert_eq!(time_spec.specification_level(), DataSpecLevel::Access);
+}
+
+#[test]
+fn time_type_with_resolution() {
+    let time_spec = TimeSpecBuilder::new()
+        .set_time_type(TimeType::Zoned)
+        .set_resolution(crate::primitive_specs::time_spec::TimeResolution::Microsecond)
+        .build();
+    match time_spec.specification_type() {
+        DataSpecType::Primitive(primitive) => match primitive {
+            Primitive::ZonedTime(def) => match def {
+                Some(value) => {
+                    let spec = value.spec();
+                    match *spec.time_type() {
+                        Some(TimeType::Zoned) => {}
+                        _ => assert!(false),
+                    }
+                    match *spec.resolution() {
+                        Some(crate::primitive_specs::time_spec::TimeResolution::Microsecond) => {}
+                        _ => assert!(false),
+                    }
+                }
                 _ => assert!(false),
             },
             _ => assert!(false),

@@ -262,6 +262,226 @@ impl Variable {
         }
     }
 
+    /// Extracts and returns the Date accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn date(&self) -> &crate::accessors::temporal::date::Date {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Date(date_def) => {
+                    let def = &date_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a date."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the Date accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn date_mut(&mut self) -> &mut crate::accessors::temporal::date::Date {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Date(date_def) => {
+                    let def = date_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a date."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the Time accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn time(&self) -> &crate::accessors::temporal::time::Time {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Time(time_def) => {
+                    let def = &time_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a time."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the Time accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn time_mut(&mut self) -> &mut crate::accessors::temporal::time::Time {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::Time(time_def) => {
+                    let def = time_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a time."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the ZonedTime accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn zoned_time(&self) -> &crate::accessors::temporal::zoned_time::ZonedTime {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::ZonedTime(time_def) => {
+                    let def = &time_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a zoned time."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the ZonedTime accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn zoned_time_mut(&mut self) -> &mut crate::accessors::temporal::zoned_time::ZonedTime {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::ZonedTime(time_def) => {
+                    let def = time_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a zoned time."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the DateTime accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn date_time(&self) -> &crate::accessors::temporal::date_time::DateTime {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::DateTime(ldt_def) => {
+                    let def = &ldt_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a date time."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the DateTime accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn date_time_mut(&mut self) -> &mut crate::accessors::temporal::date_time::DateTime {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::DateTime(ldt_def) => {
+                    let def = ldt_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a date time."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the ZonedDateTime accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn zoned_date_time(&self) -> &crate::accessors::temporal::zoned_date_time::ZonedDateTime {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::ZonedDateTime(zdt_def) => {
+                    let def = &zdt_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a zoned date time."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the ZonedDateTime accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn zoned_date_time_mut(
+        &mut self,
+    ) -> &mut crate::accessors::temporal::zoned_date_time::ZonedDateTime {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::ZonedDateTime(zdt_def) => {
+                    let def = zdt_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a zoned date time."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the DayToSecondDuration accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn day_to_second_duration(
+        &self,
+    ) -> &crate::accessors::temporal::day_to_second_duration::DayToSecondDuration {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::DayToSecondDuration(ds_def) => {
+                    let def = &ds_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a day-second duration."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the DayToSecondDuration accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn day_to_second_duration_mut(
+        &mut self,
+    ) -> &mut crate::accessors::temporal::day_to_second_duration::DayToSecondDuration {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::DayToSecondDuration(ds_def) => {
+                    let def = ds_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a day-second duration."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the YearToMonthDuration accessor within the variable.
+    /// Panics if unable to do so.
+    pub fn year_to_month_duration(
+        &self,
+    ) -> &crate::accessors::temporal::year_to_month_duration::YearToMonthDuration {
+        match self.data_spec.specification_type() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::YearToMonthDuration(ym_def) => {
+                    let def = &ym_def.as_ref().unwrap();
+                    def.borrow_access()
+                }
+                _ => panic!("Not a year-month duration."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
+    /// Extracts and returns the YearToMonthDuration accessor within the variable as mutable.
+    /// Panics if unable to do so.
+    pub fn year_to_month_duration_mut(
+        &mut self,
+    ) -> &mut crate::accessors::temporal::year_to_month_duration::YearToMonthDuration {
+        match self.data_spec.specification_type_mut() {
+            DataSpecType::Primitive(primitive) => match primitive {
+                Primitive::YearToMonthDuration(ym_def) => {
+                    let def = ym_def.as_mut().unwrap();
+                    def.mut_access()
+                }
+                _ => panic!("Not a year-month duration."),
+            },
+            _ => panic!("Not a primitive."),
+        }
+    }
+
     /// Attempts to clone the variable, returning a new Variable with the same data specification and value.
     pub fn try_clone(&self) -> Result<Variable, SetEqualToError> {
         // Attempt to clone the variable
@@ -312,6 +532,21 @@ impl PartialEq for Variable {
                 (Primitive::Tuple(t1), Primitive::Tuple(t2)) => {
                     let a1 = t1.as_ref().unwrap().borrow_access();
                     let a2 = t2.as_ref().unwrap().borrow_access();
+                    a1 == a2
+                }
+                (Primitive::Date(d1), Primitive::Date(d2)) => {
+                    let a1 = d1.as_ref().unwrap().borrow_access();
+                    let a2 = d2.as_ref().unwrap().borrow_access();
+                    a1 == a2
+                }
+                (Primitive::Time(t1), Primitive::Time(t2)) => {
+                    let a1 = t1.as_ref().unwrap().borrow_access();
+                    let a2 = t2.as_ref().unwrap().borrow_access();
+                    a1 == a2
+                }
+                (Primitive::YearToMonthDuration(ymd1), Primitive::YearToMonthDuration(ymd2)) => {
+                    let a1 = ymd1.as_ref().unwrap().borrow_access();
+                    let a2 = ymd2.as_ref().unwrap().borrow_access();
                     a1 == a2
                 }
                 _ => false,
@@ -371,6 +606,21 @@ impl Ord for Variable {
                     let a2 = t2.as_ref().unwrap().borrow_access();
                     a1.cmp(a2)
                 }
+                (Primitive::Date(d1), Primitive::Date(d2)) => {
+                    let a1 = d1.as_ref().unwrap().borrow_access();
+                    let a2 = d2.as_ref().unwrap().borrow_access();
+                    a1.cmp(a2)
+                }
+                (Primitive::Time(t1), Primitive::Time(t2)) => {
+                    let a1 = t1.as_ref().unwrap().borrow_access();
+                    let a2 = t2.as_ref().unwrap().borrow_access();
+                    a1.cmp(a2)
+                }
+                (Primitive::YearToMonthDuration(ymd1), Primitive::YearToMonthDuration(ymd2)) => {
+                    let a1 = ymd1.as_ref().unwrap().borrow_access();
+                    let a2 = ymd2.as_ref().unwrap().borrow_access();
+                    a1.cmp(a2)
+                }
                 _ => std::cmp::Ordering::Equal,
             },
             _ => std::cmp::Ordering::Equal,
@@ -415,6 +665,21 @@ impl Hash for Variable {
                 }
                 Primitive::Tuple(tuple_def) => {
                     if let Some(def) = tuple_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
+                }
+                Primitive::Date(date_def) => {
+                    if let Some(def) = date_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
+                }
+                Primitive::Time(time_def) => {
+                    if let Some(def) = time_def.as_ref() {
+                        def.borrow_access().hash(state);
+                    }
+                }
+                Primitive::YearToMonthDuration(ymd_def) => {
+                    if let Some(def) = ymd_def.as_ref() {
                         def.borrow_access().hash(state);
                     }
                 }
@@ -464,6 +729,19 @@ impl SetEqualTo for Variable {
                     let def = tuple_def.as_mut().unwrap();
                     def.mut_access().set_equal_to(other.tuple())?;
                 }
+                Primitive::Date(date_def) => {
+                    let def = date_def.as_mut().unwrap();
+                    def.mut_access().set_equal_to(other.date())?;
+                }
+                Primitive::Time(time_def) => {
+                    let def = time_def.as_mut().unwrap();
+                    def.mut_access().set_equal_to(other.time())?;
+                }
+                Primitive::YearToMonthDuration(ymd_def) => {
+                    let def = ymd_def.as_mut().unwrap();
+                    def.mut_access()
+                        .set_equal_to(other.year_to_month_duration())?;
+                }
                 _ => {
                     todo!("Implement setting equal to for other primitive types");
                 }
@@ -497,6 +775,9 @@ impl Display for Variable {
                     Primitive::Map(_) => self.map().to_string(),
                     Primitive::Sequence(_) => "Sequence does not support display.".to_string(),
                     Primitive::Tuple(_) => self.tuple().to_string(),
+                    Primitive::Date(_) => self.date().to_string(),
+                    Primitive::Time(_) => self.time().to_string(),
+                    Primitive::YearToMonthDuration(_) => self.year_to_month_duration().to_string(),
                     _ => "Unsupported primitive".to_string(),
                 },
                 _ => "Unsupported data spec type".to_string(),

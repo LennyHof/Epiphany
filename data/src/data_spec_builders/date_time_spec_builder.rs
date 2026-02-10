@@ -1,5 +1,5 @@
 use crate::{
-    accessors::temporal::{local_date_time::LocalDateTime, zoned_date_time::ZonedDateTime},
+    accessors::temporal::{date_time::DateTime, zoned_date_time::ZonedDateTime},
     data_spec::{DataSpec, DataSpecLevel},
     primitive::Primitive,
     primitive_def::PrimitiveDef,
@@ -59,10 +59,10 @@ impl DateTimeSpecBuilder {
         let primitive_spec = Rc::new(DateTimeSpec::new(self.date_time_type));
         match self.date_time_type {
             Some(DateTimeType::Local) => {
-                let primitive_def: Option<PrimitiveDef<DateTimeSpec, LocalDateTime>> =
+                let primitive_def: Option<PrimitiveDef<DateTimeSpec, DateTime>> =
                     Some(PrimitiveDef::new(primitive_spec, None));
                 Rc::new(DataSpec::new_primitive(
-                    Primitive::LocalDateTime(primitive_def),
+                    Primitive::DateTime(primitive_def),
                     specification_level,
                 ))
             }

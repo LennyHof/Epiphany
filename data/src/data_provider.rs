@@ -12,6 +12,11 @@ use crate::{
             byte_string::ByteString, utf8_string::Utf8String, utf16_string::Utf16String,
             utf32_string::Utf32String,
         },
+        temporal::{
+            date::Date, date_time::DateTime, time::Time,
+            year_to_month_duration::YearToMonthDuration, zoned_date_time::ZonedDateTime,
+            zoned_time::ZonedTime,
+        },
         tuple::Tuple,
     },
     adaptors::{
@@ -27,6 +32,10 @@ use crate::{
             byte_string_adaptor::ByteStringAdaptor, utf8_string_adaptor::Utf8StringAdaptor,
             utf16_string_adaptor::Utf16StringAdaptor, utf32_string_adaptor::Utf32StringAdaptor,
         },
+        temporal_adaptors::{
+            date_adaptor::DateAdaptor, day_to_second_duration_adaptor::DayToSecondDurationAdaptor,
+            time_adaptor::TimeAdaptor, year_to_month_duration_adaptor::YearToMonthDurationAdaptor,
+        },
         tuple_adaptor::TupleAdaptor,
     },
     data_spec::{DataSpec, DataSpecLevel, DataSpecType},
@@ -34,10 +43,11 @@ use crate::{
     primitive::Primitive,
     primitive_def::PrimitiveDef,
     primitive_specs::{
-        blob_spec::BlobSpec, boolean_spec::BooleanSpec, float_spec::FloatSpec,
+        blob_spec::BlobSpec, boolean_spec::BooleanSpec, date_spec::DateSpec,
+        date_time_spec::DateTimeSpec, duration_spec::DurationSpec, float_spec::FloatSpec,
         integer_spec::IntegerSpec, list_spec::ListSpec, map_spec::MapSpec,
         sequence_spec::SequenceSpec, set_spec::SetSpec, string_spec::StringSpec,
-        tuple_spec::TupleSpec,
+        time_spec::TimeSpec, tuple_spec::TupleSpec,
     },
     variable::Variable,
 };
@@ -145,6 +155,47 @@ pub trait DataProvider {
                 let def = Some(PrimitiveDef::new(tuple_spec.clone(), Some(accessor)));
                 Variable::new_primitive(Primitive::Tuple(def))
             }
+            Primitive::YearToMonthDuration(duration_def) => {
+                let duration_spec = duration_def.as_ref().unwrap().spec();
+                let accessor =
+                    YearToMonthDuration::new(self.year_to_month_duration_adaptor(duration_spec));
+                let def = Some(PrimitiveDef::new(duration_spec.clone(), Some(accessor)));
+                Variable::new_primitive(Primitive::YearToMonthDuration(def))
+            }
+            Primitive::ZonedDateTime(zoned_date_time_def) => {
+                let date_time_spec = zoned_date_time_def.as_ref().unwrap().spec();
+                let (date_adaptor, time_adaptor, zone_adaptor) =
+                    self.zoned_date_time_adaptors(date_time_spec);
+                let accessor = ZonedDateTime::new(date_adaptor, time_adaptor, zone_adaptor);
+                let def = Some(PrimitiveDef::new(date_time_spec.clone(), Some(accessor)));
+                Variable::new_primitive(Primitive::ZonedDateTime(def))
+            }
+            Primitive::DateTime(local_date_time_def) => {
+                let date_time_spec = local_date_time_def.as_ref().unwrap().spec();
+                let (date_adaptor, time_adaptor) = self.local_date_time_adaptors(date_time_spec);
+                let accessor = DateTime::new(date_adaptor, time_adaptor);
+                let def = Some(PrimitiveDef::new(date_time_spec.clone(), Some(accessor)));
+                Variable::new_primitive(Primitive::DateTime(def))
+            }
+            Primitive::Date(date_def) => {
+                let date_spec = date_def.as_ref().unwrap().spec();
+                let accessor = Date::new(self.date_adaptor(date_spec));
+                let def = Some(PrimitiveDef::new(date_spec.clone(), Some(accessor)));
+                Variable::new_primitive(Primitive::Date(def))
+            }
+            Primitive::Time(local_time_def) => {
+                let time_spec = local_time_def.as_ref().unwrap().spec();
+                let accessor = Time::new(self.time_adaptor(time_spec));
+                let def = Some(PrimitiveDef::new(time_spec.clone(), Some(accessor)));
+                Variable::new_primitive(Primitive::Time(def))
+            }
+            Primitive::ZonedTime(zoned_time_def) => {
+                let zoned_time_spec = zoned_time_def.as_ref().unwrap().spec();
+                let (time_adaptor, zone_adaptor) = self.zoned_time_adaptors(zoned_time_spec);
+                let accessor = ZonedTime::new(time_adaptor, zone_adaptor);
+                let def = Some(PrimitiveDef::new(zoned_time_spec.clone(), Some(accessor)));
+                Variable::new_primitive(Primitive::ZonedTime(def))
+            }
             _ => todo!(),
         }
     }
@@ -249,6 +300,81 @@ pub trait DataProvider {
     fn tuple_adaptor(&self, _spec: &Rc<TupleSpec>) -> Box<dyn TupleAdaptor> {
         panic!(
             "Tuples are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns a date adaptor according to the given spec.
+    fn date_adaptor(&self, _spec: &Rc<DateSpec>) -> Box<dyn DateAdaptor> {
+        panic!(
+            "Dates are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns a time adaptor according to the given spec.
+    fn time_adaptor(&self, _spec: &Rc<TimeSpec>) -> Box<dyn TimeAdaptor> {
+        panic!(
+            "Times are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns adaptors for a zoned time according to the given spec.
+    fn zoned_time_adaptors(
+        &self,
+        _spec: &Rc<TimeSpec>,
+    ) -> (Box<dyn TimeAdaptor>, Box<dyn DayToSecondDurationAdaptor>) {
+        panic!(
+            "Zoned times are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns adaptors for a local date-time according to the given spec.
+    fn local_date_time_adaptors(
+        &self,
+        _spec: &Rc<DateTimeSpec>,
+    ) -> (Box<dyn DateAdaptor>, Box<dyn TimeAdaptor>) {
+        panic!(
+            " date-times are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns adaptors for a zoned date-time according to the given spec.
+    fn zoned_date_time_adaptors(
+        &self,
+        _spec: &Rc<DateTimeSpec>,
+    ) -> (
+        Box<dyn DateAdaptor>,
+        Box<dyn TimeAdaptor>,
+        Box<dyn DayToSecondDurationAdaptor>,
+    ) {
+        panic!(
+            "Zoned date-times are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns a year-month duration adaptor according to the given spec.
+    fn year_to_month_duration_adaptor(
+        &self,
+        _spec: &Rc<DurationSpec>,
+    ) -> Box<dyn YearToMonthDurationAdaptor> {
+        panic!(
+            "Year-month durations are not supported by the {} data provider",
+            self.name()
+        );
+    }
+
+    /// Returns a day-time duration adaptor according to the given spec.
+    fn day_time_duration_adaptor(
+        &self,
+        _spec: &Rc<DurationSpec>,
+    ) -> Box<dyn DayToSecondDurationAdaptor> {
+        panic!(
+            "Day-time durations are not supported by the {} data provider",
             self.name()
         );
     }

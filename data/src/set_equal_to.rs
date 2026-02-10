@@ -4,6 +4,9 @@ use crate::{
         float::FloatError,
         integer::IntegerError,
         sequence::SequenceError,
+        temporal::{
+            date::DateError, time::TimeError, year_to_month_duration::YearToMonthDurationError,
+        },
         tuple::TupleError,
     },
     provider_error::ProviderError,
@@ -36,6 +39,12 @@ pub enum SetEqualToError {
     SequenceError(SequenceError),
     /// A tuple error.
     TupleError(TupleError),
+    /// A date error.
+    DateError(DateError),
+    /// A time error.
+    TimeError(TimeError),
+    /// A year-month duration error.
+    YearToMonthDurationError(YearToMonthDurationError),
 }
 
 impl From<SpecError> for SetEqualToError {

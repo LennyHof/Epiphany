@@ -1,5 +1,4 @@
 use crate::{
-    accessors::tuple,
     data_spec_builders::{
         float_spec_builder::FloatSpecBuilder, integer_spec_builder::IntegerSpecBuilder,
         tuple_spec_builder::TupleSpecBuilder,
@@ -297,7 +296,10 @@ fn tuple_partial_ord() {
 
     // Check partial ordering
     assert_eq!(var1.partial_cmp(&var2), Some(std::cmp::Ordering::Equal));
-    assert_eq!(var1.tuple().partial_cmp(var2.tuple()), Some(std::cmp::Ordering::Equal));
+    assert_eq!(
+        var1.tuple().partial_cmp(var2.tuple()),
+        Some(std::cmp::Ordering::Equal)
+    );
 
     // Change a value in var2 and check ordering
     {
@@ -307,7 +309,10 @@ fn tuple_partial_ord() {
             .unwrap();
     }
     assert_eq!(var1.partial_cmp(&var2), Some(std::cmp::Ordering::Less));
-    assert_eq!(var1.tuple().partial_cmp(var2.tuple()), Some(std::cmp::Ordering::Less));
+    assert_eq!(
+        var1.tuple().partial_cmp(var2.tuple()),
+        Some(std::cmp::Ordering::Less)
+    );
 }
 
 #[test]

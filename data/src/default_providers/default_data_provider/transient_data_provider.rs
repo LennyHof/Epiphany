@@ -1,19 +1,28 @@
 use std::rc::Rc;
 
+use crate::default_providers::default_data_provider::default_adaptors::temporal::transient_year_to_month_duration_adaptor::TransientYearToMonthDurationAdaptor;
+use crate::default_providers::default_data_provider::default_adaptors::{
+    transient_boolean_adaptor::TransientBooleanAdaptor,
+    transient_float_adaptor::TransientFloatAdaptor,
+    transient_integer_adaptor::TransientIntegerAdaptor,
+    transient_list_adaptor::TransientListAdaptor, transient_map_adaptor::TransientMapAdaptor,
+    transient_sequence_adaptor::TransientSequenceAdaptor,
+    transient_set_adaptor::TransientSetAdaptor, transient_tuple_adaptor::TransientTupleAdaptor,
+};
+
+use crate::default_providers::default_data_provider::default_adaptors::temporal::{
+    transient_date_adaptor::TransientDateAdaptor,
+    transient_time_micro_adaptor::TransientTimeMicroAdaptor,
+    transient_time_nano_adaptor::TransientTimeNanoAdaptor,
+};
+
+use crate::primitive_specs::time_spec::TimeResolution;
 use crate::{
     adaptors::{
         blob_adaptor::BlobAdaptor, boolean_adaptor::BooleanAdaptor, float_adaptor::FloatAdaptor,
         integer_adaptor::IntegerAdaptor,
     },
     data_provider::DataProvider,
-    default_providers::default_data_provider::default_adaptors::{
-        transient_boolean_adaptor::TransientBooleanAdaptor,
-        transient_float_adaptor::TransientFloatAdaptor,
-        transient_integer_adaptor::TransientIntegerAdaptor,
-        transient_list_adaptor::TransientListAdaptor, transient_map_adaptor::TransientMapAdaptor,
-        transient_sequence_adaptor::TransientSequenceAdaptor,
-        transient_set_adaptor::TransientSetAdaptor, transient_tuple_adaptor::TransientTupleAdaptor,
-    },
     primitive_specs::{
         blob_spec::BlobSpec, boolean_spec::BooleanSpec, float_spec::FloatSpec,
         integer_spec::IntegerSpec,
@@ -94,5 +103,30 @@ impl DataProvider for TransientDataProvider {
         spec: &Rc<crate::primitive_specs::tuple_spec::TupleSpec>,
     ) -> Box<dyn crate::adaptors::tuple_adaptor::TupleAdaptor> {
         Box::new(TransientTupleAdaptor::new(spec.clone()))
+    }
+    fn date_adaptor(
+        &self,
+        spec: &Rc<crate::primitive_specs::date_spec::DateSpec>,
+    ) -> Box<dyn crate::adaptors::temporal_adaptors::date_adaptor::DateAdaptor> {
+        Box::new(TransientDateAdaptor::new(spec.clone()))
+    }
+    fn time_adaptor(
+        &self,
+        spec: &Rc<crate::primitive_specs::time_spec::TimeSpec>,
+    ) -> Box<dyn crate::adaptors::temporal_adaptors::time_adaptor::TimeAdaptor> {
+        match spec.resolution() {
+            Some(TimeResolution::Second)
+            | Some(TimeResolution::Millisecond)
+            | Some(TimeResolution::Microsecond100) => {
+                Box::new(TransientTimeMicroAdaptor::new(spec.clone()))
+            }
+            _ => Box::new(TransientTimeNanoAdaptor::new(spec.clone())),
+        }
+    }
+    fn year_to_month_duration_adaptor(
+            &self,
+            _spec: &Rc<crate::primitive_specs::duration_spec::DurationSpec>,
+    ) -> Box<dyn crate::adaptors::temporal_adaptors::year_to_month_duration_adaptor::YearToMonthDurationAdaptor>{
+        Box::new(TransientYearToMonthDurationAdaptor::new(_spec.clone()))
     }
 }
